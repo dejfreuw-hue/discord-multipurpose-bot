@@ -2,7 +2,7 @@
 
 An all-in-one Discord bot by ReuwTheDev. You host it yourself, so your data and API keys stay yours.
 
-Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments) **AI** (a chatbot and a scam image scanner, using your own API key) **Tickets** (panels with forms, claim/lock/close, inactivity reminders, HTML transcripts and modmail through DMs) **Leveling** (text and voice XP, rank cards, leaderboards and role rewards) **Economy** (wallet and bank, daily/weekly/work, a shop with role items, blackjack, coinflip, slots and rob) and **Music** (YouTube, SoundCloud and Spotify links through Lavalink, a button controller, filters, lyrics and 24/7 mode).
+Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments) **AI** (a chatbot and a scam image scanner, using your own API key) **Tickets** (panels with forms, claim/lock/close, inactivity reminders, HTML transcripts and modmail through DMs) **Leveling** (text and voice XP, rank cards, leaderboards and role rewards) **Economy** (wallet and bank, daily/weekly/work, a shop with role items, blackjack, coinflip, slots and rob) **Music** (YouTube, SoundCloud and Spotify links through Lavalink, a button controller, filters, lyrics and 24/7 mode) and **Join to Create** (personal voice channels with an owner control panel).
 
 ## Requirements
 
@@ -258,6 +258,23 @@ Each new song posts a now-playing message with buttons for previous, pause, skip
 **Restarts.** The queue is stored in MongoDB as it changes, and the playback position is saved every 15 seconds. After a restart of the bot or of Lavalink, the bot rejoins each voice channel and continues the song from where it was, with the same volume, loop mode and filters. Channels nobody is listening in are skipped, unless 24/7 mode is on.
 
 **Spotify.** Spotify only shares song details, so the audio itself comes from YouTube. Create an app at the [Spotify developer dashboard](https://developer.spotify.com/dashboard), then put `SPOTIFY_ENABLED=true` and the client ID and secret in `.env` (docker-compose), or in `lavalink/application.yml` if you run Lavalink yourself.
+
+### Join to Create
+
+A hub is a voice channel that creates a personal channel for whoever joins it and moves them in. Create one with the button in `/setup` or `/voice hub create`, or turn an existing voice channel into a hub with `/voice hub add`, where you can also set the name pattern (`{user}`, `{count}`) and a default user limit. A server can have up to 10 hubs, for example one per game.
+
+The new channel gets a control panel in its text chat. The owner (and staff) can:
+
+- **Lock** so nobody new can join, and **hide** so nobody new can see it. People already inside keep access.
+- **Set a limit** and **rename** it. Discord allows two renames per channel every ten minutes; the bot says when the next one is possible instead of hanging.
+- **Kick** someone (they're disconnected and can't rejoin) or **let someone in** even when it's locked.
+- **Transfer** the channel to someone inside.
+
+If the owner leaves, anyone still inside can **claim** the channel. Channels are deleted as soon as the last person leaves, and leftovers from before a restart are cleaned up on startup. Joining a hub while already owning a channel just moves you back to it.
+
+Lock and hide also work on servers where a role (like "Verified") is what grants access to the category: the bot turns those role permissions off while locked and gives them back when unlocked.
+
+The bot needs Manage Channels, Move Members and Manage Roles (for channel permissions) in the hub's category.
 
 Durations accept `30s`, `10m`, `2h`, `1d`, `1w` and combinations like `1d 12h`. A plain number means minutes.
 

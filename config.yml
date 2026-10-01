@@ -169,3 +169,9 @@ modules:
     idleSeconds: 180
     emptyChannelSeconds: 120
     maxQueue: 500
+
+  voice:
+    # Join to Create voice channels. Hubs are set up per server in /setup or with /voice hub.
+    enabled: true
+    # Seconds a member waits between creating channels, so hopping in and out can't spam.
+    createCooldownSeconds: 10

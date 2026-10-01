@@ -59,6 +59,10 @@
     "music": {
       "name": "Music",
       "description": "Play music from YouTube, SoundCloud, Spotify and more in voice channels"
+    },
+    "voice": {
+      "name": "Join to Create",
+      "description": "Members get their own voice channel by joining a hub, with controls to manage it"
     }
   },
   "core": {
@@ -1435,6 +1439,87 @@
       "djPlaceholder": "DJ roles (optional)",
       "announce": "Now playing messages",
       "alwaysOn": "24/7 mode"
+    }
+  },
+  "voice": {
+    "defaults": {
+      "category": "Voice Channels",
+      "hub": "Join to Create"
+    },
+    "errors": {
+      "notTemp": "This panel's channel is gone.",
+      "notInTemp": "Join your own voice channel first.",
+      "ownerOnly": "Only the channel owner can do that.",
+      "cantClaim": "You can only claim the channel when you're in it and its owner has left.",
+      "alreadyOwner": "You already own this channel.",
+      "kickOwner": "You can't kick the channel owner.",
+      "kickSelf": "I can't kick myself.",
+      "botOwner": "A bot can't own a channel.",
+      "notInChannel": "{user} needs to be in the channel to take it over.",
+      "unknownMember": "That member isn't in the server anymore.",
+      "badLimit": "Use a number from 0 to 99. 0 means no limit.",
+      "emptyName": "The name can't be empty.",
+      "renameLimit": "Discord only allows two renames every ten minutes. You can rename again {time}.",
+      "notHub": "That channel isn't a Join to Create hub."
+    },
+    "panel": {
+      "title": "Channel controls",
+      "owner": "Owner: {user}",
+      "locked": "Locked",
+      "unlocked": "Open",
+      "hidden": "Hidden",
+      "visible": "Visible",
+      "limit": "Limit: {limit}",
+      "noLimit": "none",
+      "footer": "Only the owner (or staff) can use these. If the owner leaves, anyone inside can claim the channel.",
+      "lock": "Lock",
+      "unlock": "Unlock",
+      "hide": "Hide",
+      "show": "Show",
+      "setLimit": "Set limit",
+      "rename": "Rename",
+      "claim": "Claim",
+      "kick": "Kick someone (they can't rejoin)",
+      "permit": "Let someone in, even when locked",
+      "transfer": "Give the channel to someone"
+    },
+    "modal": {
+      "limit": "Most people allowed in (0 = no limit)",
+      "rename": "New channel name"
+    },
+    "done": {
+      "kicked": "Kicked {user}. They can't rejoin until you let them in again.",
+      "permitted": "{user} can now see and join the channel.",
+      "transferred": "{user} owns the channel now."
+    },
+    "command": {
+      "description": "Join to Create voice channels",
+      "panel": "Post the controls for your channel again",
+      "hub": "Manage Join to Create hubs",
+      "create": "Create a category with a Join to Create channel",
+      "add": "Turn an existing voice channel into a hub",
+      "remove": "Stop a channel from being a hub",
+      "list": "Show all hubs",
+      "options": {
+        "channel": "The voice channel",
+        "category": "Where new channels go (defaults to the hub's category)",
+        "name": "Name for new channels, using {user} and {count}",
+        "limit": "Default user limit for new channels (0 = none)"
+      },
+      "panelPosted": "Posted the controls in {channel}.",
+      "created": "Created {channel}. Members who join it get their own channel.",
+      "added": "{channel} is now a Join to Create hub.",
+      "removed": "{channel} is no longer a hub. Existing channels stay until they empty.",
+      "listTitle": "Join to Create hubs",
+      "hubLine": "{channel}: names `{name}`, limit {limit}",
+      "none": "No hubs yet."
+    },
+    "setup": {
+      "hubs": {
+        "title": "Join to Create"
+      },
+      "body": "Members who join a hub channel get their own voice channel, with buttons to lock, hide, limit, rename, kick and hand it over. Empty channels are deleted. Create a hub with the button below, or turn an existing channel into one with {command}.",
+      "create": "Create a hub"
     }
   }
 }

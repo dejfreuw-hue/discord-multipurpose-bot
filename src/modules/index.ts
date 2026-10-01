@@ -7,9 +7,10 @@ import leveling from './leveling/index.js';
 import moderation from './moderation/index.js';
 import music from './music/index.js';
 import tickets from './tickets/index.js';
+import voice from './voice/index.js';
 
 /**
  * Every module the bot knows about, in load order. To remove a module completely, delete its
  * line here and its folder. To just turn it off, use config.yml instead.
  */
-export const modules: Module[] = [core, moderation, automod, ai, tickets, leveling, economy, music];
+export const modules: Module[] = [core, moderation, automod, ai, tickets, leveling, economy, music, voice];
