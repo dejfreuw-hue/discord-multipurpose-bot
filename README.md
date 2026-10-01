@@ -2,7 +2,7 @@
 
 An all-in-one Discord bot by ReuwTheDev. You host it yourself, so your data and API keys stay yours.
 
-Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments) **AI** (a chatbot and a scam image scanner, using your own API key) **Tickets** (panels with forms, claim/lock/close, inactivity reminders, HTML transcripts and modmail through DMs) and **Leveling** (text and voice XP, rank cards, leaderboards and role rewards).
+Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments) **AI** (a chatbot and a scam image scanner, using your own API key) **Tickets** (panels with forms, claim/lock/close, inactivity reminders, HTML transcripts and modmail through DMs) **Leveling** (text and voice XP, rank cards, leaderboards and role rewards) and **Economy** (wallet and bank, daily/weekly/work, a shop with role items, blackjack, coinflip, slots and rob).
 
 ## Requirements
 
@@ -212,6 +212,26 @@ Members earn 15-25 XP per message (at most once a minute) and 10 XP per minute i
 Uploaded backgrounds are resized and stored in MongoDB, so they keep working after Discord's attachment links expire. Rank cards use the bundled Open Sans font (in `assets/fonts`, Apache 2.0) so they look the same on every host.
 
 Leveling doesn't need the Message Content intent. Reward roles are only given for roles below the bot's own role.
+
+### Economy
+
+Each server has its own economy with its own currency name or symbol.
+
+| Command | What it does |
+| --- | --- |
+| `/balance`, `/baltop` | Wallet, bank and net worth; the richest members |
+| `/deposit`, `/withdraw`, `/pay` | Move money. Money in the bank can't be robbed |
+| `/daily`, `/weekly`, `/work` | Earn money. Daily rewards grow with a streak of consecutive days |
+| `/rob user` | Steal part of someone's wallet, or pay a fine if caught |
+| `/coinflip`, `/slots`, `/blackjack` | Casino games |
+| `/shop view/buy`, `/inventory` | Buy roles and items |
+| `/economy ...` | Admin: currency, rewards, robbery odds, bet limits, balances and the shop (Manage Server) |
+
+Amounts can be typed as `500`, `1,500`, `2.5k`, `1m`, `half`, `all` or `25%`.
+
+The odds are yours to set: the coinflip win chance, robbery success chance and percentages, the blackjack payout and bet limits are per server, and the slot machine's symbols and payouts are in `config.yml`. The bot calculates the slot machine's exact return rate and prints it on startup and in `/economy status`, so you can see the house edge before members do. Blackjack uses two decks; the dealer stands on all 17s.
+
+Every balance change is a single conditional database update, so double-clicking a button or spamming a command can't spend money twice or go below zero. Blackjack stakes in an unfinished game are refunded if the bot shuts down.
 
 Durations accept `30s`, `10m`, `2h`, `1d`, `1w` and combinations like `1d 12h`. A plain number means minutes.
 

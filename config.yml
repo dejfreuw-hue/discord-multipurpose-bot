@@ -141,3 +141,19 @@ modules:
     voiceTickSeconds: 60
     # Largest image members and admins can upload as a rank card background, in MB.
     maxBackgroundMB: 8
+
+  economy:
+    enabled: true
+    # Slot machine symbols. weight = relative chance per reel, three/two = bet multiplier for
+    # three or two matching symbols. The defaults return 94% of bets over time; the bot logs
+    # the return rate of your table on startup, and /economy status shows it too. The symbols
+    # themselves are set per language in locales/<lang>.json under economy.slots.symbols.
+    slots:
+      - { id: cherry, weight: 30, three: 6, two: 0.75 }
+      - { id: lemon, weight: 25, three: 8, two: 0.75 }
+      - { id: bell, weight: 20, three: 12, two: 1 }
+      - { id: clover, weight: 13, three: 25, two: 1.5 }
+      - { id: seven, weight: 8, three: 60, two: 2 }
+      - { id: diamond, weight: 4, three: 200, two: 3 }
+    # Seconds a blackjack hand waits for a move before standing automatically.
+    blackjackTimeoutSeconds: 120

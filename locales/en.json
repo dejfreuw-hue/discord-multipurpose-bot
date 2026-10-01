@@ -51,6 +51,10 @@
     "leveling": {
       "name": "Leveling",
       "description": "Text and voice XP, rank cards, leaderboards and role rewards"
+    },
+    "economy": {
+      "name": "Economy",
+      "description": "Wallet and bank, daily rewards, work, a shop and casino games"
     }
   },
   "core": {
@@ -1021,6 +1025,232 @@
       "text": "Message XP",
       "voice": "Voice XP",
       "channelPlaceholder": "Channel for level-up messages"
+    }
+  },
+  "economy": {
+    "options": {
+      "amount": "An amount like 500, 2.5k, half or all",
+      "bet": "How much to bet: 100, 1k, half or all"
+    },
+    "errors": {
+      "amount": "`{value}` isn't an amount I understand. Try `500`, `2.5k`, `half` or `all`.",
+      "funds": "You don't have enough in your wallet.",
+      "bankFunds": "You don't have that much in the bank.",
+      "bankFull": "Your bank is nearly full. You can deposit at most {amount}.",
+      "bot": "Bots don't have wallets.",
+      "self": "You can't do that to yourself.",
+      "cooldown": "Not yet. Try again {time}.",
+      "alreadyClaimed": "You just claimed that.",
+      "gamblingOff": "Gambling is turned off in this server.",
+      "minBet": "The minimum bet is {amount}.",
+      "maxBet": "The maximum bet is {amount}."
+    },
+    "balance": {
+      "description": "Show a wallet and bank balance",
+      "options": {
+        "user": "Whose balance"
+      },
+      "title": "{user}'s balance",
+      "wallet": "Wallet",
+      "bank": "Bank",
+      "total": "Net worth",
+      "rank": "#{rank} in this server"
+    },
+    "deposit": {
+      "description": "Move money into the bank, where it can't be stolen",
+      "done": "Deposited {amount}."
+    },
+    "withdraw": {
+      "description": "Take money out of the bank",
+      "done": "Withdrew {amount}."
+    },
+    "pay": {
+      "description": "Give money to someone",
+      "options": {
+        "user": "Who to pay"
+      },
+      "done": "Sent {amount} to {user}."
+    },
+    "baltop": {
+      "description": "The richest members",
+      "title": "Richest members",
+      "empty": "Nobody has any money yet."
+    },
+    "daily": {
+      "description": "Claim your daily reward",
+      "done": "You claimed {amount}. Daily streak: **{streak}**. Come back tomorrow to keep it going."
+    },
+    "weekly": {
+      "description": "Claim your weekly reward",
+      "done": "You claimed your weekly {amount}."
+    },
+    "work": {
+      "description": "Work a shift for some money",
+      "done": "You {job} and earned {amount}.",
+      "jobs": [
+        "delivered pizzas across town",
+        "fixed a stranger's Wi-Fi",
+        "walked a very energetic dog",
+        "debugged a production outage",
+        "washed dishes at a busy diner",
+        "moderated a chaotic Discord server",
+        "tutored a student in maths",
+        "painted a fence",
+        "streamed for six hours straight",
+        "sorted mail at the post office"
+      ]
+    },
+    "rob": {
+      "description": "Try to steal from someone's wallet",
+      "options": {
+        "user": "Who to rob"
+      },
+      "disabled": "Robbing is turned off in this server.",
+      "poorTarget": "{user} has less than {amount} on them. Not worth the risk.",
+      "success": "You robbed {user} and got away with {amount}.",
+      "empty": "You reached into {user}'s pockets and found nothing. They must have just spent it.",
+      "caught": "You got caught robbing {user} and paid them {amount} in damages."
+    },
+    "coinflip": {
+      "description": "Bet on a coin toss",
+      "options": {
+        "side": "Heads or tails"
+      },
+      "heads": "Heads",
+      "tails": "Tails",
+      "won": "It landed on **{side}**. You won {amount}!",
+      "lost": "It landed on **{side}**. You lost {amount}."
+    },
+    "slots": {
+      "description": "Spin the slot machine",
+      "symbols": {
+        "cherry": "🍒",
+        "lemon": "🍋",
+        "bell": "🔔",
+        "clover": "🍀",
+        "seven": "7️⃣",
+        "diamond": "💎"
+      },
+      "won": "You won {amount} ({multiplier}x)!",
+      "partial": "A pair. You got {amount} back.",
+      "lost": "No luck. You lost {amount}."
+    },
+    "blackjack": {
+      "description": "Play blackjack against the dealer",
+      "title": "Blackjack",
+      "you": "Your hand",
+      "dealer": "Dealer",
+      "bet": "Bet",
+      "hit": "Hit",
+      "stand": "Stand",
+      "double": "Double down",
+      "inProgress": "Finish your current blackjack game first.",
+      "notYours": "This isn't your game, or it already ended.",
+      "cantDouble": "You need as much again in your wallet to double down.",
+      "timedOut": "You took too long, so your hand stands.",
+      "outcomes": {
+        "blackjack": "Blackjack! You won {amount}.",
+        "win": "You win {amount}!",
+        "push": "Push. Your {bet} is returned.",
+        "lose": "The dealer wins. You lost {bet}.",
+        "bust": "Bust! You lost {bet}."
+      }
+    },
+    "shop": {
+      "description": "Buy items and roles",
+      "view": "See what's for sale",
+      "buy": "Buy an item",
+      "options": {
+        "item": "The item"
+      },
+      "title": "Shop",
+      "footer": "Buy with /shop buy",
+      "empty": "The shop is empty. Admins can add items with /economy shop add.",
+      "givesRole": "Gives {role}",
+      "stock_one": "{count} left",
+      "stock_other": "{count} left",
+      "notFound": "That item isn't in the shop.",
+      "owned": "You already have that role.",
+      "soldOut": "That item is sold out.",
+      "roleBroken": "I can't give that role. An admin needs to move my role above it.",
+      "bought": "You bought **{item}** for {amount}."
+    },
+    "inventory": {
+      "description": "Show the items someone owns",
+      "title": "{user}'s inventory",
+      "empty": "{user} doesn't own any items.",
+      "removedItem": "Removed item #{id}"
+    },
+    "admin": {
+      "description": "Configure the economy",
+      "status": "Show the economy settings",
+      "statusTitle": "Economy",
+      "basics": "Currency, starting balance and bank limit",
+      "earnings": "Daily, weekly and work rewards",
+      "rob": "Robbery rules",
+      "gambling": "Bet limits and odds",
+      "unlimited": "unlimited",
+      "fields": {
+        "basics": "Basics",
+        "earnings": "Earnings",
+        "rob": "Robbing ({state})",
+        "gambling": "Gambling ({state})"
+      },
+      "basicsValue": "Starting balance {start}, bank limit {limit}",
+      "earningsValue": "Daily {daily} + {bonus} per streak day (up to {max} days)\nWeekly {weekly}\nWork {workMin} to {workMax}, every {workCooldown} min",
+      "robValue": "{chance}% success, steals {min}-{max}%, fine {fine}%\nTarget needs {minTarget}, cooldown {cooldown} min",
+      "gamblingValue": "Bets {min} to {max}\nCoinflip win chance {coinflip}%, blackjack pays {blackjack}:1\nSlots return {rtp}% of bets over time",
+      "money": {
+        "description": "Change a member's balance",
+        "give": "Add money to a wallet",
+        "take": "Take money from a member",
+        "reset": "Reset a member's balance, items and cooldowns",
+        "done": "{user} now has {wallet} in their wallet and {bank} in the bank."
+      },
+      "shop": {
+        "description": "Manage the shop",
+        "add": "Add an item",
+        "remove": "Remove an item",
+        "added": "Added **{name}** for {price}.",
+        "removed": "Item removed. Members who bought it keep it in their inventory."
+      },
+      "options": {
+        "currency": "Name of the currency, like coins or gems",
+        "symbol": "Short symbol shown before amounts instead of the name, like $",
+        "startBalance": "Money new members start with",
+        "bankLimit": "Most a member can keep in the bank (0 = no limit)",
+        "daily": "Daily reward",
+        "streakBonus": "Extra per day of daily streak",
+        "maxStreak": "Streak days that still add a bonus",
+        "weekly": "Weekly reward",
+        "workMin": "Least a work shift pays",
+        "workMax": "Most a work shift pays",
+        "workCooldown": "Minutes between work shifts",
+        "enabled": "Turn it on or off",
+        "robChance": "Chance a robbery succeeds, in percent",
+        "minPercent": "Least share of the wallet stolen, in percent",
+        "maxPercent": "Most share of the wallet stolen, in percent",
+        "finePercent": "Share of the robber's wallet paid when caught",
+        "minTarget": "Least a target must carry to be robbed",
+        "robCooldown": "Minutes between robbery attempts",
+        "minBet": "Smallest bet",
+        "maxBet": "Largest bet",
+        "coinflipChance": "Chance to win a coinflip, in percent (50 is fair)",
+        "blackjackPays": "What a natural blackjack pays (1.5 is standard 3:2)",
+        "itemName": "Item name",
+        "price": "Price",
+        "role": "Role the item gives (leave empty for an inventory item)",
+        "itemDescription": "Short description",
+        "stock": "How many can be sold (leave empty for unlimited)"
+      }
+    },
+    "setup": {
+      "games": {
+        "title": "Economy"
+      },
+      "body": "Members earn money with daily and weekly rewards and work shifts, and spend it in the shop. Amounts look like: {example}. Currency, rewards, odds and the shop are set with {command} and the other /economy commands.",
+      "gambling": "Casino games",
+      "rob": "Robbing"
     }
   }
 }
