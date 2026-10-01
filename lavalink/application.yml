@@ -1,16 +1,27 @@
 # Lavalink v4 config used by docker-compose. If you run Lavalink yourself, copy this file
 # next to Lavalink.jar. The password must match LAVALINK_PASSWORD in .env
 # (docker-compose passes it in through LAVALINK_SERVER_PASSWORD).
+#
+# Plugin versions: YouTube changes often and old plugin versions stop working. If songs fail
+# to load, check the latest versions at
+#   https://github.com/lavalink-devs/youtube-source/releases
+#   https://github.com/topi314/LavaSrc/releases
+# and update the numbers below, then restart Lavalink.
 
 server:
   port: 2333
   address: 0.0.0.0
 
 lavalink:
+  plugins:
+    - dependency: "dev.lavalink.youtube:youtube-plugin:1.13.3"
+      snapshot: false
+    - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.7.2"
+      snapshot: false
   server:
     password: "youshallnotpass"
     sources:
-      # The built-in YouTube source is deprecated and no longer works reliably.
+      # Replaced by the YouTube plugin above.
       youtube: false
       bandcamp: true
       soundcloud: true
@@ -36,7 +47,39 @@ lavalink:
     trackStuckThresholdMs: 10000
     useSeekGhosting: true
     playerUpdateInterval: 5
+    youtubePlaylistLoadLimit: 6
     soundcloudSearchEnabled: true
+
+plugins:
+  youtube:
+    enabled: true
+    allowSearch: true
+    allowDirectVideoIds: true
+    allowDirectPlaylistIds: true
+    # Tried in order. If YouTube blocks one, the next is used.
+    clients:
+      - MUSIC
+      - ANDROID_VR
+      - WEB
+      - WEBEMBEDDED
+  lavasrc:
+    # Spotify links only give song names; these searches find something playable for them.
+    providers:
+      - 'ytsearch:"%ISRC%"'
+      - "ytsearch:%QUERY%"
+    sources:
+      # Needs a Spotify app (https://developer.spotify.com/dashboard). Turned on by setting
+      # SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET in .env when using docker-compose.
+      spotify: false
+      applemusic: false
+      deezer: false
+      yandexmusic: false
+    spotify:
+      clientId: ""
+      clientSecret: ""
+      countryCode: "US"
+      playlistLoadLimit: 6
+      albumLoadLimit: 6
 
 metrics:
   prometheus:

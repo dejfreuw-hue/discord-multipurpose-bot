@@ -37,6 +37,10 @@ describe('buildCommands', () => {
     expect(setup.contexts).toEqual([InteractionContextType.Guild]);
   });
 
+  it('stays under the Discord limit of 100 global commands', () => {
+    expect(commands.length).toBeLessThanOrEqual(100);
+  });
+
   it('has unique command names', () => {
     const names = commands.map((c) => c.name);
     expect(new Set(names).size).toBe(names.length);

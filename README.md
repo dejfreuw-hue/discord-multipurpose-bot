@@ -2,7 +2,7 @@
 
 An all-in-one Discord bot by ReuwTheDev. You host it yourself, so your data and API keys stay yours.
 
-Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments) **AI** (a chatbot and a scam image scanner, using your own API key) **Tickets** (panels with forms, claim/lock/close, inactivity reminders, HTML transcripts and modmail through DMs) **Leveling** (text and voice XP, rank cards, leaderboards and role rewards) and **Economy** (wallet and bank, daily/weekly/work, a shop with role items, blackjack, coinflip, slots and rob).
+Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments) **AI** (a chatbot and a scam image scanner, using your own API key) **Tickets** (panels with forms, claim/lock/close, inactivity reminders, HTML transcripts and modmail through DMs) **Leveling** (text and voice XP, rank cards, leaderboards and role rewards) **Economy** (wallet and bank, daily/weekly/work, a shop with role items, blackjack, coinflip, slots and rob) and **Music** (YouTube, SoundCloud and Spotify links through Lavalink, a button controller, filters, lyrics and 24/7 mode).
 
 ## Requirements
 
@@ -45,6 +45,7 @@ cp .env.example .env      # on Windows: copy .env.example .env
 | `LICENSE_KEY` | The key from your BuiltByBit purchase |
 | `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY` | Only for the AI module. Fill in the ones you use |
 | `AI_COMPAT_API_KEY` | Key for an OpenAI-compatible server, if it needs one |
+| `SPOTIFY_ENABLED`, `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` | Optional, for Spotify links (docker-compose only; see Music) |
 | `LAVALINK_*` | Only for music. The defaults match the bundled Lavalink setup |
 
 For Atlas: create a free cluster, add a database user, allow your server's IP under **Network Access**, then use **Connect -> Drivers** to copy the connection string. Put a database name before the `?`, for example `...mongodb.net/reuwbot?retryWrites=true`.
@@ -88,7 +89,9 @@ docker compose logs -f bot
 1. Install Java 17 or newer.
 2. Download `Lavalink.jar` (v4) from the [Lavalink releases](https://github.com/lavalink-devs/Lavalink/releases).
 3. Copy `lavalink/application.yml` next to it and set `lavalink.server.password` to match `LAVALINK_PASSWORD`.
-4. Run `java -jar Lavalink.jar`.
+4. Run `java -jar Lavalink.jar`. The first start downloads the plugins listed in the file.
+
+The bot keeps retrying every 15 seconds until Lavalink is up, so start order doesn't matter.
 
 ## Commands
 
@@ -233,6 +236,29 @@ The odds are yours to set: the coinflip win chance, robbery success chance and p
 
 Every balance change is a single conditional database update, so double-clicking a button or spamming a command can't spend money twice or go below zero. Blackjack stakes in an unfinished game are refunded if the bot shuts down.
 
+### Music
+
+Music plays through [Lavalink](https://lavalink.dev), a separate audio server; docker-compose starts one for you. `lavalink/application.yml` enables the YouTube plugin (Lavalink's built-in YouTube support no longer works reliably) and LavaSrc for Spotify links.
+
+| Command | What it does |
+| --- | --- |
+| `/play query [next]` | Search or paste a YouTube, SoundCloud, Spotify, Twitch or direct audio link. Suggestions appear as you type |
+| `/pause`, `/resume`, `/skip [to]`, `/previous`, `/stop`, `/leave` | Playback |
+| `/seek time`, `/volume percent`, `/loop [mode]` | `1:30` style seeking, 0-150% volume, loop a song or the whole queue |
+| `/queue view/remove/move/shuffle/clear` | Edit the queue |
+| `/nowplaying` | The current song with control buttons |
+| `/filter` | Bass boost, nightcore, vaporwave, 8D and karaoke |
+| `/lyrics [song]` | Lyrics for the current song or any song, from [LRCLIB](https://lrclib.net) |
+| `/247 enabled` | Stay in the voice channel around the clock (Manage Server) |
+
+Each new song posts a now-playing message with buttons for previous, pause, skip, stop, loop, shuffle, volume and the queue; the old message is removed so the controls stay at the bottom of the chat.
+
+**Who can control playback.** Without DJ roles, everyone in the voice channel can. With DJ roles (set in `/setup`), DJs and staff can do everything, members can skip and remove their own songs, and anyone alone with the bot can do anything.
+
+**Restarts.** The queue is stored in MongoDB as it changes, and the playback position is saved every 15 seconds. After a restart of the bot or of Lavalink, the bot rejoins each voice channel and continues the song from where it was, with the same volume, loop mode and filters. Channels nobody is listening in are skipped, unless 24/7 mode is on.
+
+**Spotify.** Spotify only shares song details, so the audio itself comes from YouTube. Create an app at the [Spotify developer dashboard](https://developer.spotify.com/dashboard), then put `SPOTIFY_ENABLED=true` and the client ID and secret in `.env` (docker-compose), or in `lavalink/application.yml` if you run Lavalink yourself.
+
 Durations accept `30s`, `10m`, `2h`, `1d`, `1w` and combinations like `1d 12h`. A plain number means minutes.
 
 `npm run commands:deploy` re-registers commands by hand. `npm run commands:clear` removes them all (useful after switching between `devGuildId` and global).
@@ -317,6 +343,12 @@ The bot needs Manage Channels and Manage Roles to create ticket channels, and it
 
 **Modmail says "not set up to take messages"**
 Modmail must be on in `/setup` for that server, and the user must be a member of it.
+
+**Music says the audio server isn't available**
+The bot can't reach Lavalink. Check that it's running (`docker compose logs lavalink`), and that `LAVALINK_HOST`, `LAVALINK_PORT` and `LAVALINK_PASSWORD` in `.env` match `lavalink/application.yml`. The bot logs `lavalink connected` once it works.
+
+**Songs don't load or YouTube stops working**
+YouTube changes often, and the YouTube plugin needs updates to keep up. Update the plugin versions at the top of `lavalink/application.yml` to the latest releases and restart Lavalink.
 
 **Temporary bans don't expire**
 The bot must be running and still have Ban Members. Expiries are checked every `expiryCheckSeconds`, so they can be up to that late.

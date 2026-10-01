@@ -157,3 +157,15 @@ modules:
       - { id: diamond, weight: 4, three: 200, two: 3 }
     # Seconds a blackjack hand waits for a move before standing automatically.
     blackjackTimeoutSeconds: 120
+
+  music:
+    # Needs a Lavalink v4 server; docker-compose starts one. Connection details are in .env.
+    enabled: true
+    # Where plain-text searches go: ytsearch (YouTube), ytmsearch (YouTube Music),
+    # scsearch (SoundCloud), spsearch (Spotify, needs LavaSrc with Spotify set up).
+    defaultSearch: ytsearch
+    # Seconds to wait before leaving when the queue is empty, or when nobody is listening.
+    # Servers with 24/7 mode on never leave.
+    idleSeconds: 180
+    emptyChannelSeconds: 120
+    maxQueue: 500

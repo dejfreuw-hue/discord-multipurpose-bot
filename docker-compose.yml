@@ -41,6 +41,10 @@ services:
     environment:
       _JAVA_OPTIONS: -Xmx1G
       LAVALINK_SERVER_PASSWORD: ${LAVALINK_PASSWORD}
+      # Spotify support: set SPOTIFY_ENABLED=true and the client ID and secret in .env.
+      PLUGINS_LAVASRC_SOURCES_SPOTIFY: ${SPOTIFY_ENABLED:-false}
+      PLUGINS_LAVASRC_SPOTIFY_CLIENTID: ${SPOTIFY_CLIENT_ID:-}
+      PLUGINS_LAVASRC_SPOTIFY_CLIENTSECRET: ${SPOTIFY_CLIENT_SECRET:-}
     volumes:
       - ./lavalink/application.yml:/opt/Lavalink/application.yml:ro
       - lavalink-plugins:/opt/Lavalink/plugins

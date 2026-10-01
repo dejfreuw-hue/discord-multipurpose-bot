@@ -55,6 +55,10 @@
     "economy": {
       "name": "Economy",
       "description": "Wallet and bank, daily rewards, work, a shop and casino games"
+    },
+    "music": {
+      "name": "Music",
+      "description": "Play music from YouTube, SoundCloud, Spotify and more in voice channels"
     }
   },
   "core": {
@@ -1251,6 +1255,186 @@
       "body": "Members earn money with daily and weekly rewards and work shifts, and spend it in the shop. Amounts look like: {example}. Currency, rewards, odds and the shop are set with {command} and the other /economy commands.",
       "gambling": "Casino games",
       "rob": "Robbing"
+    }
+  },
+  "music": {
+    "errors": {
+      "offline": "Music isn't available right now: the bot can't reach its audio server (Lavalink). Try again in a minute.",
+      "notInVoice": "Join a voice channel first.",
+      "otherChannel": "I'm already playing in {channel}. Join me there.",
+      "cantJoin": "I can't join or speak in {channel}. Check my permissions there.",
+      "channelFull": "That voice channel is full.",
+      "nothingPlaying": "Nothing is playing right now.",
+      "djOnly": "Only DJs can do that while others are listening. Your own songs you can always skip.",
+      "noResults": "Nothing found for `{query}`.",
+      "loadFailed": "That couldn't be loaded. The link may be private, region-locked or from an unsupported site.",
+      "queueFull": "The queue is full ({max} songs).",
+      "trackFailed": "Couldn't play {track}, skipping it.",
+      "alreadyPaused": "Already paused.",
+      "notPaused": "It isn't paused.",
+      "noPrevious": "There's no previous song.",
+      "badPosition": "Pick a position between 1 and {max}.",
+      "notSeekable": "This track can't be seeked.",
+      "badTime": "`{value}` isn't a time in this track. Use something like `1:30` (track length {duration}).",
+      "tooFewToShuffle": "Add at least two songs to the queue to shuffle."
+    },
+    "play": {
+      "description": "Play a song or playlist from a search or a link",
+      "options": {
+        "query": "A song name, or a YouTube, SoundCloud or Spotify link",
+        "next": "Put it at the front of the queue"
+      },
+      "playing": "Now playing {track}",
+      "queued": "Queued {track} at position {position} ({duration})",
+      "playlist": "Queued {count} songs from **{name}**",
+      "truncated": "{count} more didn't fit in the queue."
+    },
+    "nowPlaying": {
+      "description": "Show the song that's playing, with controls",
+      "title": "Now playing",
+      "nothing": "Nothing is playing.",
+      "live": "LIVE",
+      "requestedBy": "Requested by",
+      "volume": "Volume",
+      "loop": "Loop",
+      "upNext": "Up next",
+      "queued_one": "{count} song in queue",
+      "queued_other": "{count} songs in queue",
+      "filters": "Filters: {filters}"
+    },
+    "controls": {
+      "previous": "Previous",
+      "pause": "Pause",
+      "resume": "Resume",
+      "skip": "Skip",
+      "stop": "Stop",
+      "loop": "Loop",
+      "shuffle": "Shuffle",
+      "volumeDown": "Vol -",
+      "volumeUp": "Vol +",
+      "queue": "Queue"
+    },
+    "skip": {
+      "description": "Skip the current song",
+      "options": {
+        "to": "Jump to this position in the queue"
+      },
+      "done": "Skipped."
+    },
+    "previous": {
+      "description": "Play the previous song again",
+      "done": "Going back."
+    },
+    "stop": {
+      "description": "Stop the music and clear the queue",
+      "done": "Stopped and cleared the queue.",
+      "byUser": "Stopped by {user}."
+    },
+    "pause": {
+      "description": "Pause the music",
+      "done": "Paused."
+    },
+    "resume": {
+      "description": "Resume the music",
+      "done": "Resumed."
+    },
+    "seek": {
+      "description": "Jump to a time in the current song",
+      "options": {
+        "time": "Like 1:30, 90 or 1m30s"
+      },
+      "done": "Jumped to {time}."
+    },
+    "volume": {
+      "description": "Change the volume",
+      "options": {
+        "percent": "0 to 150 percent"
+      },
+      "done": "Volume set to {volume}%."
+    },
+    "loop": {
+      "description": "Repeat the song or the whole queue",
+      "options": {
+        "mode": "Leave empty to cycle through the modes"
+      },
+      "modes": {
+        "off": "Off",
+        "track": "This song",
+        "queue": "Whole queue"
+      },
+      "done": "Loop: {mode}."
+    },
+    "filter": {
+      "description": "Turn an audio effect on or off",
+      "options": {
+        "name": "The effect"
+      },
+      "names": {
+        "bassboost": "Bass boost",
+        "nightcore": "Nightcore",
+        "vaporwave": "Vaporwave",
+        "8d": "8D audio",
+        "karaoke": "Karaoke",
+        "off": "Turn all off"
+      },
+      "on": "{filter} on. It can take a few seconds to kick in.",
+      "off": "{filter} off.",
+      "cleared": "All effects off."
+    },
+    "queue": {
+      "description": "See and edit the queue",
+      "view": "Show the queue",
+      "remove": "Remove a song",
+      "move": "Move a song to another position",
+      "shuffle": "Shuffle the queue",
+      "clear": "Remove every song from the queue",
+      "options": {
+        "position": "Position in the queue",
+        "from": "Current position",
+        "to": "New position"
+      },
+      "title": "Queue",
+      "now": "**Now:**",
+      "empty": "Nothing else is queued.",
+      "summary": "{count} songs, {duration}",
+      "removed": "Removed {track}.",
+      "moved": "Moved {track} to position {position}.",
+      "shuffled": "Shuffled {count} songs.",
+      "cleared": "Removed {count} songs from the queue."
+    },
+    "queueEnd": {
+      "leaving": "The queue is finished. I'll leave in {minutes} minutes unless something new is added.",
+      "alwaysOn": "The queue is finished. 24/7 mode is on, so I'll stay here."
+    },
+    "lyrics": {
+      "description": "Show lyrics for the current song or any song",
+      "options": {
+        "song": "A song to look up instead of the current one"
+      },
+      "nothing": "Nothing is playing. Give a song name to look up instead.",
+      "notFound": "I couldn't find lyrics for that.",
+      "source": "Lyrics from {source}"
+    },
+    "leave": {
+      "description": "Disconnect from the voice channel",
+      "done": "Left the voice channel."
+    },
+    "alwaysOn": {
+      "description": "Keep the bot in the voice channel around the clock",
+      "options": {
+        "enabled": "Stay 24/7, even when the queue is empty or nobody is listening"
+      },
+      "on": "24/7 mode on. I'll stay in the voice channel, and come back after restarts.",
+      "off": "24/7 mode off. I'll leave when the queue ends or the channel empties."
+    },
+    "setup": {
+      "player": {
+        "title": "Music"
+      },
+      "body": "DJ roles control playback for everyone. Without DJ roles, anyone in the voice channel can. Members can always skip their own songs, and someone alone with the bot can do anything.",
+      "djPlaceholder": "DJ roles (optional)",
+      "announce": "Now playing messages",
+      "alwaysOn": "24/7 mode"
     }
   }
 }
