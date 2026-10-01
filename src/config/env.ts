@@ -11,6 +11,10 @@ const envSchema = z.object({
     .string({ error: 'missing. Use mongodb://127.0.0.1:27017/reuwbot for a local install or your Atlas connection string' })
     .regex(/^mongodb(\+srv)?:\/\//, 'must start with mongodb:// or mongodb+srv://'),
   LICENSE_KEY: z.string().default(''),
+  OPENAI_API_KEY: z.string().default(''),
+  ANTHROPIC_API_KEY: z.string().default(''),
+  GEMINI_API_KEY: z.string().default(''),
+  AI_COMPAT_API_KEY: z.string().default(''),
   LAVALINK_HOST: z.string().default('127.0.0.1'),
   LAVALINK_PORT: z.coerce.number().int().min(1).max(65535).default(2333),
   LAVALINK_PASSWORD: z.string().default('youshallnotpass'),

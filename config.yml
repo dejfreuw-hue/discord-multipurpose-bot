@@ -86,3 +86,35 @@ modules:
     enabled: true
     # Seconds before AutoMod's in-channel warning deletes itself. 0 keeps it.
     noticeSeconds: 6
+
+  ai:
+    # Needs the Message Content intent. API keys go in .env (OPENAI_API_KEY, ANTHROPIC_API_KEY,
+    # GEMINI_API_KEY, AI_COMPAT_API_KEY). Providers without a key are simply not offered.
+    enabled: true
+    # Used when a server hasn't picked a provider: openai, anthropic, gemini or compatible.
+    defaultProvider: anthropic
+    # Models per provider. chatModel answers messages; visionModel reads images for the scam
+    # scanner and must support image input. Check your provider's docs for current model names.
+    providers:
+      openai:
+        chatModel: gpt-4.1-mini
+        visionModel: gpt-4.1-mini
+      anthropic:
+        chatModel: claude-sonnet-5-5
+        visionModel: claude-haiku-4-5-20251001
+      gemini:
+        chatModel: gemini-2.5-flash
+        visionModel: gemini-2.5-flash
+      # Any server that speaks the OpenAI Chat Completions API: OpenRouter, Groq, Together,
+      # Ollama (http://localhost:11434/v1), LM Studio (http://localhost:1234/v1) and others.
+      compatible:
+        baseUrl: ""
+        chatModel: ""
+        visionModel: ""
+    # Longest answer, in tokens. Thinking models (like Gemini 2.5) spend part of this on
+    # reasoning, so don't set it too low.
+    maxOutputTokens: 800
+    timeoutSeconds: 45
+    # Upper limit for any server's daily token allowance. Servers can set a lower one in
+    # /ai limits. This is what protects your API bill.
+    maxDailyTokens: 500000

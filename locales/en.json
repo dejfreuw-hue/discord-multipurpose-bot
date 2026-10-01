@@ -39,6 +39,10 @@
     "automod": {
       "name": "AutoMod",
       "description": "Filters for invites, links, bad words, spam, mentions, caps and ghost pings"
+    },
+    "ai": {
+      "name": "AI",
+      "description": "Chatbot with your own API key and an AI scam image scanner"
     }
   },
   "core": {
@@ -149,7 +153,8 @@
     "sources": {
       "automod": "Issued by AutoMod",
       "external": "Done outside the bot, picked up from the audit log",
-      "expiry": "Lifted automatically"
+      "expiry": "Lifted automatically",
+      "scanner": "Issued by the AI image scanner"
     },
     "errors": {
       "self": "You can't use that on yourself.",
@@ -498,6 +503,148 @@
       "filtersPlaceholder": "Select the filters to turn on",
       "rolesPlaceholder": "Roles AutoMod ignores",
       "channelsPlaceholder": "Channels or categories AutoMod ignores"
+    }
+  },
+  "ai": {
+    "description": "Configure the AI chatbot and image scanner",
+    "providers": {
+      "openai": "OpenAI",
+      "anthropic": "Anthropic",
+      "gemini": "Google Gemini",
+      "compatible": "OpenAI-compatible"
+    },
+    "personalities": {
+      "helpful": "Helpful",
+      "friendly": "Friendly",
+      "concise": "Concise",
+      "sarcastic": "Sarcastic",
+      "pirate": "Pirate",
+      "custom": "Custom"
+    },
+    "errors": {
+      "noProvider": "AI isn't set up on this bot yet. The bot owner needs to add an API key to the .env file.",
+      "noVisionModel": "The selected AI provider has no vision model set in config.yml, so images can't be scanned.",
+      "rateLimited": "You're asking too fast. Try again in a minute.",
+      "budget": "This server has used up today's AI allowance. It resets at midnight UTC.",
+      "blacklisted": "You're not allowed to use the AI features here.",
+      "listFull": "That list is full (at most {max}).",
+      "auth": "The AI provider rejected the API key. The bot owner needs to check it.",
+      "rate_limit": "The AI provider is rate limiting the bot right now. Try again shortly.",
+      "bad_request": "The AI provider refused the request. The bot owner should check the model name in config.yml.",
+      "unavailable": "The AI provider isn't responding right now. Try again later.",
+      "empty": "The AI didn't come up with an answer. Try rephrasing.",
+      "timeout": "The AI took too long to answer. Try again."
+    },
+    "ask": {
+      "description": "Ask the AI a question",
+      "options": {
+        "question": "Your question"
+      }
+    },
+    "status": {
+      "description": "Show the AI settings and today's usage",
+      "title": "AI",
+      "provider": "Provider",
+      "noProvider": "None set up",
+      "available": "Available",
+      "personality": "Personality",
+      "channels": "Chat channels",
+      "mentions": "Replies to mentions",
+      "limits": "Limits",
+      "limitsValue": "{perMinute} per user per minute, {history} messages of context",
+      "usage": "Used today",
+      "usageValue": "{used} of {cap} tokens in {requests} requests",
+      "blacklist": "Blocked",
+      "scanner": "Image scanner",
+      "thresholds": "Alert {alert}, delete {delete}, timeout {timeout}",
+      "allChannels": "All channels"
+    },
+    "provider": {
+      "description": "Choose which AI provider this server uses",
+      "options": {
+        "name": "The provider"
+      },
+      "unavailable": "{provider} isn't set up on this bot. Pick one of the available providers in /ai status.",
+      "done": "This server now uses {provider}."
+    },
+    "personality": {
+      "description": "Choose how the chatbot talks",
+      "options": {
+        "preset": "The personality"
+      },
+      "noCustom": "Write a custom personality with {command} first.",
+      "done": "Personality set to {personality}."
+    },
+    "persona": {
+      "description": "Write a custom personality",
+      "title": "Custom personality",
+      "label": "How should the bot behave?",
+      "placeholder": "You are the mascot of a cozy gaming server. You love puns...",
+      "saved": "Custom personality saved and turned on.",
+      "cleared": "Custom personality removed. Back to the helpful preset."
+    },
+    "limits": {
+      "description": "Set usage limits for this server",
+      "options": {
+        "dailyTokens": "Tokens the server may use per day",
+        "perMinute": "Requests per user per minute",
+        "history": "Earlier messages the bot reads for context"
+      },
+      "done": "Limits saved: {daily} tokens per day, {perMinute} requests per user per minute, {history} messages of context.",
+      "capped": "The bot owner caps servers at {cap} tokens per day, so that's the real limit."
+    },
+    "channels": {
+      "description": "Channels where the bot replies to every message",
+      "add": "Make the bot chat in a channel",
+      "remove": "Stop chatting in a channel",
+      "options": {
+        "channel": "The channel"
+      },
+      "added": "I'll reply to every message in {channel}.",
+      "removed": "I'll stop chatting in {channel}."
+    },
+    "blacklist": {
+      "description": "Block members or roles from the AI features",
+      "add": "Block a member or role",
+      "remove": "Unblock a member or role",
+      "options": {
+        "target": "A member or role"
+      },
+      "added": "Blocked {target} from the AI features.",
+      "removed": "Unblocked {target}."
+    },
+    "scanner": {
+      "description": "Scan posted images for scams",
+      "settings": "Turn the scanner on or off and set its thresholds",
+      "addChannel": "Only scan certain channels",
+      "removeChannel": "Stop limiting the scanner to a channel",
+      "options": {
+        "enabled": "Whether images are scanned",
+        "alert": "Confidence to post an alert in the mod log (0 = never)",
+        "delete": "Confidence to delete the message (0 = never)",
+        "timeout": "Confidence to time out the poster (0 = never)",
+        "timeoutMinutes": "How long the timeout lasts, in minutes",
+        "channel": "A channel or category"
+      },
+      "channelAdded": "Scanning {channel}. With channels listed, only those are scanned.",
+      "channelRemoved": "No longer limiting the scanner to {channel}.",
+      "reason": "Scam image ({score}% confidence): {reason}",
+      "title": "Possible scam image ({score}%)",
+      "message": "Message",
+      "actions": "Action taken",
+      "deleted": "message deleted",
+      "timedOut": "timed out for {minutes} minutes",
+      "alertOnly": "none, alert only"
+    },
+    "setup": {
+      "chat": {
+        "title": "AI"
+      },
+      "body": "Pick the AI provider and the channels where the bot chats freely. Elsewhere it answers when mentioned, if mention replies are on. The scanner checks posted images for scams. Use {command} for limits, personality and scanner thresholds.",
+      "noProviders": "No AI provider is set up on this bot. The bot owner can add an OpenAI, Anthropic or Gemini API key to the .env file, or point config.yml at an OpenAI-compatible server.",
+      "channelsPlaceholder": "Channels where the bot chats",
+      "mentions": "Reply to mentions",
+      "scanner": "Scam image scanner"
     }
   }
 }

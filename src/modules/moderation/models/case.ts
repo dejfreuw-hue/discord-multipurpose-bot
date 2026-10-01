@@ -3,8 +3,8 @@ import { Schema, model } from 'mongoose';
 export const CASE_TYPES = ['ban', 'unban', 'kick', 'timeout', 'untimeout', 'warn'] as const;
 export type CaseType = (typeof CASE_TYPES)[number];
 
-/** Where a case came from: a slash command, AutoMod, an action taken outside the bot, or an expiry. */
-export type CaseSource = 'command' | 'automod' | 'external' | 'expiry';
+/** Where a case came from: a slash command, AutoMod, the AI image scanner, an action outside the bot, or an expiry. */
+export type CaseSource = 'command' | 'automod' | 'scanner' | 'external' | 'expiry';
 
 export interface CaseDoc {
   guildId: string;

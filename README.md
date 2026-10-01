@@ -2,7 +2,7 @@
 
 An all-in-one Discord bot by ReuwTheDev. You host it yourself, so your data and API keys stay yours.
 
-Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) and **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments).
+Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments) and **AI** (a chatbot and a scam image scanner, using your own API key).
 
 ## Requirements
 
@@ -25,7 +25,7 @@ Windows, Linux and macOS all work. Nothing needs compiling.
    | Message Content | AutoMod, AI chat, leveling, counting, sticky messages |
    | Presence | Not needed |
 
-   General and Moderation need none of them. AutoMod needs Message Content. The bot only requests intents for modules that are enabled, so you can leave the rest off.
+   General and Moderation need none of them. AutoMod and AI need Message Content. The bot only requests intents for modules that are enabled, so you can leave the rest off.
 4. Under **Installation**, tick both **Guild Install** and **User Install**. User install lets people use `/botinfo` (and later `/userinfo` and `/rank`) anywhere.
 5. Invite the bot: under **OAuth2 -> URL Generator**, tick the `bot` and `applications.commands` scopes, pick the permissions you want to grant (or Administrator for a quick test) and open the generated link. Once the bot runs, `/botinfo` has an **Invite** button with exactly the permissions it needs.
 
@@ -43,6 +43,8 @@ cp .env.example .env      # on Windows: copy .env.example .env
 | `DISCORD_TOKEN` | The token from step 1 |
 | `MONGODB_URI` | `mongodb://127.0.0.1:27017/reuwbot` for a local MongoDB, or your Atlas connection string |
 | `LICENSE_KEY` | The key from your BuiltByBit purchase |
+| `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY` | Only for the AI module. Fill in the ones you use |
+| `AI_COMPAT_API_KEY` | Key for an OpenAI-compatible server, if it needs one |
 | `LAVALINK_*` | Only for music. The defaults match the bundled Lavalink setup |
 
 For Atlas: create a free cluster, add a database user, allow your server's IP under **Network Access**, then use **Connect -> Drivers** to copy the connection string. Put a database name before the `?`, for example `...mongodb.net/reuwbot?retryWrites=true`.
@@ -139,6 +141,37 @@ Server owners, administrators and (unless turned off) staff roles are never filt
 
 The bad word filter matches whole words, so `ass` won't flag `class`. It also catches common evasions: letter swaps (`1d10t`), accents, zero-width characters and spaced-out words (`i d i o t`, `i.d.i.o.t`). Ghost pings are reported in the channel when a message that pinged someone is deleted within the configured time; they give no strikes by default.
 
+### AI
+
+The AI module talks straight to the provider you choose, with your own API key. Nothing goes through ReuwTheDev's servers.
+
+| Provider | `.env` key | Notes |
+| --- | --- | --- |
+| Anthropic | `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) |
+| OpenAI | `OPENAI_API_KEY` | [platform.openai.com](https://platform.openai.com) |
+| Google Gemini | `GEMINI_API_KEY` | [aistudio.google.com](https://aistudio.google.com), has a free tier |
+| OpenAI-compatible | `AI_COMPAT_API_KEY` (optional) | Set `modules.ai.providers.compatible.baseUrl` and the models. Works with OpenRouter, Groq, Ollama, LM Studio and similar |
+
+Model names live in `config.yml` under `modules.ai.providers`. Providers change their lineups often, so check their docs if a model stops working; the bot logs the provider's error message when a request fails.
+
+| Command | Who | What it does |
+| --- | --- | --- |
+| `/ask question` | Everyone | Ask the AI something |
+| `/ai status` | Manage Server | Provider, model, limits, today's usage and scanner settings |
+| `/ai provider`, `/ai personality`, `/ai persona` | Manage Server | Pick a provider, a preset personality, or write your own |
+| `/ai channels add/remove` | Manage Server | Channels where the bot replies to every message |
+| `/ai blacklist add/remove` | Manage Server | Block members or roles |
+| `/ai limits` | Manage Server | Daily tokens, requests per user per minute, context size |
+| `/ai scanner settings/add-channel/remove-channel` | Manage Server | The scam image scanner |
+
+Outside its chat channels the bot answers when it's mentioned or replied to (turn this off in `/setup`). It reads the last few messages in the channel for context. Replies never ping anyone.
+
+Every request counts against the server's daily token allowance, which resets at midnight UTC. `maxDailyTokens` in `config.yml` caps what any server can set, so one busy server can't run up your bill.
+
+The scam image scanner sends images posted in the server to the provider's vision model and gets back a confidence score from 0 to 100 and a short reason. Each server sets three thresholds: post an alert to the mod log, delete the message, and time out the poster (0 turns an action off). Admins and staff are never scanned. Identical images are only checked once per hour. The scanner is off by default.
+
+Messages the bot answers, and scanned images, are sent to the AI provider you configured. Mention that in your server rules if your members would want to know.
+
 Durations accept `30s`, `10m`, `2h`, `1d`, `1w` and combinations like `1d 12h`. A plain number means minutes.
 
 `npm run commands:deploy` re-registers commands by hand. `npm run commands:clear` removes them all (useful after switching between `devGuildId` and global).
@@ -211,6 +244,12 @@ Discord only lets a bot act on members and roles below its own highest role. In 
 
 **AutoMod does nothing**
 Check that Message Content is turned on under Developer Portal -> Bot, that the filter is on in `/automod status`, and that you're testing with an account that isn't an admin or staff member. AutoMod needs Manage Messages in the channel to delete messages.
+
+**The AI says it isn't set up**
+Add at least one provider key to `.env` and restart. On startup the log lists the providers it found (`ai providers ready`).
+
+**The AI answers with an error about the API key or the model**
+Check the key in `.env`, and the model names in `config.yml` against your provider's current list. The log has the provider's exact error message.
 
 **Temporary bans don't expire**
 The bot must be running and still have Ban Members. Expiries are checked every `expiryCheckSeconds`, so they can be up to that late.
