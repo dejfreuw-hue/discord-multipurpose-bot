@@ -25,8 +25,8 @@ Windows, Linux and macOS all work. Nothing needs compiling.
    | Message Content | AutoMod, AI, Tickets (transcripts and modmail), Counting, Starboard |
    | Presence | Not needed |
 
-   General, Moderation, Leveling, Economy, Music, Join to Create, Giveaways, Suggestions, Sticky Messages and Birthdays need none of them. The bot only requests intents for modules that are enabled, so you can leave the rest off.
-4. Under **Installation**, tick both **Guild Install** and **User Install**. User install lets people use `/botinfo` (and later `/userinfo` and `/rank`) anywhere.
+   General, Moderation, Leveling, Economy, Music, Join to Create, Giveaways, Suggestions, Sticky Messages, Birthdays and all Utilities need none of them. The bot only requests intents for modules that are enabled, so you can leave the rest off.
+4. Under **Installation**, tick both **Guild Install** and **User Install**. User install lets people use `/botinfo`, `/userinfo`, `/rank`, `/remind`, `/weather`, `/translate` and the right-click **User info** and **Translate** apps anywhere, even in servers without the bot.
 5. Invite the bot: under **OAuth2 -> URL Generator**, tick the `bot` and `applications.commands` scopes, pick the permissions you want to grant (or Administrator for a quick test) and open the generated link. Once the bot runs, `/botinfo` has an **Invite** button with exactly the permissions it needs.
 
 ## 2. Get the code ready
@@ -302,6 +302,25 @@ Every part below is its own module, so each can be turned off separately in `con
 
 **Server stats.** `/serverstats add` creates a voice channel nobody can join whose name shows a count: members, members without bots, bots, boosts, channels or roles. Use `{count}` in the name to place the number. Discord allows only two renames per channel every ten minutes, so counts update every few minutes rather than instantly. Deleting the channel removes the counter.
 
+### Utilities
+
+**User and server info.** `/userinfo` shows account age, badges, banner and, inside a server the bot is in, join date, roles and key permissions. It's also in the right-click menu on any user (**Apps -> User info**). `/serverinfo` shows owner, creation date, member, channel, role and boost counts.
+
+**Reminders.** `/remind me in:2h text:...` reminds you in the channel you asked in, or by DM with `dm:true` (always by DM when the bot isn't in that server). Add `repeat:1d` for a repeating reminder. Delivered reminders have snooze buttons for 10 minutes or an hour. `/remind list` and `/remind delete` manage them. Reminders due while the bot was offline are delivered when it's back, with a note saying when they were due; repeating ones skip the occurrences they missed instead of sending them all at once.
+
+**Weather.** `/weather` suggests places as you type and shows the current conditions and three days ahead. US English users get Fahrenheit by default, everyone else Celsius; the `units` option overrides it. Data comes from [Open-Meteo](https://open-meteo.com), which needs no key.
+
+**Translate.** `/translate` translates text into your Discord language or the one you pick, and **Apps -> Translate** on any message translates it for you privately. It uses DeepL if `DEEPL_API_KEY` is set, otherwise a [LibreTranslate](https://libretranslate.com) server from `config.yml`, otherwise the AI module's providers. Each person can translate a few times a minute (`perUserPerMinute`).
+
+**YouTube and Twitch alerts.** `/feed youtube` takes a channel link, @handle or channel ID and posts each new video; `/feed twitch` posts when a streamer goes live. Both can mention a role and use your own text with `{name}`, `{title}`, `{url}` and `{game}`. `/feed test` posts a sample, `/feed list` and `/feed remove` manage them. YouTube uses the public channel feed, so no key is needed; new videos show up within `youtubeIntervalMinutes`. Twitch needs an app from the [Twitch developer console](https://dev.twitch.tv/console/apps) with its ID and secret in `.env`. Videos and streams that were already there when you added the feed aren't posted.
+
+**Backup and restore.** `/backup create` saves roles (names, colours, permissions, order), categories and channels (topics, slowmode, NSFW, limits) with all their permission overwrites. `/backup restore` shows what will happen and asks for confirmation:
+
+- **Merge** creates missing roles and channels and updates existing ones to match. Nothing is deleted.
+- **Replace** also deletes roles and channels that aren't in the backup. Only the server owner can use it.
+
+Restores match roles and channels by ID on the same server and by name on another one, so a backup can also be used as a template for a new server you own (you can restore your own backups anywhere you're an admin). The bot needs Administrator during a restore to set permissions it doesn't have itself, and it can only touch roles below its own role. Messages, members, emojis and webhooks are not part of a backup. `/backup auto enabled:true` makes a backup every `autoIntervalHours` and keeps the newest `autoKeep`.
+
 Durations accept `30s`, `10m`, `2h`, `1d`, `1w` and combinations like `1d 12h`. A plain number means minutes.
 
 `npm run commands:deploy` re-registers commands by hand. `npm run commands:clear` removes them all (useful after switching between `devGuildId` and global).
@@ -328,6 +347,7 @@ src/
     index.ts            list of modules, in load order
     core/               General module (help, ping, botinfo, setup)
     community/          one folder per Community module (welcome, roles, giveaways, ...)
+    info/ reminders/ weather/ translate/ feeds/ backup/   Utilities
   scripts/commands.ts   manual command registration
 locales/                translations
 tests/                  unit tests (npm test)
@@ -338,6 +358,7 @@ A module is a folder in `src/modules/` exporting `defineModule({...})` with its 
 A few conventions that keep things predictable:
 
 - Command descriptions are locale keys (`.setDescription('core.ping.description')`), translated at registration.
+- Right-click entries (Apps -> ...) are `defineContextMenu({ type: 'user' | 'message', name: 'locale.key', ... })` in a module's `contextMenus`. Discord allows five of each type.
 - The router acknowledges every interaction for you. Set `defer: false` only when the handler shows a modal.
 - Throw `new UserError('some.locale.key')` for anything the user did wrong. It becomes a friendly message. Any other error is logged with a reference code and the user gets a generic message with that code.
 - Component custom IDs are `module:action:args`. The handler with the longest matching prefix runs.
@@ -408,6 +429,21 @@ Discord lets a channel be renamed only twice per ten minutes, so changes show up
 
 **Birthdays are announced at the wrong time**
 Announcements follow the member's own timezone, or the server's default from `/birthdays settings` (UTC unless changed). Members can fix theirs by running `/birthday set` again with their timezone.
+
+**YouTube alerts never arrive**
+YouTube's feed can lag a few minutes behind an upload, and the bot checks every `youtubeIntervalMinutes`. Run `/feed test` to make sure the bot can post in the channel. If adding a channel by @handle fails, paste the channel ID instead (on the channel page: About -> Share channel -> Copy channel ID).
+
+**"Twitch alerts aren't set up"**
+Put `TWITCH_CLIENT_ID` and `TWITCH_CLIENT_SECRET` in `.env` and restart. If the log shows `twitch check failed` with a 401 or 403, the secret is wrong or was regenerated.
+
+**Translate says it isn't set up**
+Add `DEEPL_API_KEY` to `.env`, set `translate.libretranslateUrl` in `config.yml`, or configure an AI provider. With `service: auto` the first one available is used.
+
+**A restore skipped some items**
+Skipped items are roles above the bot's own role, and channels Discord refused: announcement and forum channels need the server to have Community turned on. Move the bot's role to the top of the list and run the restore again; anything already restored is left alone.
+
+**Commands from a service say it isn't answering**
+Weather, translation and feeds talk to outside services. If the bot's host blocks outgoing connections (some hosting panels do), allow HTTPS to `api.open-meteo.com`, `geocoding-api.open-meteo.com`, `www.youtube.com`, `api.twitch.tv`, `id.twitch.tv` and your translation service.
 
 **"Something went wrong" with a reference code**
 Search the log for the code. The full error is right there.

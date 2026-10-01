@@ -4,14 +4,16 @@ import type {
   ButtonInteraction,
   ClientEvents,
   GatewayIntentBits,
+  MessageContextMenuCommandInteraction,
   ModalSubmitInteraction,
   Partials,
   SlashCommandOptionsOnlyBuilder,
   SlashCommandSubcommandsOnlyBuilder,
+  UserContextMenuCommandInteraction,
 } from 'discord.js';
 import type { z } from 'zod';
 import type { Bot } from './bot.js';
-import type { CommandContext, ComponentContext, ComponentInteractionContext, GuildContext } from './context.js';
+import type { CommandContext, ComponentContext, ComponentInteractionContext, GuildContext, InteractionContext } from './context.js';
 import type { PermissionRequirements } from './permissions.js';
 import type { PanelRow } from './ui/panel.js';
 
@@ -50,6 +52,25 @@ export interface AnywhereCommand extends CommandBase {
 }
 
 export type Command = GuildCommand | AnywhereCommand;
+
+type ContextMenuInteractionFor<T extends 'user' | 'message'> = T extends 'user'
+  ? UserContextMenuCommandInteraction
+  : MessageContextMenuCommandInteraction;
+
+/**
+ * An entry in the Apps menu when right-clicking a user or a message. Discord allows five of each
+ * type per bot, and they count separately from slash commands.
+ */
+export interface ContextMenu<T extends 'user' | 'message' = 'user' | 'message'> {
+  type: T;
+  /** Locale key for the name shown in the menu (up to 32 characters once translated). */
+  name: string;
+  scope?: Scope;
+  defer?: Exclude<DeferMode, 'update'>;
+  cooldown?: number;
+  permissions?: PermissionRequirements;
+  run(ctx: InteractionContext<ContextMenuInteractionFor<T>>): Promise<void>;
+}
 
 export type ComponentKind = 'button' | 'select' | 'modal';
 
@@ -118,6 +139,7 @@ export interface Module<C extends z.ZodObject = z.ZodObject, S extends z.ZodType
   /** Schema for this module's per-server settings. Every field needs a default. */
   guildSettings?: S;
   commands?: Command[];
+  contextMenus?: ContextMenu[];
   components?: (ComponentHandler | AnywhereComponentHandler)[];
   events?: EventHandler[];
   setup?: SetupStep[];
@@ -147,4 +169,8 @@ export function defineComponent(handler: ComponentHandler | AnywhereComponentHan
 
 export function defineEvent<K extends keyof ClientEvents>(handler: EventHandler<K>): EventHandler {
   return handler as unknown as EventHandler;
+}
+
+export function defineContextMenu<T extends 'user' | 'message'>(menu: ContextMenu<T>): ContextMenu {
+  return menu as unknown as ContextMenu;
 }

@@ -16,7 +16,7 @@ import { Cooldowns } from './cooldowns.js';
 import type { GuildSettings, GuildSettingsData } from './guild-settings.js';
 import type { I18n } from './i18n.js';
 import type { Logger } from './logger.js';
-import type { AnywhereComponentHandler, Command, ComponentHandler, Module } from './module.js';
+import type { AnywhereComponentHandler, Command, ComponentHandler, ContextMenu, Module } from './module.js';
 import { routeInteraction } from './router.js';
 import { Panel } from './ui/panel.js';
 
@@ -46,6 +46,8 @@ export class Bot {
   /** Modules enabled in config.yml, in load order. */
   readonly modules: Module[];
   readonly commands = new Map<string, Registered<Command>>();
+  /** Keyed by "user:<name>" or "message:<name>", with the name in the default language. */
+  readonly contextMenus = new Map<string, Registered<ContextMenu>>();
   readonly components = new Map<string, Registered<ComponentHandler | AnywhereComponentHandler>>();
   readonly cooldowns = new Cooldowns();
   /** Command name -> application command ID, for clickable command mentions. */
@@ -144,6 +146,11 @@ export class Bot {
         const name = command.data.name;
         if (this.commands.has(name)) throw new Error(`command /${name} is defined twice (${mod.name})`);
         this.commands.set(name, { item: command, module: mod });
+      }
+      for (const menu of mod.contextMenus ?? []) {
+        const key = `${menu.type}:${this.i18n.t(this.i18n.fallback, menu.name)}`;
+        if (this.contextMenus.has(key)) throw new Error(`context menu ${key} is defined twice (${mod.name})`);
+        this.contextMenus.set(key, { item: menu, module: mod });
       }
       for (const handler of mod.components ?? []) {
         const key = `${handler.kind}:${handler.id}`;

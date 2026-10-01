@@ -221,3 +221,47 @@ modules:
     # channel to be renamed twice per 10 minutes, so counts update every few minutes.
     # Needs the Server Members intent.
     enabled: true
+
+  # Utilities.
+  info:
+    # /userinfo (also works as a user-installed app and from the right-click menu) and /serverinfo.
+    enabled: true
+
+  reminders:
+    enabled: true
+    maxPerUser: 25
+    # Furthest ahead a reminder can be set.
+    maxDays: 365
+    # Shortest interval for repeating reminders.
+    minRepeatMinutes: 60
+
+  weather:
+    # Uses Open-Meteo, which needs no API key.
+    enabled: true
+
+  translate:
+    enabled: true
+    # auto: DeepL if DEEPL_API_KEY is set in .env, else LibreTranslate if libretranslateUrl is
+    # set, else the AI module's providers. Or pick one: deepl, libretranslate, ai.
+    service: auto
+    # Your own or a hosted LibreTranslate server, e.g. https://translate.example.com
+    libretranslateUrl: ""
+    perUserPerMinute: 6
+    maxLength: 2000
+
+  feeds:
+    # YouTube needs nothing extra. Twitch needs TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET in .env.
+    enabled: true
+    youtubeIntervalMinutes: 10
+    twitchIntervalSeconds: 120
+    maxPerGuild: 25
+    # Videos older than this are never posted, e.g. old uploads made public later.
+    maxVideoAgeHours: 48
+
+  backup:
+    enabled: true
+    # Manual backups each server can keep.
+    maxPerGuild: 10
+    # Automatic backups, turned on per server with /backup auto.
+    autoIntervalHours: 24
+    autoKeep: 3

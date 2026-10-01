@@ -37,7 +37,9 @@
     "everyoneRole": "You can't use @everyone here.",
     "managedRole": "{role} is managed by an integration and can't be assigned by hand.",
     "botRoleHierarchy": "{role} is equal to or higher than my highest role. Move my role above it in Server Settings -> Roles.",
-    "userRoleHierarchy": "{role} is equal to or higher than your highest role."
+    "userRoleHierarchy": "{role} is equal to or higher than your highest role.",
+    "serviceUnavailable": "The service behind this command isn't answering right now. Try again in a few minutes.",
+    "serviceBusy": "The service behind this command is getting too many requests. Try again in a minute."
   },
   "modules": {
     "core": {
@@ -115,6 +117,30 @@
     "serverstats": {
       "name": "Server Stats",
       "description": "Voice channels whose names show live server counts"
+    },
+    "info": {
+      "name": "Info",
+      "description": "User and server information"
+    },
+    "reminders": {
+      "name": "Reminders",
+      "description": "Personal reminders, one-off or repeating"
+    },
+    "weather": {
+      "name": "Weather",
+      "description": "Current weather and a 3-day forecast for any place"
+    },
+    "translate": {
+      "name": "Translate",
+      "description": "Translate text and messages with DeepL, LibreTranslate or AI"
+    },
+    "feeds": {
+      "name": "Feeds",
+      "description": "Alerts for new YouTube videos and Twitch streams"
+    },
+    "backup": {
+      "name": "Backup",
+      "description": "Back up and restore roles, channels and permissions"
     }
   },
   "core": {
@@ -2066,6 +2092,287 @@
     "errors": {
       "notCounter": "That channel isn't a counter.",
       "limit": "A server can have up to 10 counters. Remove one first."
+    }
+  },
+  "info": {
+    "user": {
+      "description": "Show information about a user",
+      "menu": "User info",
+      "options": {
+        "user": "Who to look up (you, if empty)"
+      },
+      "bot": "bot",
+      "created": "Account created",
+      "joined": "Joined this server",
+      "badges": "Badges",
+      "roles_one": "Roles ({count})",
+      "roles_other": "Roles ({count})",
+      "more": "and {count} more",
+      "boosting": "Boosting since",
+      "timedOut": "Timed out until",
+      "permissions": "Key permissions",
+      "avatar": "Avatar",
+      "banner": "Banner"
+    },
+    "server": {
+      "description": "Show information about this server",
+      "owner": "Owner",
+      "created": "Created",
+      "members": "Members",
+      "channels": "Channels",
+      "channelLine": "{text} text, {voice} voice, {categories} categories",
+      "roles": "Roles",
+      "emojis": "Emojis and stickers",
+      "emojiLine": "{emojis} emojis, {stickers} stickers",
+      "boosts": "Boosts",
+      "boostLine_one": "{count} boost, level {tier}",
+      "boostLine_other": "{count} boosts, level {tier}",
+      "verification": "Verification level"
+    },
+    "verification": {
+      "0": "None",
+      "1": "Low",
+      "2": "Medium",
+      "3": "High",
+      "4": "Highest"
+    },
+    "badges": {
+      "Staff": "Discord Staff",
+      "Partner": "Partnered Server Owner",
+      "CertifiedModerator": "Moderator Programs Alumni",
+      "Hypesquad": "HypeSquad Events",
+      "HypeSquadOnlineHouse1": "HypeSquad Bravery",
+      "HypeSquadOnlineHouse2": "HypeSquad Brilliance",
+      "HypeSquadOnlineHouse3": "HypeSquad Balance",
+      "BugHunterLevel1": "Bug Hunter",
+      "BugHunterLevel2": "Golden Bug Hunter",
+      "ActiveDeveloper": "Active Developer",
+      "VerifiedDeveloper": "Early Verified Bot Developer",
+      "PremiumEarlySupporter": "Early Supporter",
+      "VerifiedBot": "Verified Bot"
+    },
+    "permissions": {
+      "Administrator": "Administrator",
+      "ManageGuild": "Manage Server",
+      "ManageRoles": "Manage Roles",
+      "ManageChannels": "Manage Channels",
+      "BanMembers": "Ban Members",
+      "KickMembers": "Kick Members",
+      "ModerateMembers": "Timeout Members",
+      "ManageMessages": "Manage Messages",
+      "MentionEveryone": "Mention Everyone"
+    }
+  },
+  "reminders": {
+    "command": {
+      "description": "Set and manage reminders",
+      "me": "Remind yourself about something",
+      "list": "Show your reminders",
+      "delete": "Delete a reminder",
+      "options": {
+        "in": "When, like 10m, 2h or 1d 12h",
+        "text": "What to remind you about",
+        "repeat": "Repeat every, like 1d or 1w",
+        "dm": "Send it by DM instead of in this channel",
+        "number": "Reminder number"
+      }
+    },
+    "saved": "Reminder #{number} set for {time} ({relative}). I'll remind you {where}.",
+    "savedRepeat": "Reminder #{number} set for {time} ({relative}), then every {interval}. I'll remind you {where}.",
+    "whereChannel": "in this channel",
+    "whereDm": "by DM",
+    "every": "every {interval}",
+    "listTitle": "Your reminders",
+    "empty": "You have no reminders. Set one with `/remind me`.",
+    "deleted": "Reminder #{number} deleted.",
+    "snoozed": "Snoozed. I'll remind you again {time}.",
+    "deliver": {
+      "title": "Reminder",
+      "late": "This was due {time}; I was offline then.",
+      "repeats": "Next reminder {time}.",
+      "snooze10": "Snooze 10 minutes",
+      "snooze60": "Snooze 1 hour"
+    },
+    "errors": {
+      "duration": "`{value}` isn't a time I understand. Try `10m`, `2h` or `1d 12h`.",
+      "range": "Reminders can be set from 1 minute up to {days} days ahead.",
+      "repeatTooShort": "Repeating reminders can repeat at most every {interval}.",
+      "limit_one": "You can have {count} reminder at a time. Delete one first.",
+      "limit_other": "You can have {count} reminders at a time. Delete one first.",
+      "notFound": "You don't have a reminder #{number}.",
+      "snooze": "This reminder can't be snoozed anymore."
+    }
+  },
+  "weather": {
+    "command": {
+      "description": "Show the weather for a place",
+      "options": {
+        "place": "City or town",
+        "units": "Celsius or Fahrenheit"
+      }
+    },
+    "units": {
+      "metric": "Metric (°C, km/h)",
+      "imperial": "Imperial (°F, mph)"
+    },
+    "title": "Weather in {place}",
+    "feelsLike": "Feels like",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "forecast": "Forecast",
+    "today": "Today",
+    "rainChance": "{percent}% chance of rain",
+    "source": "Weather data by Open-Meteo.com",
+    "codes": {
+      "0": "Clear sky",
+      "1": "Mainly clear",
+      "2": "Partly cloudy",
+      "3": "Overcast",
+      "45": "Fog",
+      "48": "Freezing fog",
+      "51": "Light drizzle",
+      "53": "Drizzle",
+      "55": "Heavy drizzle",
+      "56": "Light freezing drizzle",
+      "57": "Freezing drizzle",
+      "61": "Light rain",
+      "63": "Rain",
+      "65": "Heavy rain",
+      "66": "Light freezing rain",
+      "67": "Freezing rain",
+      "71": "Light snow",
+      "73": "Snow",
+      "75": "Heavy snow",
+      "77": "Snow grains",
+      "80": "Light showers",
+      "81": "Showers",
+      "82": "Heavy showers",
+      "85": "Snow showers",
+      "86": "Heavy snow showers",
+      "95": "Thunderstorm",
+      "96": "Thunderstorm with hail",
+      "99": "Severe thunderstorm with hail",
+      "unknown": "Unknown conditions"
+    },
+    "errors": {
+      "notFound": "I couldn't find a place called **{place}**. Try picking one from the list as you type."
+    }
+  },
+  "translate": {
+    "command": {
+      "description": "Translate text into another language",
+      "options": {
+        "text": "Text to translate",
+        "to": "Language to translate into (yours, if empty)",
+        "from": "Language of the text (detected, if empty)"
+      }
+    },
+    "menu": "Translate",
+    "footer": "Translated into {to} by {service}",
+    "footerFrom": "Translated from {from} into {to} by {service}",
+    "errors": {
+      "empty": "There's no text to translate.",
+      "tooLong": "That's too long. I can translate up to {max} characters at a time.",
+      "notSetUp": "Translation isn't set up. The bot owner needs to add a DeepL key, a LibreTranslate server or an AI provider.",
+      "rateLimited": "You're translating a lot. Wait a minute and try again.",
+      "language": "`{value}` isn't a language I can translate into. Pick one from the list."
+    }
+  },
+  "feeds": {
+    "command": {
+      "description": "YouTube and Twitch alerts",
+      "youtube": "Post new videos from a YouTube channel",
+      "twitch": "Post when a Twitch streamer goes live",
+      "remove": "Stop a feed",
+      "test": "Post a test alert for a feed",
+      "list": "Show this server's feeds",
+      "options": {
+        "youtubeChannel": "Channel link, @handle or channel ID",
+        "streamer": "Twitch username or link",
+        "postIn": "Channel to post alerts in",
+        "ping": "Role to mention with each alert",
+        "message": "Custom text. Placeholders: {name}, {title}, {url}, {game}",
+        "shorts": "Also post Shorts (default: yes)",
+        "feed": "Feed number"
+      }
+    },
+    "platforms": {
+      "youtube": "YouTube",
+      "twitch": "Twitch"
+    },
+    "announce": {
+      "youtube": "**{name}** uploaded a new video: **{title}**\n{url}",
+      "twitch": "**{name}** is live playing {game}: **{title}**\n{url}",
+      "twitchNoGame": "**{name}** is live: **{title}**\n{url}"
+    },
+    "added": {
+      "youtube": "Feed #{number} added. New videos from **{name}** will be posted in {channel}. Try it with {command}.",
+      "twitch": "Feed #{number} added. {channel} will hear about it when **{name}** goes live. Try it with {command}."
+    },
+    "removed": "Feed for **{name}** removed.",
+    "tested": "Test alert posted in {channel}.",
+    "testTitle": "Test alert",
+    "testGame": "something fun",
+    "listTitle": "Feeds",
+    "empty": "No feeds yet. Add one with `/feed youtube` or `/feed twitch`.",
+    "errors": {
+      "notFound": "There's no feed #{number}.",
+      "youtubeNotFound": "I couldn't find a YouTube channel for `{input}`. Paste the channel's link, its @handle or its channel ID (starts with UC).",
+      "twitchNotFound": "There's no Twitch account called `{input}`.",
+      "twitchNotSetUp": "Twitch alerts aren't set up. The bot owner needs to add TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET to .env.",
+      "duplicate": "**{name}** is already posted in {channel}.",
+      "limit_one": "A server can have {count} feed. Remove one first.",
+      "limit_other": "A server can have {count} feeds. Remove one first.",
+      "cantPost": "I couldn't post in {channel}. Check that I can see it and send messages there."
+    }
+  },
+  "backup": {
+    "command": {
+      "description": "Back up and restore this server's structure",
+      "create": "Save roles, channels and permissions as they are now",
+      "list": "Show the backups you can restore here",
+      "restore": "Restore a backup onto this server",
+      "delete": "Delete a backup",
+      "auto": "Turn automatic backups on or off",
+      "options": {
+        "name": "A name to recognise it by",
+        "backup": "Backup ID",
+        "mode": "Merge keeps what's here; replace also deletes what the backup doesn't have",
+        "settings": "Also restore verification level, notification and AFK settings",
+        "enabled": "Make automatic backups"
+      }
+    },
+    "modes": {
+      "merge": "Merge (create and update only)",
+      "replace": "Replace (also delete extras)"
+    },
+    "defaultName": "Manual backup",
+    "line": "`{id}` **{name}** from {server}, {roles} roles, {channels} channels, {time}",
+    "created": "Backup `{id}` saved with {roles} roles and {channels} channels. Restore it with `/backup restore`, here or on another server you manage.",
+    "listTitle": "Backups",
+    "empty": "No backups yet. Make one with `/backup create`.",
+    "autoOn": "Automatic backups are on.",
+    "autoOff": "Automatic backups are off.",
+    "autoEnabled": "Automatic backups are on: one every {hours} hours, keeping the newest {keep}.",
+    "autoDisabled": "Automatic backups are off. Existing backups are kept.",
+    "deleted": "Backup `{id}` deleted.",
+    "confirm": {
+      "title": "Restore this backup?",
+      "merge": "Missing roles and channels are created, and existing ones get the names and permissions from the backup. Nothing is deleted.",
+      "replace": "**Roles and channels that aren't in the backup will be deleted**, along with their messages. This can't be undone.",
+      "settings": "Server settings (verification level, notifications, AFK channel) are restored too.",
+      "botRole": "-# Only roles below my own role can be changed. Move my role to the top first for a complete restore.",
+      "button": "Restore"
+    },
+    "restoring": "Restoring. Large servers can take several minutes, since Discord limits how fast channels and roles can be created.",
+    "done": "Restore finished: {created} created, {updated} updated, {deleted} deleted, {skipped} skipped. Skipped items are roles above mine or things Discord refused, like announcement channels on servers without Community.",
+    "errors": {
+      "notFound": "There's no backup `{id}` that you can use here.",
+      "limit_one": "This server already has {count} backup. Delete one first.",
+      "limit_other": "This server already has {count} backups. Delete one first.",
+      "ownerOnly": "Only the server owner can restore in replace mode, since it deletes channels and roles.",
+      "botAdmin": "I need the Administrator permission during a restore, to set channel permissions I don't have myself. You can take it away again afterwards.",
+      "running": "A restore is already running on this server."
     }
   }
 }

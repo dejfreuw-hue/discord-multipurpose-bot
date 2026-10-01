@@ -2,19 +2,32 @@ import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import {
+  ApplicationCommandType,
   ApplicationIntegrationType,
   InteractionContextType,
   REST,
   Routes,
-  type RESTPostAPIChatInputApplicationCommandsJSONBody,
+  type RESTPostAPIApplicationCommandsJSONBody,
 } from 'discord.js';
 import type { I18n } from './i18n.js';
-import type { Module } from './module.js';
+import type { Module, Scope } from './module.js';
 import { fromRoot } from './paths.js';
 
 const HASH_FILE = fromRoot('data', 'commands.sha256');
 
-type CommandJSON = RESTPostAPIChatInputApplicationCommandsJSONBody;
+type CommandJSON = RESTPostAPIApplicationCommandsJSONBody;
+
+function scopeFields(scope: Scope | undefined): Pick<CommandJSON, 'integration_types' | 'contexts'> {
+  const anywhere = scope === 'anywhere';
+  return {
+    integration_types: anywhere
+      ? [ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall]
+      : [ApplicationIntegrationType.GuildInstall],
+    contexts: anywhere
+      ? [InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel]
+      : [InteractionContextType.Guild],
+  };
+}
 
 /**
  * Builds the registration payload: translates description keys and applies each command's scope.
@@ -32,14 +45,15 @@ export function buildCommands(
     for (const command of mod.commands ?? []) {
       const json = localize(structuredClone(command.data.toJSON()), i18n) as CommandJSON;
       if (showToAll) json.default_member_permissions = null;
-      const anywhere = command.scope === 'anywhere';
-      json.integration_types = anywhere
-        ? [ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall]
-        : [ApplicationIntegrationType.GuildInstall];
-      json.contexts = anywhere
-        ? [InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel]
-        : [InteractionContextType.Guild];
-      out.push(json);
+      out.push({ ...json, ...scopeFields(command.scope) });
+    }
+    for (const menu of mod.contextMenus ?? []) {
+      out.push({
+        type: menu.type === 'user' ? ApplicationCommandType.User : ApplicationCommandType.Message,
+        name: i18n.t(i18n.fallback, menu.name),
+        name_localizations: i18n.localizations(menu.name),
+        ...scopeFields(menu.scope),
+      });
     }
   }
   return out;

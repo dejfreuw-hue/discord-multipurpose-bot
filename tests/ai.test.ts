@@ -5,7 +5,7 @@ import { GeminiProvider } from '../src/modules/ai/providers/gemini.js';
 import { configuredProviders, pickProvider } from '../src/modules/ai/providers/index.js';
 import { OpenAIProvider } from '../src/modules/ai/providers/openai.js';
 import { ProviderError, type ChatRequest } from '../src/modules/ai/providers/types.js';
-import { RateLimiter } from '../src/modules/ai/rate-limit.js';
+import { RateLimiter } from '../src/core/rate-limit.js';
 import { parseScanResult } from '../src/modules/ai/scan-result.js';
 import { aiConfig } from '../src/modules/ai/settings.js';
 import type { Env } from '../src/config/env.js';

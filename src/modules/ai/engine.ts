@@ -4,7 +4,7 @@ import { UserError } from '../../core/errors.js';
 import { PERSONALITIES } from './personalities.js';
 import { configuredProviders, pickProvider, type ConfiguredProvider } from './providers/index.js';
 import { ProviderError, type ChatMessage, type ProviderName } from './providers/types.js';
-import { RateLimiter } from './rate-limit.js';
+import { RateLimiter } from '../../core/rate-limit.js';
 import { aiConfig, type AiSettings } from './settings.js';
 import { recordUsage, usage } from './usage.js';
 

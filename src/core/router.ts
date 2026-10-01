@@ -9,6 +9,8 @@ import {
   type AutocompleteInteraction,
   type ButtonInteraction,
   type ChatInputCommandInteraction,
+  type MessageContextMenuCommandInteraction,
+  type UserContextMenuCommandInteraction,
   type Interaction,
   type ModalSubmitInteraction,
   type PermissionResolvable,
@@ -17,23 +19,31 @@ import {
 import type { Bot, Registered } from './bot.js';
 import { ComponentInteractionContext, InteractionContext } from './context.js';
 import { UserError } from './errors.js';
-import type { AnywhereComponentHandler, Command, ComponentHandler, ComponentKind, DeferMode } from './module.js';
+import { HttpError } from './http.js';
+import type { AnywhereComponentHandler, Command, ComponentHandler, ComponentKind, ContextMenu, DeferMode } from './module.js';
 import { isStaff, missingPermissions, permissionLabel, type PermissionRequirements } from './permissions.js';
 
 type ComponentInteraction = ButtonInteraction | AnySelectMenuInteraction | ModalSubmitInteraction;
 
 export async function routeInteraction(bot: Bot, interaction: Interaction): Promise<void> {
   if (bot.stopping) return;
-  if (interaction.isChatInputCommand()) return runCommand(bot, interaction);
+  if (interaction.isChatInputCommand()) return runCommand(bot, interaction, bot.commands.get(interaction.commandName));
+  if (interaction.isContextMenuCommand()) return runCommand(bot, interaction, contextMenuFor(bot, interaction));
   if (interaction.isAutocomplete()) return runAutocomplete(bot, interaction);
   if (interaction.isButton()) return runComponent(bot, interaction, 'button');
   if (interaction.isAnySelectMenu()) return runComponent(bot, interaction, 'select');
   if (interaction.isModalSubmit()) return runComponent(bot, interaction, 'modal');
 }
 
-async function runCommand(bot: Bot, interaction: ChatInputCommandInteraction): Promise<void> {
+type ApplicationCommandInteraction = ChatInputCommandInteraction | UserContextMenuCommandInteraction | MessageContextMenuCommandInteraction;
+
+function contextMenuFor(bot: Bot, interaction: UserContextMenuCommandInteraction | MessageContextMenuCommandInteraction): Registered<ContextMenu> | undefined {
+  const type = interaction.isUserContextMenuCommand() ? 'user' : 'message';
+  return bot.contextMenus.get(`${type}:${interaction.commandName}`);
+}
+
+async function runCommand(bot: Bot, interaction: ApplicationCommandInteraction, entry: Registered<Command | ContextMenu> | undefined): Promise<void> {
   const ctx = new InteractionContext(bot, interaction, peekSettings(bot, interaction));
-  const entry = bot.commands.get(interaction.commandName);
   if (!entry) {
     // Happens when a command was removed but Discord still has the old registration cached.
     await ctx.fail(ctx.errorPanel(ctx.t('errors.unknownCommand'))).catch(() => undefined);
@@ -55,7 +65,7 @@ async function runCommand(bot: Bot, interaction: ChatInputCommandInteraction): P
     await loadGuildState(bot, ctx, module.name, module.toggleable, command.permissions);
 
     bot.cooldowns.start(cooldownKey, cooldownFor(bot, interaction.commandName, command));
-    await (command.run as (c: InteractionContext<ChatInputCommandInteraction>) => Promise<void>)(ctx);
+    await (command.run as (c: InteractionContext<ApplicationCommandInteraction>) => Promise<void>)(ctx);
   } catch (err) {
     await reportFailure(bot, ctx, err, { command: interaction.commandName });
   }
@@ -163,7 +173,7 @@ function assertUserPermissions(have: Readonly<PermissionsBitField> | null, need:
   }
 }
 
-function cooldownFor(bot: Bot, name: string, command: Command): number {
+function cooldownFor(bot: Bot, name: string, command: Command | ContextMenu): number {
   return bot.config.commands.cooldowns[name] ?? command.cooldown ?? bot.config.commands.defaultCooldown;
 }
 
@@ -179,6 +189,10 @@ async function reportFailure(bot: Bot, ctx: InteractionContext, err: unknown, wh
   } else if (err instanceof DiscordAPIError && err.code === RESTJSONErrorCodes.MissingPermissions) {
     bot.logger.warn({ ...where, guild: i.guildId, msg: err.message }, 'missing discord permissions');
     text = ctx.t('errors.discordPermissions');
+  } else if (err instanceof HttpError) {
+    // An outside service (weather, translation, feeds) is down or refused; not our bug.
+    bot.logger.warn({ ...where, status: err.status, msg: err.message }, 'outside service failed');
+    text = ctx.t(err.status === 429 ? 'errors.serviceBusy' : 'errors.serviceUnavailable');
   } else {
     const ref = randomBytes(3).toString('hex');
     bot.logger.error({ err, ref, ...where, user: i.user.id, guild: i.guildId }, 'interaction failed');
