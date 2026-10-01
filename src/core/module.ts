@@ -11,7 +11,7 @@ import type {
 } from 'discord.js';
 import type { z } from 'zod';
 import type { Bot } from './bot.js';
-import type { CommandContext, ComponentContext, GuildContext } from './context.js';
+import type { CommandContext, ComponentContext, ComponentInteractionContext, GuildContext } from './context.js';
 import type { PermissionRequirements } from './permissions.js';
 import type { PanelRow } from './ui/panel.js';
 
@@ -68,9 +68,25 @@ type InteractionFor<K extends ComponentKind> = K extends 'button'
 export interface ComponentHandler<K extends ComponentKind = ComponentKind> {
   kind: K;
   id: string;
+  scope?: 'guild';
   defer?: DeferMode;
   permissions?: PermissionRequirements;
   run(ctx: ComponentContext<InteractionFor<K>>, args: string[]): Promise<void>;
+}
+
+type AnyInteractionFor<K extends ComponentKind> = K extends 'button'
+  ? ButtonInteraction
+  : K extends 'select'
+    ? AnySelectMenuInteraction
+    : ModalSubmitInteraction;
+
+/** A component that also works in DMs, for example on a message the bot sent to a user. */
+export interface AnywhereComponentHandler<K extends ComponentKind = ComponentKind> {
+  kind: K;
+  id: string;
+  scope: 'anywhere';
+  defer?: DeferMode;
+  run(ctx: ComponentInteractionContext<AnyInteractionFor<K>>, args: string[]): Promise<void>;
 }
 
 export interface EventHandler<K extends keyof ClientEvents = keyof ClientEvents> {
@@ -102,7 +118,7 @@ export interface Module<C extends z.ZodObject = z.ZodObject, S extends z.ZodType
   /** Schema for this module's per-server settings. Every field needs a default. */
   guildSettings?: S;
   commands?: Command[];
-  components?: ComponentHandler[];
+  components?: (ComponentHandler | AnywhereComponentHandler)[];
   events?: EventHandler[];
   setup?: SetupStep[];
   /** Runs once after the client is ready. */
@@ -123,8 +139,10 @@ export function defineCommand(command: Command): Command {
   return command;
 }
 
-export function defineComponent<K extends ComponentKind>(handler: ComponentHandler<K>): ComponentHandler {
-  return handler as unknown as ComponentHandler;
+export function defineComponent<K extends ComponentKind>(handler: AnywhereComponentHandler<K>): AnywhereComponentHandler;
+export function defineComponent<K extends ComponentKind>(handler: ComponentHandler<K>): ComponentHandler;
+export function defineComponent(handler: ComponentHandler | AnywhereComponentHandler): ComponentHandler | AnywhereComponentHandler {
+  return handler;
 }
 
 export function defineEvent<K extends keyof ClientEvents>(handler: EventHandler<K>): EventHandler {

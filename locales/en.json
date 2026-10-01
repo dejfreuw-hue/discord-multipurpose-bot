@@ -43,6 +43,10 @@
     "ai": {
       "name": "AI",
       "description": "Chatbot with your own API key and an AI scam image scanner"
+    },
+    "tickets": {
+      "name": "Tickets",
+      "description": "Ticket panels with forms, transcripts and modmail through DMs"
     }
   },
   "core": {
@@ -645,6 +649,214 @@
       "channelsPlaceholder": "Channels where the bot chats",
       "mentions": "Reply to mentions",
       "scanner": "Scam image scanner"
+    }
+  },
+  "tickets": {
+    "opened": "Your ticket is open: {channel}",
+    "form": {
+      "title": "{category}"
+    },
+    "errors": {
+      "busy": "Your ticket is already being created.",
+      "tooMany": "You already have an open ticket: {channels}",
+      "noPanel": "There's no ticket panel #{id}.",
+      "noCategory": "That ticket type doesn't exist anymore.",
+      "panelChannel": "I can't post in that channel. Check my permissions there.",
+      "panelInvalid": "Discord rejected the panel. Usually that's an emoji I can't use; check the emojis on its categories.",
+      "notTicket": "This isn't an open ticket channel.",
+      "staffOnly": "Only support staff can do that.",
+      "claimedByOther": "This ticket is already claimed by {user}.",
+      "alreadyLocked": "This ticket is already locked.",
+      "notLocked": "This ticket isn't locked.",
+      "owner": "That's the ticket owner; they're always in the ticket.",
+      "closing": "This ticket is already closing.",
+      "tooManyPanels": "A server can have at most {max} panels.",
+      "tooManyCategories": "A panel can have at most {max} ticket types.",
+      "tooManyQuestions": "A ticket type can have at most {max} questions."
+    },
+    "control": {
+      "title": "Ticket #{number}: {category}",
+      "general": "Support",
+      "welcome": "Thanks for reaching out. Describe what you need and a staff member will be with you shortly.",
+      "claimedBy": "Claimed by {user}",
+      "claim": "Claim",
+      "unclaim": "Unclaim",
+      "lock": "Lock",
+      "unlock": "Unlock",
+      "close": "Close"
+    },
+    "claim": {
+      "claimed": "{user} is handling this ticket.",
+      "unclaimed": "{user} is no longer handling this ticket.",
+      "claimedSelf": "You claimed this ticket.",
+      "unclaimedSelf": "You unclaimed this ticket."
+    },
+    "lock": {
+      "locked": "Ticket locked. Only staff can send messages now.",
+      "unlocked": "Ticket unlocked."
+    },
+    "participants": {
+      "added": "Added {user} to the ticket.",
+      "removed": "Removed {user} from the ticket."
+    },
+    "close": {
+      "modalTitle": "Close ticket",
+      "reasonLabel": "Reason (optional)",
+      "started": "Closing the ticket...",
+      "closing": "Closed by {user}. Saving the transcript; this channel will be deleted in a few seconds.",
+      "dm": "Your conversation in {guild} was closed. The transcript is attached if the server shares them.",
+      "dmReason": "Reason: {reason}"
+    },
+    "transcript": {
+      "ticket": "Ticket #{number}",
+      "modmail": "Modmail #{number}",
+      "owner": "Opened by",
+      "category": "Type",
+      "opened": "Opened",
+      "closedBy": "Closed by",
+      "claimedBy": "Claimed by",
+      "reason": "Reason"
+    },
+    "inactivity": {
+      "reminder": "this ticket has been quiet for a while. Is there anything else you need?",
+      "closesIn": "It will close automatically in about {hours} hours without a reply.",
+      "closeReason": "No activity for {hours} hours"
+    },
+    "panel": {
+      "empty": "No ticket types yet. Add one with /tickets category add.",
+      "none": "No panels yet. Create one with /tickets panel create.",
+      "listTitle": "Ticket panels",
+      "notPosted": "not posted",
+      "questions_one": "{count} question",
+      "questions_other": "{count} questions",
+      "kinds": {
+        "buttons": "Buttons",
+        "select": "Dropdown menu"
+      },
+      "created": "Created panel #{id}. Add ticket types with {command}, then post it with /tickets panel send.",
+      "sent": "Panel posted: {url}",
+      "updated": "Panel #{id} updated.",
+      "deleted": "Panel #{id} deleted. Tickets already open stay open."
+    },
+    "category": {
+      "added": "Added **{label}** to panel #{id}. If the panel is posted, it's been updated.",
+      "removed": "Removed **{label}**."
+    },
+    "question": {
+      "saved_one": "**{label}** now asks {count} question when a ticket opens.",
+      "saved_other": "**{label}** now asks {count} questions when a ticket opens."
+    },
+    "ticket": {
+      "description": "Manage the ticket you're in",
+      "close": "Close this ticket",
+      "claim": "Claim or unclaim this ticket",
+      "lock": "Stop the owner from sending messages",
+      "unlock": "Let the owner send messages again",
+      "add": "Add someone to this ticket",
+      "remove": "Remove someone from this ticket",
+      "rename": "Rename this ticket channel",
+      "options": {
+        "reason": "Why it's being closed",
+        "name": "The new channel name"
+      },
+      "renamed": "Renamed to {channel}."
+    },
+    "modmail": {
+      "description": "Private conversations with members through DMs",
+      "open": "Start a conversation with a member",
+      "close": "Close this modmail conversation",
+      "block": "Stop a user from opening modmail",
+      "unblock": "Let a user open modmail again",
+      "options": {
+        "message": "First message to send them"
+      },
+      "disabled": "Modmail is turned off in this server. Turn it on in /setup.",
+      "isBlocked": "That user is blocked from modmail here.",
+      "blocked": "{user} can no longer open modmail.",
+      "unblocked": "{user} can open modmail again.",
+      "notThread": "This is a ticket, not a modmail conversation. Use /ticket close.",
+      "botUser": "Bots can't receive modmail.",
+      "undelivered": "Couldn't deliver that to the user. They may have closed their DMs or left the server.",
+      "opened": "Started a conversation in {channel}.",
+      "existing": "There's already a conversation with them: {channel}",
+      "threadTitle": "Modmail with {user}",
+      "threadIntro": "Messages here are sent to the user. Start a message with {prefix} to keep it as a staff-only note.",
+      "user": "User",
+      "created": "Account created",
+      "joined": "Joined server",
+      "openedBy": "Started by",
+      "noServers": "I'm not set up to take messages in any server we share.",
+      "pick": "Which server's staff do you want to contact? Your message will be passed on once you pick.",
+      "pickPlaceholder": "Choose a server",
+      "unavailable": "That server isn't taking modmail right now.",
+      "connected": "You're now talking to the staff of {guild}. Just keep messaging me here.",
+      "alreadyOpen": "You already have a conversation with {guild}. Keep messaging me here."
+    },
+    "admin": {
+      "description": "Set up ticket panels",
+      "panel": {
+        "description": "Create and manage ticket panels",
+        "create": "Create a new panel",
+        "edit": "Change a panel's title, text or style",
+        "send": "Post a panel in a channel",
+        "delete": "Delete a panel",
+        "list": "Show all panels"
+      },
+      "category": {
+        "description": "Ticket types on a panel",
+        "add": "Add a ticket type to a panel",
+        "remove": "Remove a ticket type"
+      },
+      "question": {
+        "description": "Questions asked when a ticket opens",
+        "add": "Add a question to a ticket type",
+        "clear": "Remove all questions from a ticket type"
+      },
+      "settings": {
+        "description": "Ticket limits, reminders and naming",
+        "maxOpen": "Open tickets allowed per member",
+        "reminderHours": "Hours of silence before reminding the owner (0 = off)",
+        "autoCloseHours": "Hours of silence before closing (0 = never)",
+        "dmTranscript": "DM the transcript to the owner when closed",
+        "namePattern": "Channel name, using {number}, {user} and {category}",
+        "modmailCategory": "Category for modmail channels",
+        "saved": "Saved. Max open: {maxOpen}, reminder after: {reminder} h, auto-close after: {autoClose} h, DM transcripts: {dm}, names: `{pattern}`"
+      },
+      "options": {
+        "title": "Panel title",
+        "description": "Panel text",
+        "style": "Buttons or a dropdown menu",
+        "panel": "The panel",
+        "channel": "Where to post it",
+        "label": "Name of the ticket type",
+        "categoryDescription": "Short description, shown in dropdown menus",
+        "emoji": "Emoji for the button, like a unicode emoji or <:name:id>",
+        "color": "Button colour",
+        "staffRole": "Extra role that handles these tickets",
+        "parent": "Discord category for these tickets",
+        "welcome": "Message shown when a ticket of this type opens",
+        "category": "The ticket type",
+        "question": "The question (up to 45 characters)",
+        "long": "Allow a long, multi-line answer",
+        "required": "Must be answered (default yes)",
+        "placeholder": "Example answer shown in the empty field"
+      },
+      "styles": {
+        "primary": "Blurple",
+        "secondary": "Grey",
+        "success": "Green",
+        "danger": "Red"
+      }
+    },
+    "setup": {
+      "basics": {
+        "title": "Tickets"
+      },
+      "body": "Pick where transcripts go, which Discord category new tickets are created in, and which roles handle them. Modmail lets members contact staff by DMing the bot. Build ticket panels with {command}.",
+      "transcriptsPlaceholder": "Channel for transcripts",
+      "categoryPlaceholder": "Category for new tickets",
+      "rolesPlaceholder": "Support roles",
+      "modmail": "Modmail"
     }
   }
 }

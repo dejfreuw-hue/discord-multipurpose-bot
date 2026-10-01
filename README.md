@@ -2,7 +2,7 @@
 
 An all-in-one Discord bot by ReuwTheDev. You host it yourself, so your data and API keys stay yours.
 
-Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments) and **AI** (a chatbot and a scam image scanner, using your own API key).
+Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments) **AI** (a chatbot and a scam image scanner, using your own API key) and **Tickets** (panels with forms, claim/lock/close, inactivity reminders, HTML transcripts and modmail through DMs).
 
 ## Requirements
 
@@ -25,7 +25,7 @@ Windows, Linux and macOS all work. Nothing needs compiling.
    | Message Content | AutoMod, AI chat, leveling, counting, sticky messages |
    | Presence | Not needed |
 
-   General and Moderation need none of them. AutoMod and AI need Message Content. The bot only requests intents for modules that are enabled, so you can leave the rest off.
+   General and Moderation need none of them. AutoMod, AI and Tickets need Message Content. The bot only requests intents for modules that are enabled, so you can leave the rest off.
 4. Under **Installation**, tick both **Guild Install** and **User Install**. User install lets people use `/botinfo` (and later `/userinfo` and `/rank`) anywhere.
 5. Invite the bot: under **OAuth2 -> URL Generator**, tick the `bot` and `applications.commands` scopes, pick the permissions you want to grant (or Administrator for a quick test) and open the generated link. Once the bot runs, `/botinfo` has an **Invite** button with exactly the permissions it needs.
 
@@ -172,6 +172,25 @@ The scam image scanner sends images posted in the server to the provider's visio
 
 Messages the bot answers, and scanned images, are sent to the AI provider you configured. Mention that in your server rules if your members would want to know.
 
+### Tickets and modmail
+
+Setting up tickets takes four steps:
+
+1. In `/setup`, pick the transcript channel, the Discord category new tickets go into, and the support roles.
+2. `/tickets panel create title:Support style:Buttons` creates a panel. A panel can show buttons or a dropdown menu.
+3. `/tickets category add panel:1 label:"Billing" emoji:... staff_role:@Billing` adds ticket types. Each type can have its own staff role, its own Discord category and a welcome message. Add up to five questions per type with `/tickets question add`; members fill them in a form before the ticket opens.
+4. `/tickets panel send panel:1 channel:#support` posts it. Later changes update the posted panel automatically.
+
+A server can have up to 25 panels with up to 25 ticket types each.
+
+Each ticket is a private channel for the member, the support roles and staff. Staff can **claim** it (so others know it's handled), **lock** it (the member can read but not write), add or remove people and rename it with `/ticket`. The member or staff can **close** it with an optional reason.
+
+On close, the bot saves an HTML transcript of the whole conversation to the transcript channel and, if enabled, DMs it to the member, then deletes the channel. Transcripts open in any browser and look like Discord. Attachments link to Discord's CDN, and Discord expires those links after a while, so save important files separately.
+
+With reminders on (24 hours by default), the member is pinged when a ticket goes quiet. Auto-close (off by default) closes tickets that stay quiet for longer. Change both with `/tickets settings`.
+
+**Modmail** lets members contact staff privately by DMing the bot. Turn it on in `/setup`. When someone DMs the bot, it asks which server they want to reach (only servers they share with the bot that have modmail on), then opens a staff-only channel. Everything they DM goes there, and everything staff write there goes back to them, except messages starting with `//`, which stay as internal notes. Staff can start a conversation with `/modmail open`, close it with `/modmail close` (transcripts work the same as tickets), and block abusers with `/modmail block`.
+
 Durations accept `30s`, `10m`, `2h`, `1d`, `1w` and combinations like `1d 12h`. A plain number means minutes.
 
 `npm run commands:deploy` re-registers commands by hand. `npm run commands:clear` removes them all (useful after switching between `devGuildId` and global).
@@ -250,6 +269,12 @@ Add at least one provider key to `.env` and restart. On startup the log lists th
 
 **The AI answers with an error about the API key or the model**
 Check the key in `.env`, and the model names in `config.yml` against your provider's current list. The log has the provider's exact error message.
+
+**Opening a ticket fails with a permissions error**
+The bot needs Manage Channels and Manage Roles to create ticket channels, and it must be allowed to see the category you picked.
+
+**Modmail says "not set up to take messages"**
+Modmail must be on in `/setup` for that server, and the user must be a member of it.
 
 **Temporary bans don't expire**
 The bot must be running and still have Ban Members. Expiries are checked every `expiryCheckSeconds`, so they can be up to that late.

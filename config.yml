@@ -118,3 +118,12 @@ modules:
     # Upper limit for any server's daily token allowance. Servers can set a lower one in
     # /ai limits. This is what protects your API bill.
     maxDailyTokens: 500000
+
+  tickets:
+    # Needs the Message Content intent (for transcripts and modmail). Panels, ticket types and
+    # questions are set up per server with /tickets; the basics are in /setup.
+    enabled: true
+    # Most messages saved in one transcript. Longer tickets keep the newest messages.
+    transcriptLimit: 5000
+    # How often to look for quiet tickets to remind or close, in minutes.
+    inactivityCheckMinutes: 10

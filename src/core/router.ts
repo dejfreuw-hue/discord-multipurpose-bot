@@ -17,7 +17,7 @@ import {
 import type { Bot, Registered } from './bot.js';
 import { ComponentInteractionContext, InteractionContext } from './context.js';
 import { UserError } from './errors.js';
-import type { Command, ComponentHandler, ComponentKind, DeferMode } from './module.js';
+import type { AnywhereComponentHandler, Command, ComponentHandler, ComponentKind, DeferMode } from './module.js';
 import { isStaff, missingPermissions, permissionLabel, type PermissionRequirements } from './permissions.js';
 
 type ComponentInteraction = ButtonInteraction | AnySelectMenuInteraction | ModalSubmitInteraction;
@@ -73,10 +73,11 @@ async function runComponent(bot: Bot, interaction: ComponentInteraction, kind: C
   const { entry, args } = match;
   const { item: handler, module } = entry;
   try {
-    if (!interaction.inCachedGuild()) throw new UserError('errors.guildOnly');
-    checkPermissions(bot, ctx, handler.permissions);
+    const permissions = handler.scope === 'anywhere' ? undefined : handler.permissions;
+    if (handler.scope !== 'anywhere' && !interaction.inCachedGuild()) throw new UserError('errors.guildOnly');
+    checkPermissions(bot, ctx, permissions);
     await defer(ctx, handler.defer ?? 'update');
-    await loadGuildState(bot, ctx, module.name, module.toggleable, handler.permissions);
+    await loadGuildState(bot, ctx, module.name, module.toggleable, permissions);
     await (handler.run as (c: ComponentInteractionContext<ComponentInteraction>, a: string[]) => Promise<void>)(ctx, args);
   } catch (err) {
     await reportFailure(bot, ctx, err, { component: handler.id });
@@ -98,7 +99,7 @@ function findComponent(
   bot: Bot,
   kind: ComponentKind,
   customId: string,
-): { entry: Registered<ComponentHandler>; args: string[] } | undefined {
+): { entry: Registered<ComponentHandler | AnywhereComponentHandler>; args: string[] } | undefined {
   const parts = customId.split(':');
   for (let n = parts.length; n > 0; n--) {
     const entry = bot.components.get(`${kind}:${parts.slice(0, n).join(':')}`);

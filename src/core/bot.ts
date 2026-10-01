@@ -16,7 +16,7 @@ import { Cooldowns } from './cooldowns.js';
 import type { GuildSettings, GuildSettingsData } from './guild-settings.js';
 import type { I18n } from './i18n.js';
 import type { Logger } from './logger.js';
-import type { Command, ComponentHandler, Module } from './module.js';
+import type { AnywhereComponentHandler, Command, ComponentHandler, Module } from './module.js';
 import { routeInteraction } from './router.js';
 import { Panel } from './ui/panel.js';
 
@@ -46,7 +46,7 @@ export class Bot {
   /** Modules enabled in config.yml, in load order. */
   readonly modules: Module[];
   readonly commands = new Map<string, Registered<Command>>();
-  readonly components = new Map<string, Registered<ComponentHandler>>();
+  readonly components = new Map<string, Registered<ComponentHandler | AnywhereComponentHandler>>();
   readonly cooldowns = new Cooldowns();
   /** Command name -> application command ID, for clickable command mentions. */
   readonly commandIds = new Map<string, string>();
