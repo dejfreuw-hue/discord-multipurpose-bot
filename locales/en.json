@@ -47,6 +47,10 @@
     "tickets": {
       "name": "Tickets",
       "description": "Ticket panels with forms, transcripts and modmail through DMs"
+    },
+    "leveling": {
+      "name": "Leveling",
+      "description": "Text and voice XP, rank cards, leaderboards and role rewards"
     }
   },
   "core": {
@@ -857,6 +861,166 @@
       "categoryPlaceholder": "Category for new tickets",
       "rolesPlaceholder": "Support roles",
       "modmail": "Modmail"
+    }
+  },
+  "leveling": {
+    "levelUp": "{user} reached level **{level}**!",
+    "card": {
+      "rank": "RANK",
+      "level": "LEVEL",
+      "xp": "XP"
+    },
+    "presets": {
+      "midnight": "Midnight",
+      "sunset": "Sunset",
+      "ocean": "Ocean",
+      "forest": "Forest",
+      "grape": "Grape",
+      "mono": "Mono"
+    },
+    "errors": {
+      "bot": "Bots don't earn XP.",
+      "minMax": "The minimum XP can't be higher than the maximum.",
+      "needChannel": "Pick a channel for level-up messages.",
+      "ignoreTarget": "Pick a channel, a role or both."
+    },
+    "rank": {
+      "description": "Show a rank card",
+      "options": {
+        "user": "Whose rank to show"
+      },
+      "global": "Total across all servers I'm in."
+    },
+    "leaderboard": {
+      "description": "The most active members",
+      "options": {
+        "by": "What to rank by",
+        "page": "Page number"
+      },
+      "sorts": {
+        "xp": "XP",
+        "voice": "Voice time",
+        "messages": "Messages"
+      },
+      "title": {
+        "xp": "XP leaderboard",
+        "voice": "Voice leaderboard",
+        "messages": "Message leaderboard"
+      },
+      "xpLine": "Level {level} · {xp} XP",
+      "voiceLine": "{minutes} minutes",
+      "messagesLine": "{messages} messages",
+      "you": "You're #{rank}",
+      "empty": "Nobody has earned anything yet."
+    },
+    "rankcard": {
+      "description": "Customise your rank card",
+      "preset": "Use one of the built-in backgrounds",
+      "image": "Use your own background image",
+      "color": "Change the accent colour",
+      "reset": "Go back to the server's default card",
+      "options": {
+        "preset": "The background",
+        "file": "An image, ideally wide (about 934x282)",
+        "hex": "Hex colour, like #5865F2"
+      },
+      "disabled": "Custom rank cards are turned off in this server.",
+      "badImage": "That doesn't look like an image I can use. Send a PNG, JPEG or WebP under {mb} MB.",
+      "saved": "Saved. Here's your card:"
+    },
+    "announce": {
+      "modes": {
+        "channel": "In the channel where they leveled up",
+        "dm": "In a DM",
+        "fixed": "In a set channel",
+        "off": "Off"
+      }
+    },
+    "status": {
+      "title": "Leveling",
+      "text": "Message XP",
+      "voice": "Voice XP",
+      "perMinute": "{xp} per minute",
+      "notAlone": "not when alone",
+      "announce": "Level-up messages",
+      "rewards": "Role rewards ({mode})",
+      "stack": "members keep every reward",
+      "replace": "members keep only the highest",
+      "multipliers": "XP multipliers",
+      "ignored": "No XP in",
+      "cards": "Rank cards",
+      "custom": "custom cards {state}"
+    },
+    "reset": {
+      "confirm": "This deletes the XP, levels and stats of all {count} members in this server. It can't be undone.",
+      "button": "Delete all XP",
+      "allDone": "Reset {count} members."
+    },
+    "xp": {
+      "updated": "{user} now has {xp} XP (level {level})."
+    },
+    "admin": {
+      "description": "Configure leveling",
+      "status": "Show the leveling settings",
+      "text": "Message XP settings",
+      "voice": "Voice XP settings",
+      "announce": "Where level-up messages go",
+      "cards": "Server rank card style",
+      "resetAll": "Delete every member's XP",
+      "reward": {
+        "description": "Roles given at certain levels",
+        "add": "Give a role at a level",
+        "remove": "Remove a role reward",
+        "mode": "Keep all rewards or only the highest"
+      },
+      "multiplier": {
+        "description": "Earn more or less XP with certain roles",
+        "set": "Set a role's XP multiplier",
+        "remove": "Remove a role's multiplier"
+      },
+      "ignore": {
+        "description": "Channels and roles that earn no XP",
+        "add": "Stop XP in a channel or for a role",
+        "remove": "Allow XP again"
+      },
+      "xp": {
+        "description": "Change a member's XP",
+        "give": "Add XP",
+        "take": "Remove XP",
+        "set": "Set XP to an exact amount",
+        "reset": "Reset a member to zero"
+      },
+      "options": {
+        "enabled": "Whether this kind of XP is earned",
+        "min": "Least XP per message",
+        "max": "Most XP per message",
+        "cooldown": "Seconds before the next message earns XP",
+        "perMinute": "XP per minute in voice",
+        "requireOthers": "Only earn when someone else is in the channel",
+        "mode": "Where to post level-ups",
+        "channel": "Channel for the set-channel mode",
+        "message": "Custom text with {user}, {username} and {level}. \"default\" restores the built-in one",
+        "preset": "Default background",
+        "image": "Default background image for everyone",
+        "allowCustom": "Let members pick their own card style",
+        "removeImage": "Remove the server's background image",
+        "level": "The level",
+        "role": "The role",
+        "stack": "True: keep every reward. False: only the highest",
+        "value": "Multiplier, like 1.5 for 50% more. 0 stops XP for that role",
+        "ignoreChannel": "A channel or category",
+        "ignoreRole": "A role",
+        "amount": "Amount of XP"
+      }
+    },
+    "setup": {
+      "xp": {
+        "title": "Leveling"
+      },
+      "body": "Members earn XP for chatting and for time in voice channels. Choose where level-up messages go. Rewards, multipliers, ignored channels and XP rates are in {command} and the other /levels commands.",
+      "text": "Message XP",
+      "voice": "Voice XP",
+      "channelPlaceholder": "Channel for level-up messages"
     }
   }
 }

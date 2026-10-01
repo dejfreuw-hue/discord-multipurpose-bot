@@ -127,3 +127,17 @@ modules:
     transcriptLimit: 5000
     # How often to look for quiet tickets to remind or close, in minutes.
     inactivityCheckMinutes: 10
+
+  leveling:
+    enabled: true
+    # XP needed for each level is quadratic*level^2 + linear*level + base. The defaults give
+    # 100 XP for level 1, 1,150 for level 5 and 23,850 for level 20. Changing this later moves
+    # everyone's level, since levels are worked out from total XP.
+    curve:
+      quadratic: 5
+      linear: 50
+      base: 100
+    # How often voice XP is handed out, in seconds. XP per minute is set per server.
+    voiceTickSeconds: 60
+    # Largest image members and admins can upload as a rank card background, in MB.
+    maxBackgroundMB: 8

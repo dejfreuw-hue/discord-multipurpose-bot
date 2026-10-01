@@ -2,7 +2,7 @@
 
 An all-in-one Discord bot by ReuwTheDev. You host it yourself, so your data and API keys stay yours.
 
-Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments) **AI** (a chatbot and a scam image scanner, using your own API key) and **Tickets** (panels with forms, claim/lock/close, inactivity reminders, HTML transcripts and modmail through DMs).
+Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments) **AI** (a chatbot and a scam image scanner, using your own API key) **Tickets** (panels with forms, claim/lock/close, inactivity reminders, HTML transcripts and modmail through DMs) and **Leveling** (text and voice XP, rank cards, leaderboards and role rewards).
 
 ## Requirements
 
@@ -21,8 +21,8 @@ Windows, Linux and macOS all work. Nothing needs compiling.
 
    | Intent | Needed by |
    | --- | --- |
-   | Server Members | Moderation, welcome messages, auto-roles, leveling, verification |
-   | Message Content | AutoMod, AI chat, leveling, counting, sticky messages |
+   | Server Members | Welcome messages, auto-roles and verification (Community module) |
+   | Message Content | AutoMod, AI, Tickets (transcripts and modmail) |
    | Presence | Not needed |
 
    General and Moderation need none of them. AutoMod, AI and Tickets need Message Content. The bot only requests intents for modules that are enabled, so you can leave the rest off.
@@ -190,6 +190,28 @@ On close, the bot saves an HTML transcript of the whole conversation to the tran
 With reminders on (24 hours by default), the member is pinged when a ticket goes quiet. Auto-close (off by default) closes tickets that stay quiet for longer. Change both with `/tickets settings`.
 
 **Modmail** lets members contact staff privately by DMing the bot. Turn it on in `/setup`. When someone DMs the bot, it asks which server they want to reach (only servers they share with the bot that have modmail on), then opens a staff-only channel. Everything they DM goes there, and everything staff write there goes back to them, except messages starting with `//`, which stay as internal notes. Staff can start a conversation with `/modmail open`, close it with `/modmail close` (transcripts work the same as tickets), and block abusers with `/modmail block`.
+
+### Leveling
+
+Members earn 15-25 XP per message (at most once a minute) and 10 XP per minute in voice, as long as they aren't alone, deafened or in the AFK channel. Everything is adjustable per server with `/levels`.
+
+| Command | Who | What it does |
+| --- | --- | --- |
+| `/rank [user]` | Everyone, also user-installed | Rank card image. Outside a server with the bot, shows XP summed over all servers |
+| `/leaderboard [by] [page]` | Everyone | Top members by XP, voice time or messages |
+| `/rankcard preset/image/color/reset` | Everyone | Pick a background, upload one, or change the accent colour |
+| `/levels status` | Manage Server | All leveling settings |
+| `/levels text`, `/levels voice` | Manage Server | XP amounts, cooldown, voice rules |
+| `/levels announce` | Manage Server | Level-up messages: same channel, DM, a set channel, or off, with an optional custom text |
+| `/levels reward add/remove/mode` | Manage Server | Roles given at levels. Members keep all of them, or only the highest |
+| `/levels multiplier set/remove` | Manage Server | More (or less) XP for certain roles, like boosters |
+| `/levels ignore add/remove` | Manage Server | Channels, categories or roles that earn no XP |
+| `/levels cards` | Manage Server | Server default card style, and whether members may customise theirs |
+| `/levels xp give/take/set/reset`, `/levels reset-all` | Manage Server | Adjust XP by hand |
+
+Uploaded backgrounds are resized and stored in MongoDB, so they keep working after Discord's attachment links expire. Rank cards use the bundled Open Sans font (in `assets/fonts`, Apache 2.0) so they look the same on every host.
+
+Leveling doesn't need the Message Content intent. Reward roles are only given for roles below the bot's own role.
 
 Durations accept `30s`, `10m`, `2h`, `1d`, `1w` and combinations like `1d 12h`. A plain number means minutes.
 

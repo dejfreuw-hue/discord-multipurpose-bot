@@ -13,6 +13,7 @@ COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY package.json config.yml ./
 COPY locales ./locales
+COPY assets ./assets
 RUN mkdir -p logs data && chown node:node logs data
 USER node
 CMD ["node", "dist/index.js"]
