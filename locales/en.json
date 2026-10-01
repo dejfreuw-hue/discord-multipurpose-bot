@@ -35,6 +35,10 @@
     "moderation": {
       "name": "Moderation",
       "description": "Bans, kicks, timeouts, warnings, cases and the mod log"
+    },
+    "automod": {
+      "name": "AutoMod",
+      "description": "Filters for invites, links, bad words, spam, mentions, caps and ghost pings"
     }
   },
   "core": {
@@ -329,6 +333,171 @@
       "dmUsers": "DM users",
       "requireReason": "Require reason",
       "logExternal": "Log outside actions"
+    }
+  },
+  "automod": {
+    "description": "Configure automatic moderation",
+    "reason": "AutoMod: {filter} ({strikes} active strikes)",
+    "filters": {
+      "invites": "Invites",
+      "links": "Links",
+      "badWords": "Bad words",
+      "spam": "Spam",
+      "mentions": "Mass mentions",
+      "caps": "Caps",
+      "ghostPing": "Ghost pings"
+    },
+    "filterHelp": {
+      "invites": "Invite links to other servers",
+      "links": "Links to sites not on the allowlist",
+      "badWords": "Words from your blocklist, including l33t and s p a c e d spellings",
+      "spam": "Too many messages too fast, or the same message repeated",
+      "mentions": "Messages that ping lots of people or roles",
+      "caps": "Messages written mostly in capital letters",
+      "ghostPing": "Pings that are deleted right after sending"
+    },
+    "notices": {
+      "invites": "invite links aren't allowed here.",
+      "links": "that link isn't allowed here.",
+      "badWords": "watch your language.",
+      "spam": "slow down, you're sending messages too fast.",
+      "mentions": "please don't mass mention.",
+      "caps": "please don't write in all caps.",
+      "ghostPing": "please don't ghost ping."
+    },
+    "actions": {
+      "warn": "Warning",
+      "timeout": "Timeout",
+      "kick": "Kick",
+      "ban": "Ban"
+    },
+    "ghostPing": {
+      "title": "Ghost ping",
+      "body": "{author} mentioned {mentions} and deleted the message."
+    },
+    "log": {
+      "title": "AutoMod: {filter}",
+      "channel": "Channel",
+      "strikes": "Strikes",
+      "trigger": "Trigger",
+      "content": "Message",
+      "punishment": "Punishment"
+    },
+    "options": {
+      "filter": "Which filter"
+    },
+    "status": {
+      "description": "Show all AutoMod settings",
+      "title": "AutoMod",
+      "strikes_one": "{count} strike",
+      "strikes_other": "{count} strikes",
+      "ownInvites": "own server allowed",
+      "domains_one": "{count} allowed domain",
+      "domains_other": "{count} allowed domains",
+      "words_one": "{count} word",
+      "words_other": "{count} words",
+      "spam": "{messages} msgs in {seconds}s, {duplicates} repeats",
+      "mentions": "limit {limit}",
+      "caps": "{percent}% of {min}+ letters",
+      "ghostPing": "within {seconds}s",
+      "ladder": "Punishments",
+      "step": "{strikes} strikes: {action}",
+      "decay": "Strikes expire after",
+      "exemptStaff": "Staff exempt",
+      "notify": "Warn in channel",
+      "whitelistRoles": "Ignored roles",
+      "whitelistChannels": "Ignored channels"
+    },
+    "toggle": {
+      "description": "Turn a filter on or off",
+      "options": {
+        "enabled": "Whether the filter is on"
+      }
+    },
+    "configure": {
+      "description": "Tune a filter's thresholds and strikes",
+      "title": "Configure {filter}"
+    },
+    "fields": {
+      "strikes": "Strikes per violation (0-10)",
+      "messages": "Messages in a burst ({min}-{max})",
+      "seconds": "Within seconds ({min}-{max})",
+      "duplicates": "Identical messages ({min}-{max})",
+      "limit": "Mentions per message ({min}-{max})",
+      "percent": "Caps percentage ({min}-{max})",
+      "minLength": "Minimum letters ({min}-{max})",
+      "allowOwnServer": "Allow invites to this server"
+    },
+    "errors": {
+      "number": "{field} must be a whole number from {min} to {max}."
+    },
+    "decay": {
+      "description": "Set how long strikes last",
+      "options": {
+        "duration": "For example 12h, 1d or 1w"
+      },
+      "invalid": "`{value}` doesn't work. Use a duration between 1 minute and 90 days, like `1d`.",
+      "done": "Strikes now expire after {duration}."
+    },
+    "words": {
+      "description": "Manage the bad word list",
+      "add": "Add words to the list",
+      "remove": "Remove words from the list",
+      "list": "Show the list",
+      "options": {
+        "words": "Separate with commas. Use * as a wildcard, like scam*"
+      },
+      "title": "Bad words ({count})",
+      "empty": "The list is empty.",
+      "tooMany": "The list can hold at most {max} words.",
+      "saved": "Saved. The list has {count} words.",
+      "savedDisabled": "Saved. The list has {count} words. The bad word filter is off; turn it on with /automod toggle."
+    },
+    "domains": {
+      "description": "Manage the allowed link domains",
+      "add": "Allow links to these domains",
+      "remove": "Stop allowing these domains",
+      "list": "Show allowed domains",
+      "options": {
+        "domains": "Separate with commas, like youtube.com, github.com"
+      },
+      "title": "Allowed domains",
+      "empty": "No domains are allowed, so every link is blocked while the link filter is on.",
+      "tooMany": "You can allow at most {max} domains.",
+      "saved": "Saved. {count} domains are allowed. Subdomains are included."
+    },
+    "punishment": {
+      "description": "Set what happens when strikes add up",
+      "add": "Add or replace a punishment step",
+      "remove": "Remove a punishment step",
+      "options": {
+        "strikes": "Active strikes that trigger it",
+        "action": "What happens",
+        "duration": "For timeouts and temporary bans, like 1h or 3d"
+      },
+      "needsDuration": "Timeouts need a duration, like `30m`.",
+      "tooMany": "You can have at most {max} punishment steps.",
+      "notFound": "There's no punishment at {strikes} strikes.",
+      "added": "At {strikes} strikes: {action}.",
+      "removed": "Removed the punishment at {strikes} strikes."
+    },
+    "strikes": {
+      "description": "View or clear a member's strikes",
+      "view": "Show a member's active strikes",
+      "clear": "Remove all of a member's strikes",
+      "title": "AutoMod strikes",
+      "total": "{user} has **{count}** active strikes.",
+      "line": "{filter}: {count}, expires {time}",
+      "cleared": "Cleared {count} strike entries for {user}."
+    },
+    "setup": {
+      "filters": {
+        "title": "AutoMod"
+      },
+      "body": "Pick which filters are on, and which roles and channels AutoMod ignores. Admins and staff are always ignored. Fine-tune thresholds, strikes and punishments with {command}.",
+      "filtersPlaceholder": "Select the filters to turn on",
+      "rolesPlaceholder": "Roles AutoMod ignores",
+      "channelsPlaceholder": "Channels or categories AutoMod ignores"
     }
   }
 }

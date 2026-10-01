@@ -18,6 +18,7 @@ export interface SettingsSlice<S extends z.ZodType> {
 export class GuildSettings {
   private readonly cache = new Map<string, GuildSettingsData>();
   private readonly pending = new Map<string, Promise<GuildSettingsData>>();
+  private readonly parsed = new WeakMap<GuildSettingsData, Map<string, unknown>>();
 
   constructor(private readonly logger: Logger) {}
 
@@ -42,10 +43,18 @@ export class GuildSettings {
     return this.write(guildId, { $set: patch });
   }
 
-  /** Parsed settings for one module, with defaults filled in for anything not stored yet. */
+  /** Parsed settings for one module, with defaults filled in. The result is shared and cached, so treat it as read-only. */
   async module<S extends z.ZodType>(guildId: string, mod: SettingsSlice<S>): Promise<z.output<S>> {
     const data = await this.get(guildId);
-    return this.parseModule(mod, data.modules[mod.name]);
+    // Every write replaces the data object, so keying parsed results on it invalidates them
+    // for free. This matters for modules that read settings on every message.
+    let parsed = this.parsed.get(data);
+    if (!parsed) {
+      parsed = new Map();
+      this.parsed.set(data, parsed);
+    }
+    if (!parsed.has(mod.name)) parsed.set(mod.name, this.parseModule(mod, data.modules[mod.name]));
+    return parsed.get(mod.name) as z.output<S>;
   }
 
   async updateModule<S extends z.ZodType>(

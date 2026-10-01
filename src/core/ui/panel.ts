@@ -103,7 +103,7 @@ export class Panel {
       // and the first text block share it.
       const first = blocks[0]?.kind === 'text' ? (blocks.shift() as { text: string }).text : undefined;
       const texts = [this.heading && `## ${this.heading}`, first].filter((t): t is string => Boolean(t));
-      if (texts.length === 0) texts.push('​');
+      if (texts.length === 0) texts.push('\u200b');
       container.addSectionComponents(
         new SectionBuilder()
           .addTextDisplayComponents(texts.map((t) => new TextDisplayBuilder().setContent(t)))

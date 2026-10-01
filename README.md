@@ -2,7 +2,7 @@
 
 An all-in-one Discord bot by ReuwTheDev. You host it yourself, so your data and API keys stay yours.
 
-Included so far: the core framework, **General** (help, bot info, ping, setup wizard) and **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log).
+Included so far: the core framework, **General** (help, bot info, ping, setup wizard) **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log) and **AutoMod** (invite, link, bad word, spam, mass mention, caps and ghost ping filters with decaying strikes and escalating punishments).
 
 ## Requirements
 
@@ -25,7 +25,7 @@ Windows, Linux and macOS all work. Nothing needs compiling.
    | Message Content | AutoMod, AI chat, leveling, counting, sticky messages |
    | Presence | Not needed |
 
-   General and Moderation need none of them. The bot only requests intents for modules that are enabled, so you can leave the rest off.
+   General and Moderation need none of them. AutoMod needs Message Content. The bot only requests intents for modules that are enabled, so you can leave the rest off.
 4. Under **Installation**, tick both **Guild Install** and **User Install**. User install lets people use `/botinfo` (and later `/userinfo` and `/rank`) anywhere.
 5. Invite the bot: under **OAuth2 -> URL Generator**, tick the `bot` and `applications.commands` scopes, pick the permissions you want to grant (or Administrator for a quick test) and open the generated link. Once the bot runs, `/botinfo` has an **Invite** button with exactly the permissions it needs.
 
@@ -118,6 +118,27 @@ Every action gets a numbered case (per server, never reused) and goes to the mod
 
 Before acting, the bot checks role order the way Discord does: nobody can act on the server owner, on someone with an equal or higher role, or on anyone above the bot's own role. If an action fails for that reason the message says which role to move.
 
+### AutoMod
+
+| Command | What it does |
+| --- | --- |
+| `/automod status` | Every filter, threshold, punishment and ignored role or channel at a glance |
+| `/automod toggle filter enabled` | Turn one filter on or off |
+| `/automod configure filter` | Opens a form for that filter's strikes and thresholds |
+| `/automod words add/remove/list` | The bad word list. `*` is a wildcard: `scam*` |
+| `/automod domains add/remove/list` | Domains the link filter allows. Subdomains are included |
+| `/automod punishment add/remove` | What happens at a number of active strikes |
+| `/automod decay duration` | How long strikes last |
+| `/automod strikes view/clear user` | See or reset a member's strikes |
+
+All of these need Manage Server. Filters, ignored roles and ignored channels are also in `/setup`.
+
+How it works: a message that breaks a filter is deleted, the member gets a short warning in the channel, and the filter's strikes are added to their record. Strikes expire on their own after the decay time (24 hours by default). When a member's active strikes reach a step on the punishment ladder, that punishment runs through the Moderation module, so it gets a case, a DM and a mod log entry like any other action. The default ladder is a 10 minute timeout at 3 strikes, 1 hour at 5 and a kick at 8.
+
+Server owners, administrators and (unless turned off) staff roles are never filtered. Ignoring a category ignores every channel in it, and ignoring a channel also covers its threads.
+
+The bad word filter matches whole words, so `ass` won't flag `class`. It also catches common evasions: letter swaps (`1d10t`), accents, zero-width characters and spaced-out words (`i d i o t`, `i.d.i.o.t`). Ghost pings are reported in the channel when a message that pinged someone is deleted within the configured time; they give no strikes by default.
+
 Durations accept `30s`, `10m`, `2h`, `1d`, `1w` and combinations like `1d 12h`. A plain number means minutes.
 
 `npm run commands:deploy` re-registers commands by hand. `npm run commands:clear` removes them all (useful after switching between `devGuildId` and global).
@@ -187,6 +208,9 @@ Shouldn't happen. If it does, check the log for an `interaction expired before r
 
 **"has a role equal to or higher than mine"**
 Discord only lets a bot act on members and roles below its own highest role. In Server Settings -> Roles, drag the bot's role above the roles of the people it should moderate.
+
+**AutoMod does nothing**
+Check that Message Content is turned on under Developer Portal -> Bot, that the filter is on in `/automod status`, and that you're testing with an account that isn't an admin or staff member. AutoMod needs Manage Messages in the channel to delete messages.
 
 **Temporary bans don't expire**
 The bot must be running and still have Ban Members. Expiries are checked every `expiryCheckSeconds`, so they can be up to that late.

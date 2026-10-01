@@ -79,3 +79,10 @@ modules:
     hideCommands: true
     # How often to check for expired temporary bans and roles, in seconds.
     expiryCheckSeconds: 30
+
+  automod:
+    # Needs the Message Content intent (Developer Portal -> Bot). Per-server filters,
+    # strikes and punishments are set with /setup and /automod.
+    enabled: true
+    # Seconds before AutoMod's in-channel warning deletes itself. 0 keeps it.
+    noticeSeconds: 6
