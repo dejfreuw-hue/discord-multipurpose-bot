@@ -1,13 +1,18 @@
 {
   "_meta": {
     "name": "English",
-    "discord": ["en-US", "en-GB"]
+    "discord": [
+      "en-US",
+      "en-GB"
+    ]
   },
   "common": {
     "none": "None",
     "enabled": "Enabled",
     "disabled": "Disabled",
-    "unavailable": "Unavailable"
+    "unavailable": "Unavailable",
+    "on": "On",
+    "off": "Off"
   },
   "errors": {
     "generic": "Something went wrong on our side. If it keeps happening, give the server owner this reference: `{ref}`",
@@ -26,6 +31,10 @@
     "core": {
       "name": "General",
       "description": "Help, bot info and server setup"
+    },
+    "moderation": {
+      "name": "Moderation",
+      "description": "Bans, kicks, timeouts, warnings, cases and the mod log"
     }
   },
   "core": {
@@ -115,6 +124,211 @@
         "title": "Setup complete",
         "body": "You're all set. Run {setup} any time to change these settings."
       }
+    }
+  },
+  "moderation": {
+    "noReason": "No reason given",
+    "dmFailed": "Couldn't DM them about it. Their DMs are probably closed.",
+    "options": {
+      "user": "The user",
+      "member": "The member",
+      "reason": "Why. Shown in the mod log and sent to the user"
+    },
+    "types": {
+      "ban": "Ban",
+      "unban": "Unban",
+      "kick": "Kick",
+      "timeout": "Timeout",
+      "untimeout": "Timeout removed",
+      "warn": "Warning"
+    },
+    "sources": {
+      "automod": "Issued by AutoMod",
+      "external": "Done outside the bot, picked up from the audit log",
+      "expiry": "Lifted automatically"
+    },
+    "errors": {
+      "self": "You can't use that on yourself.",
+      "bot": "I can't use that on myself.",
+      "owner": "The server owner can't be moderated.",
+      "userHierarchy": "{user} has a role equal to or higher than yours.",
+      "botHierarchy": "{user} has a role equal to or higher than mine. Move my role above theirs in Server Settings -> Roles.",
+      "timeoutAdmin": "{user} is an Administrator, and Discord doesn't allow timing out administrators.",
+      "timeoutTooLong": "Timeouts can last at most 28 days.",
+      "everyoneRole": "You can't use @everyone here.",
+      "managedRole": "{role} is managed by an integration and can't be assigned by hand.",
+      "botRoleHierarchy": "{role} is equal to or higher than my highest role. Move my role above it in Server Settings -> Roles.",
+      "userRoleHierarchy": "{role} is equal to or higher than your highest role.",
+      "notMember": "{user} isn't in this server.",
+      "alreadyBanned": "{user} is already banned.",
+      "notBanned": "{user} isn't banned.",
+      "notTimedOut": "{user} isn't timed out.",
+      "reasonRequired": "This server requires a reason for moderation actions.",
+      "badDuration": "`{value}` isn't a duration I understand. Try something like `10m`, `2h`, `1d` or `1w 2d`."
+    },
+    "ban": {
+      "description": "Ban a user, optionally for a limited time",
+      "options": {
+        "duration": "How long, e.g. 7d. Leave empty for a permanent ban",
+        "deleteMessages": "Delete their recent messages"
+      },
+      "delete": {
+        "none": "Don't delete any",
+        "hour": "Last hour",
+        "day": "Last 24 hours",
+        "week": "Last 7 days"
+      },
+      "done": "Banned {user}. Case #{case}",
+      "doneTemp": "Banned {user} for {duration}. Case #{case}"
+    },
+    "unban": {
+      "description": "Lift a ban",
+      "options": {
+        "user": "The user, or paste their ID"
+      },
+      "done": "Unbanned {user}. Case #{case}"
+    },
+    "kick": {
+      "description": "Remove a member from the server",
+      "done": "Kicked {user}. Case #{case}"
+    },
+    "timeout": {
+      "description": "Time out a member",
+      "add": "Stop a member from chatting for a while",
+      "remove": "Lift a member's timeout early",
+      "options": {
+        "duration": "How long, e.g. 10m, 2h or 3d (up to 28d)"
+      },
+      "done": "Timed out {user} for {duration}. Case #{case}",
+      "removed": "Lifted the timeout for {user}. Case #{case}"
+    },
+    "warn": {
+      "description": "Give a member a warning",
+      "done": "Warned {user}. That's warning #{count} for them. Case #{case}"
+    },
+    "purge": {
+      "description": "Bulk-delete recent messages in this channel",
+      "options": {
+        "amount": "How many messages to delete (1-100)",
+        "user": "Only messages from this user",
+        "filter": "Only a certain kind of message"
+      },
+      "filters": {
+        "bots": "From bots",
+        "humans": "From humans",
+        "links": "Containing links",
+        "attachments": "With attachments",
+        "embeds": "With embeds"
+      },
+      "unsupported": "Messages can't be bulk-deleted in this channel.",
+      "nothing": "No matching messages found. Only messages from the last 14 days can be bulk-deleted.",
+      "done_one": "Deleted {count} message.",
+      "done_other": "Deleted {count} messages.",
+      "logTitle": "Messages purged",
+      "log": "{moderator} deleted {count} messages in {channel}.",
+      "logUser": "Only messages from {user}."
+    },
+    "slowmode": {
+      "description": "Set how often members can send messages in a channel",
+      "options": {
+        "duration": "Delay between messages, e.g. 5s or 1m. Use off to disable",
+        "channel": "The channel. Defaults to this one"
+      },
+      "unsupported": "This channel doesn't support slowmode.",
+      "tooLong": "Slowmode can be at most 6 hours.",
+      "on": "Slowmode in {channel} is now {duration}.",
+      "off": "Slowmode in {channel} is off."
+    },
+    "lock": {
+      "description": "Stop members from sending messages in a channel",
+      "options": {
+        "channel": "The channel. Defaults to this one"
+      },
+      "unsupported": "This channel can't be locked. Threads follow the lock of their parent channel.",
+      "already": "{channel} is already locked.",
+      "notice": "This channel has been locked by a moderator.",
+      "reason": "Reason: {reason}",
+      "done": "Locked {channel}.",
+      "logTitle": "Channel locked",
+      "log": "{moderator} locked {channel}."
+    },
+    "unlock": {
+      "description": "Let members send messages in a locked channel again",
+      "options": {
+        "channel": "The channel. Defaults to this one"
+      },
+      "notLocked": "{channel} isn't locked.",
+      "notice": "This channel has been unlocked.",
+      "done": "Unlocked {channel}.",
+      "logTitle": "Channel unlocked",
+      "log": "{moderator} unlocked {channel}."
+    },
+    "case": {
+      "description": "View and manage moderation cases",
+      "view": "Show a case",
+      "edit": "Change the reason of a case",
+      "delete": "Delete a case for good",
+      "history": "Show all cases for a user",
+      "options": {
+        "id": "The case number",
+        "reason": "The new reason"
+      },
+      "title": "{type} | Case #{id}",
+      "user": "User",
+      "moderator": "Moderator",
+      "date": "Date",
+      "duration": "Duration",
+      "ends": "ends {time}",
+      "reason": "Reason",
+      "notFound": "There's no case #{id} in this server.",
+      "noHistory": "{user} has a clean record.",
+      "historyTitle": "Moderation history",
+      "page": "Page {page} of {pages}",
+      "previous": "Previous",
+      "next": "Next",
+      "notYours": "These buttons belong to someone else.",
+      "deleteDenied": "Only members with Manage Server can delete cases.",
+      "deleted": "Deleted case #{id}. Case numbers are never reused."
+    },
+    "temprole": {
+      "description": "Give roles that are removed automatically",
+      "add": "Give a member a role for a limited time",
+      "remove": "Take a temporary role away now",
+      "list": "Show a member's temporary roles",
+      "options": {
+        "role": "The role",
+        "duration": "How long, e.g. 1d or 2w"
+      },
+      "added": "Gave {role} to {user} for {duration}. It will be removed {time}.",
+      "removed": "Removed {role} from {user}.",
+      "notTemporary": "{user} doesn't have {role} as a temporary role.",
+      "none": "{user} has no temporary roles.",
+      "listTitle": "Temporary roles",
+      "line": "{role} until {time}",
+      "logTitle": "Temporary role given",
+      "log": "{moderator} gave {role} to {user} for {duration}."
+    },
+    "dm": {
+      "ban": "You were banned from {guild}",
+      "kick": "You were kicked from {guild}",
+      "timeout": "You were timed out in {guild}",
+      "warn": "You received a warning in {guild}"
+    },
+    "expiry": {
+      "banReason": "Temporary ban from case #{id} expired",
+      "roleTitle": "Temporary role expired",
+      "role": "Removed {role} from {user}."
+    },
+    "setup": {
+      "logging": {
+        "title": "Moderation"
+      },
+      "body": "Pick the channel for the mod log. Every case, purge and lock is posted there.\nMod log: {channel}\n\n**DM users**: tell members why they were punished.\n**Require reason**: refuse moderation commands without a reason.\n**Log outside actions**: create cases for bans, kicks and timeouts done through Discord itself.",
+      "logPlaceholder": "Choose a mod log channel",
+      "noChannel": "not set",
+      "dmUsers": "DM users",
+      "requireReason": "Require reason",
+      "logExternal": "Log outside actions"
     }
   }
 }

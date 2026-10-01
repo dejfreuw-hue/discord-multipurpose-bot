@@ -32,7 +32,7 @@ async function main(): Promise<void> {
 
   const i18n = I18n.fromDirectory(fromRoot('locales'), config.bot.locale);
   const enabled = modules.filter((m) => config.moduleSettings.has(m.name));
-  const commands = buildCommands(enabled, i18n);
+  const commands = buildCommands(enabled, i18n, config.moduleSettings);
   await syncCommands(commands, {
     token: env.DISCORD_TOKEN,
     applicationId: app.id,

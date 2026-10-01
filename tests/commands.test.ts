@@ -9,10 +9,22 @@ describe('buildCommands', () => {
   const i18n = I18n.fromDirectory(fromRoot('locales'), 'en');
   const commands = buildCommands(modules, i18n);
 
-  it('translates description keys', () => {
-    for (const command of commands) {
-      expect(command.description).not.toMatch(/^[a-z]+\.[\w.]+$/);
-      expect(command.description.length).toBeLessThanOrEqual(100);
+  it('translates every description and choice name within Discord limits', () => {
+    const texts: string[] = [];
+    const walk = (node: unknown): void => {
+      if (Array.isArray(node)) return node.forEach(walk);
+      if (!node || typeof node !== 'object') return;
+      const obj = node as Record<string, unknown>;
+      if (typeof obj.description === 'string') texts.push(obj.description);
+      if (typeof obj.name === 'string' && 'value' in obj) texts.push(obj.name);
+      Object.values(obj).forEach(walk);
+    };
+    walk(commands);
+    expect(texts.length).toBeGreaterThan(commands.length);
+    for (const text of texts) {
+      expect(text).not.toMatch(/^[a-z]+\.[\w.]+$/);
+      expect(text.length).toBeGreaterThan(0);
+      expect(text.length).toBeLessThanOrEqual(100);
     }
   });
 

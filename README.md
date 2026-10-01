@@ -2,7 +2,7 @@
 
 An all-in-one Discord bot by ReuwTheDev. You host it yourself, so your data and API keys stay yours.
 
-This release ships the core framework and the **General** module (help, bot info, ping, setup wizard). The remaining modules are added module by module on top of the same framework.
+Included so far: the core framework, **General** (help, bot info, ping, setup wizard) and **Moderation** (bans, kicks, timeouts, warnings, purge, slowmode, channel locks, cases, temporary roles and a mod log).
 
 ## Requirements
 
@@ -25,7 +25,7 @@ Windows, Linux and macOS all work. Nothing needs compiling.
    | Message Content | AutoMod, AI chat, leveling, counting, sticky messages |
    | Presence | Not needed |
 
-   The General module needs none of them. The bot only requests intents for modules that are enabled, so you can leave the rest off.
+   General and Moderation need none of them. The bot only requests intents for modules that are enabled, so you can leave the rest off.
 4. Under **Installation**, tick both **Guild Install** and **User Install**. User install lets people use `/botinfo` (and later `/userinfo` and `/rank`) anywhere.
 5. Invite the bot: under **OAuth2 -> URL Generator**, tick the `bot` and `applications.commands` scopes, pick the permissions you want to grant (or Administrator for a quick test) and open the generated link. Once the bot runs, `/botinfo` has an **Invite** button with exactly the permissions it needs.
 
@@ -97,6 +97,29 @@ docker compose logs -f bot
 | `/botinfo` | Everyone, also user-installed | Stats, versions and invite link |
 | `/setup` | Manage Server | Wizard for language, staff roles, colour and modules |
 
+### Moderation
+
+| Command | Permission | What it does |
+| --- | --- | --- |
+| `/ban user [reason] [duration] [delete_messages]` | Ban Members | Ban, optionally temporary (`7d`, `2w`) |
+| `/unban user [reason]` | Ban Members | Lift a ban. Paste the user ID if they're not in a shared server |
+| `/kick user [reason]` | Kick Members | Remove a member |
+| `/timeout add/remove` | Moderate Members | Time out for up to 28 days, or lift it |
+| `/warn user [reason]` | Moderate Members | Record a warning and DM the member |
+| `/purge amount [user] [filter]` | Manage Messages | Delete up to 100 recent messages, by user or type |
+| `/slowmode duration [channel]` | Manage Channels | `5s`, `1m`, up to `6h`, or `off` |
+| `/lock`, `/unlock [channel] [reason]` | Manage Channels | Stop or allow sending messages |
+| `/case view/edit/delete/history` | Moderate Members | Look up and manage cases. Deleting needs Manage Server |
+| `/temprole add/remove/list` | Manage Roles | Roles that remove themselves after a set time |
+
+Members with a staff role from `/setup` can use these too, even without the Discord permission. By default Discord hides the commands from members who lack the permission; set `modules.moderation.hideCommands: false` in `config.yml` if your staff roles rely on the bot's own check.
+
+Every action gets a numbered case (per server, never reused) and goes to the mod log channel picked in `/setup`. Bans, kicks and timeouts done through Discord's own menus are recorded too, as long as the bot has **View Audit Log**. Temporary bans and roles are stored in MongoDB, so they still expire correctly after a restart.
+
+Before acting, the bot checks role order the way Discord does: nobody can act on the server owner, on someone with an equal or higher role, or on anyone above the bot's own role. If an action fails for that reason the message says which role to move.
+
+Durations accept `30s`, `10m`, `2h`, `1d`, `1w` and combinations like `1d 12h`. A plain number means minutes.
+
 `npm run commands:deploy` re-registers commands by hand. `npm run commands:clear` removes them all (useful after switching between `devGuildId` and global).
 
 ## Translating
@@ -161,6 +184,12 @@ Global commands can take up to an hour to appear. Set `commands.devGuildId` for 
 
 **"The application did not respond"**
 Shouldn't happen. If it does, check the log for an `interaction expired before response` line. It usually means the host is overloaded or the clock is far off.
+
+**"has a role equal to or higher than mine"**
+Discord only lets a bot act on members and roles below its own highest role. In Server Settings -> Roles, drag the bot's role above the roles of the people it should moderate.
+
+**Temporary bans don't expire**
+The bot must be running and still have Ban Members. Expiries are checked every `expiryCheckSeconds`, so they can be up to that late.
 
 **"Something went wrong" with a reference code**
 Search the log for the code. The full error is right there.

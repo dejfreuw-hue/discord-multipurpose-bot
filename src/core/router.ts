@@ -11,6 +11,8 @@ import {
   type ChatInputCommandInteraction,
   type Interaction,
   type ModalSubmitInteraction,
+  type PermissionResolvable,
+  type PermissionsBitField,
 } from 'discord.js';
 import type { Bot, Registered } from './bot.js';
 import { ComponentInteractionContext, InteractionContext } from './context.js';
@@ -127,10 +129,8 @@ function checkPermissions(bot: Bot, ctx: InteractionContext, req: PermissionRequ
   if (req.owner && !bot.isOwner(i.user.id)) throw new UserError('errors.ownerOnly');
   if (bot.isOwner(i.user.id)) return;
 
-  const userMissing = missingPermissions(i.memberPermissions, req.user);
-  if (userMissing.length > 0) {
-    throw new UserError('errors.userPermissions', { permissions: userMissing.map(permissionLabel).join(', ') });
-  }
+  // With allowStaff the user check needs the guild's staff roles, so it waits for loadGuildState.
+  if (!req.allowStaff) assertUserPermissions(i.memberPermissions, req.user);
   const botMissing = missingPermissions(i.appPermissions, req.bot);
   if (botMissing.length > 0) {
     throw new UserError('errors.botPermissions', { permissions: botMissing.map(permissionLabel).join(', ') });
@@ -150,8 +150,15 @@ async function loadGuildState(
   if (toggleable && ctx.settings.disabledModules.includes(moduleName)) {
     throw new UserError('errors.moduleDisabled', { module: ctx.t(`modules.${moduleName}.name`) });
   }
-  if (req?.staff && !bot.isOwner(i.user.id) && !isStaff(i.member, ctx.settings.staffRoles)) {
-    throw new UserError('errors.staffOnly');
+  if (!req || bot.isOwner(i.user.id)) return;
+  if (req.staff && !isStaff(i.member, ctx.settings.staffRoles)) throw new UserError('errors.staffOnly');
+  if (req.allowStaff && !isStaff(i.member, ctx.settings.staffRoles)) assertUserPermissions(i.memberPermissions, req.user);
+}
+
+function assertUserPermissions(have: Readonly<PermissionsBitField> | null, need: PermissionResolvable | undefined): void {
+  const missing = missingPermissions(have, need);
+  if (missing.length > 0) {
+    throw new UserError('errors.userPermissions', { permissions: missing.map(permissionLabel).join(', ') });
   }
 }
 

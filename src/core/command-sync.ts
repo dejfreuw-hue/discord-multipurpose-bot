@@ -16,12 +16,22 @@ const HASH_FILE = fromRoot('data', 'commands.sha256');
 
 type CommandJSON = RESTPostAPIChatInputApplicationCommandsJSONBody;
 
-/** Builds the registration payload: translates description keys and applies each command's scope. */
-export function buildCommands(modules: readonly Module[], i18n: I18n): CommandJSON[] {
+/**
+ * Builds the registration payload: translates description keys and applies each command's scope.
+ * A module whose config.yml section has `hideCommands: false` gets its default member
+ * permissions stripped, so its commands show up for everyone and the bot's own checks decide.
+ */
+export function buildCommands(
+  modules: readonly Module[],
+  i18n: I18n,
+  moduleSettings?: ReadonlyMap<string, Record<string, unknown>>,
+): CommandJSON[] {
   const out: CommandJSON[] = [];
   for (const mod of modules) {
+    const showToAll = moduleSettings?.get(mod.name)?.hideCommands === false;
     for (const command of mod.commands ?? []) {
       const json = localize(structuredClone(command.data.toJSON()), i18n) as CommandJSON;
+      if (showToAll) json.default_member_permissions = null;
       const anywhere = command.scope === 'anywhere';
       json.integration_types = anywhere
         ? [ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall]

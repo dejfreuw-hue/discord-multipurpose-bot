@@ -53,7 +53,7 @@ export class InteractionContext<I extends RepliableInteraction = RepliableIntera
   }
 
   get locale(): string {
-    if (this.guild) return this.settings?.locale ?? this.bot.config.bot.locale;
+    if (this.guild) return this.bot.guildLocale(this.settings);
     return this.bot.i18n.fromDiscord(this.interaction.locale) ?? this.bot.config.bot.locale;
   }
 

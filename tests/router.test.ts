@@ -27,18 +27,19 @@ function fakeBot(command: Command, settings: Partial<GuildSettingsData> = {}) {
     components: new Map(),
     settings: { peek: () => undefined, get: async () => data },
     isOwner: () => false,
+    guildLocale: (s: GuildSettingsData | null) => s?.locale ?? 'en',
     panel: (color = 0) => new Panel(color, true),
   };
   return { bot: bot as unknown as Bot, logger };
 }
 
-function fakeInteraction(name: string, perms: bigint = PermissionFlagsBits.SendMessages) {
+function fakeInteraction(name: string, perms: bigint = PermissionFlagsBits.SendMessages, roles: string[] = []) {
   const i = {
     commandName: name,
     user: { id: 'u' },
     guildId: 'g',
     guild: { id: 'g' },
-    member: { permissions: new PermissionsBitField(perms), roles: { cache: new Map() } },
+    member: { permissions: new PermissionsBitField(perms), roles: { cache: new Map(roles.map((r) => [r, {}])) } },
     memberPermissions: new PermissionsBitField(perms),
     appPermissions: new PermissionsBitField(PermissionFlagsBits.Administrator),
     locale: 'en-US',
@@ -144,5 +145,21 @@ describe('routeInteraction', () => {
     const i = fakeInteraction('gone');
     await route(bot, i);
     expect(i.reply).toHaveBeenCalledOnce();
+  });
+
+  it('lets staff roles stand in for Discord permissions when allowStaff is set', async () => {
+    const run = vi.fn(async () => undefined);
+    const { bot } = fakeBot(command(run, { permissions: { user: PermissionFlagsBits.BanMembers, allowStaff: true } }), { staffRoles: ['staff'] });
+    await route(bot, fakeInteraction('sample', PermissionFlagsBits.SendMessages, ['staff']));
+    expect(run).toHaveBeenCalledOnce();
+  });
+
+  it('still refuses members with neither the permission nor a staff role', async () => {
+    const run = vi.fn(async () => undefined);
+    const { bot } = fakeBot(command(run, { permissions: { user: PermissionFlagsBits.BanMembers, allowStaff: true } }), { staffRoles: ['staff'] });
+    const i = fakeInteraction('sample');
+    await route(bot, i);
+    expect(run).not.toHaveBeenCalled();
+    expect(i.followUp).toHaveBeenCalledOnce();
   });
 });

@@ -1,10 +1,15 @@
 import type { z } from 'zod';
 import type { Logger } from './logger.js';
-import type { Module } from './module.js';
 import { GuildSettingsModel, type GuildSettingsDoc } from './models/guild-settings.js';
 
 export type GuildSettingsData = Readonly<GuildSettingsDoc>;
 type CorePatch = Partial<Pick<GuildSettingsDoc, 'locale' | 'color' | 'staffRoles' | 'disabledModules'>>;
+
+/** The part of a module the settings store needs. Modules usually export this from their settings file. */
+export interface SettingsSlice<S extends z.ZodType> {
+  name: string;
+  guildSettings: S;
+}
 
 /**
  * Per-guild settings, cached in memory. Writes go to Mongo first and only update the cache
@@ -38,14 +43,14 @@ export class GuildSettings {
   }
 
   /** Parsed settings for one module, with defaults filled in for anything not stored yet. */
-  async module<S extends z.ZodType>(guildId: string, mod: Module & { guildSettings: S }): Promise<z.output<S>> {
+  async module<S extends z.ZodType>(guildId: string, mod: SettingsSlice<S>): Promise<z.output<S>> {
     const data = await this.get(guildId);
     return this.parseModule(mod, data.modules[mod.name]);
   }
 
   async updateModule<S extends z.ZodType>(
     guildId: string,
-    mod: Module & { guildSettings: S },
+    mod: SettingsSlice<S>,
     patch: Partial<z.input<S>>,
   ): Promise<z.output<S>> {
     const current = await this.module(guildId, mod);
@@ -66,7 +71,7 @@ export class GuildSettings {
     return this.cache.size;
   }
 
-  private parseModule<S extends z.ZodType>(mod: Module & { guildSettings: S }, raw: unknown): z.output<S> {
+  private parseModule<S extends z.ZodType>(mod: SettingsSlice<S>, raw: unknown): z.output<S> {
     const parsed = mod.guildSettings.safeParse(raw ?? {});
     if (parsed.success) return parsed.data;
     // Stored data can go stale after an update changes a schema. Falling back to defaults

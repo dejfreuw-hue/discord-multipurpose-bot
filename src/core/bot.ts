@@ -124,6 +124,11 @@ export class Bot {
     return (this.config.moduleSettings.get(mod.name) ?? {}) as z.output<C>;
   }
 
+  /** The language a guild uses: its own choice from /setup, or the default from config.yml. */
+  guildLocale(settings: GuildSettingsData | null | undefined): string {
+    return settings?.locale ?? this.config.bot.locale;
+  }
+
   panel(color = this.config.bot.color): Panel {
     return new Panel(color, this.config.ui.componentsV2);
   }
@@ -173,7 +178,7 @@ export class Bot {
       // A failed registration leaves the previous commands in place, which still work,
       // so log it and carry on rather than taking the bot down.
       try {
-        const result = await syncCommands(buildCommands(this.modules, this.i18n), {
+        const result = await syncCommands(buildCommands(this.modules, this.i18n, this.config.moduleSettings), {
           token: this.env.DISCORD_TOKEN,
           applicationId: app.id,
           devGuildId: this.config.commands.devGuildId,

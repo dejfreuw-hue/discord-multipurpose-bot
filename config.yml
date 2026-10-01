@@ -69,3 +69,13 @@ modules:
     help:
       # List modules in /help even when a server has turned them off.
       showDisabled: false
+
+  moderation:
+    enabled: true
+    # Hide moderation commands from members who lack the matching Discord permission
+    # (Ban Members for /ban and so on). Set to false if your staff roles don't have those
+    # permissions: the commands then show for everyone, and the bot only lets Discord-permission
+    # holders and staff roles from /setup use them. Restart after changing.
+    hideCommands: true
+    # How often to check for expired temporary bans and roles, in seconds.
+    expiryCheckSeconds: 30

@@ -7,6 +7,8 @@ export interface PermissionRequirements {
   bot?: PermissionResolvable;
   /** Require Administrator or one of the server's configured staff roles. */
   staff?: boolean;
+  /** Members with a staff role may use this even without the `user` permissions. */
+  allowStaff?: boolean;
   /** Only bot owners from config.yml (or the application owner). */
   owner?: boolean;
 }
