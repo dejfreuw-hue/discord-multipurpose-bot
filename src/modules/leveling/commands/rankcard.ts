@@ -2,7 +2,7 @@ import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { UserError } from '../../../core/errors.js';
 import { defineCommand } from '../../../core/module.js';
 import { prepareBackground } from '../card.js';
-import { fetchImage } from '../images.js';
+import { fetchImage } from '../../../core/images.js';
 import { BackgroundModel, ProfileModel } from '../models.js';
 import { rankCard } from '../render.js';
 import { levelingConfig, levelingSettings, PRESET_NAMES } from '../settings.js';
@@ -20,7 +20,7 @@ export default defineCommand({
             .setName('name')
             .setDescription('leveling.rankcard.options.preset')
             .setRequired(true)
-            .addChoices(...PRESET_NAMES.map((p) => ({ name: `leveling.presets.${p}`, value: p }))),
+            .addChoices(...PRESET_NAMES.map((p) => ({ name: `common.presets.${p}`, value: p }))),
         ),
     )
     .addSubcommand((s) =>

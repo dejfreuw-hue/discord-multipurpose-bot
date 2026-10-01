@@ -1,15 +1,7 @@
 import { z } from 'zod';
 import type { SettingsSlice } from '../../core/guild-settings.js';
 
-export const PRESETS: Record<string, [string, string]> = {
-  midnight: ['#141e30', '#243b55'],
-  sunset: ['#ee5a24', '#f9a03f'],
-  ocean: ['#1a6e8e', '#36c2d8'],
-  forest: ['#134e5e', '#4f9a63'],
-  grape: ['#2f0743', '#6a2c91'],
-  mono: ['#1c1c1e', '#3a3a3c'],
-};
-export const PRESET_NAMES = Object.keys(PRESETS);
+export { PRESET_NAMES } from '../../core/ui/canvas.js';
 
 export const levelingConfig = z.object({
   curve: z

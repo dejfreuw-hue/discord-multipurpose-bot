@@ -13,7 +13,7 @@ import { defineCommand, defineComponent } from '../../../core/module.js';
 import { fetchMember } from '../../moderation/actions.js';
 import { prepareBackground } from '../card.js';
 import { progressFor } from '../curve.js';
-import { fetchImage } from '../images.js';
+import { fetchImage } from '../../../core/images.js';
 import { BackgroundModel, ProfileModel } from '../models.js';
 import { levelingConfig, levelingSettings, PRESET_NAMES, type LevelingSettings } from '../settings.js';
 import { curveOf, setXp } from '../xp.js';
@@ -46,7 +46,7 @@ function statusPanel(ctx: InteractionContext, s: LevelingSettings) {
         name: ctx.t('leveling.status.ignored'),
         value: [...s.ignoredChannels.map(channelMention), ...s.ignoredRoles.map(roleMention)].join(', ') || none,
       },
-      { name: ctx.t('leveling.status.cards'), value: `${ctx.t(`leveling.presets.${s.background}`)} · ${ctx.t('leveling.status.custom', { state: onOff(s.customCards) })}` },
+      { name: ctx.t('leveling.status.cards'), value: `${ctx.t(`common.presets.${s.background}`)} · ${ctx.t('leveling.status.custom', { state: onOff(s.customCards) })}` },
     ]);
 }
 
@@ -112,7 +112,7 @@ export default defineCommand({
           o
             .setName('preset')
             .setDescription('leveling.admin.options.preset')
-            .addChoices(...PRESET_NAMES.map((p) => ({ name: `leveling.presets.${p}`, value: p }))),
+            .addChoices(...PRESET_NAMES.map((p) => ({ name: `common.presets.${p}`, value: p }))),
         )
         .addAttachmentOption((o) => o.setName('image').setDescription('leveling.admin.options.image'))
         .addBooleanOption((o) => o.setName('allow_custom').setDescription('leveling.admin.options.allowCustom'))

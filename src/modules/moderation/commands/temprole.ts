@@ -3,7 +3,7 @@ import { formatDuration } from '../../../core/duration.js';
 import { UserError } from '../../../core/errors.js';
 import { defineCommand } from '../../../core/module.js';
 import { fetchMember } from '../actions.js';
-import { assertCanAssign } from '../hierarchy.js';
+import { assertAssignableRole } from '../../../core/permissions.js';
 import { TempRoleModel } from '../models/temp-role.js';
 import { postModLog } from '../modlog.js';
 import { readDuration, readReason } from '../respond.js';
@@ -56,7 +56,7 @@ export default defineCommand({
     const role = options.getRole('role', true);
     const member = await fetchMember(ctx.guild, user.id);
     if (!member) throw new UserError('moderation.errors.notMember', { user: user.toString() });
-    await assertCanAssign(role, ctx.member);
+    await assertAssignableRole(role, ctx.member);
     const audit = `${ctx.interaction.user.tag}: temprole`;
 
     if (sub === 'remove') {

@@ -1,4 +1,4 @@
-import { PermissionFlagsBits, type Guild, type GuildMember, type Role } from 'discord.js';
+import { PermissionFlagsBits, type Guild, type GuildMember } from 'discord.js';
 import { UserError } from '../../core/errors.js';
 import { outranks } from '../../core/permissions.js';
 
@@ -24,16 +24,5 @@ export async function assertCanModerate(target: GuildMember, moderator: GuildMem
   // Discord silently refuses to time out administrators.
   if (action === 'timeout' && target.permissions.has(PermissionFlagsBits.Administrator)) {
     throw new UserError('moderation.errors.timeoutAdmin', vars);
-  }
-}
-
-export async function assertCanAssign(role: Role, moderator: GuildMember | null): Promise<void> {
-  const me = await botMember(role.guild);
-  const vars = { role: role.toString() };
-  if (role.id === role.guild.id) throw new UserError('moderation.errors.everyoneRole');
-  if (role.managed) throw new UserError('moderation.errors.managedRole', vars);
-  if (me.roles.highest.comparePositionTo(role) <= 0) throw new UserError('moderation.errors.botRoleHierarchy', vars);
-  if (moderator && moderator.id !== role.guild.ownerId && moderator.roles.highest.comparePositionTo(role) <= 0) {
-    throw new UserError('moderation.errors.userRoleHierarchy', vars);
   }
 }

@@ -1,7 +1,8 @@
 import { PermissionFlagsBits, type GuildMember, type Role } from 'discord.js';
 import { describe, expect, it } from 'vitest';
 import { UserError } from '../src/core/errors.js';
-import { assertCanAssign, assertCanModerate } from '../src/modules/moderation/hierarchy.js';
+import { assertAssignableRole } from '../src/core/permissions.js';
+import { assertCanModerate } from '../src/modules/moderation/hierarchy.js';
 
 function role(position: number, extra: Partial<{ id: string; managed: boolean }> = {}) {
   return {
@@ -78,18 +79,18 @@ describe('assertCanModerate', () => {
   });
 });
 
-describe('assertCanAssign', () => {
+describe('assertAssignableRole', () => {
   const mod = member('mod', 30);
   const asRole = (r: ReturnType<typeof role>) => ({ ...r, guild, toString: () => `<@&${r.id}>` }) as unknown as Role;
 
   it('allows roles below both the bot and the moderator', async () => {
-    expect(await rejection(assertCanAssign(asRole(role(20)), mod))).toBe('allowed');
+    expect(await rejection(assertAssignableRole(asRole(role(20)), mod))).toBe('allowed');
   });
 
   it('rejects @everyone, managed roles and roles too high up', async () => {
-    expect(await rejection(assertCanAssign(asRole(role(0, { id: 'guild' })), mod))).toBe('moderation.errors.everyoneRole');
-    expect(await rejection(assertCanAssign(asRole(role(5, { managed: true })), mod))).toBe('moderation.errors.managedRole');
-    expect(await rejection(assertCanAssign(asRole(role(50)), mod))).toBe('moderation.errors.botRoleHierarchy');
-    expect(await rejection(assertCanAssign(asRole(role(40)), mod))).toBe('moderation.errors.userRoleHierarchy');
+    expect(await rejection(assertAssignableRole(asRole(role(0, { id: 'guild' })), mod))).toBe('errors.everyoneRole');
+    expect(await rejection(assertAssignableRole(asRole(role(5, { managed: true })), mod))).toBe('errors.managedRole');
+    expect(await rejection(assertAssignableRole(asRole(role(50)), mod))).toBe('errors.botRoleHierarchy');
+    expect(await rejection(assertAssignableRole(asRole(role(40)), mod))).toBe('errors.userRoleHierarchy');
   });
 });

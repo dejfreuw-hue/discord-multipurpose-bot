@@ -175,3 +175,49 @@ modules:
     enabled: true
     # Seconds a member waits between creating channels, so hopping in and out can't spam.
     createCooldownSeconds: 10
+
+  # Community modules. Each one is set up per server in /setup or with its own command.
+  welcome:
+    # Join and leave messages with an image card. Needs the Server Members intent.
+    enabled: true
+
+  roles:
+    # Auto-roles on join and self-assign role menus (buttons, dropdowns or reactions).
+    # Needs the Server Members intent.
+    enabled: true
+
+  verification:
+    # Button or image captcha before members can see the server. Needs the Server Members intent.
+    enabled: true
+
+  giveaways:
+    enabled: true
+
+  suggestions:
+    enabled: true
+
+  counting:
+    # Needs the Message Content intent.
+    enabled: true
+    # Reactions the bot puts on counting messages. Custom emojis work too: "<:name:id>".
+    correctEmoji: "✅"
+    recordEmoji: "\U0001F3C6"
+    wrongEmoji: "❌"
+
+  starboard:
+    # Needs the Message Content intent to copy message text.
+    enabled: true
+
+  sticky:
+    enabled: true
+    # Sticky messages each server can have.
+    maxPerGuild: 10
+
+  birthdays:
+    enabled: true
+
+  serverstats:
+    # Voice channels showing member, bot, boost, channel or role counts. Discord only allows a
+    # channel to be renamed twice per 10 minutes, so counts update every few minutes.
+    # Needs the Server Members intent.
+    enabled: true

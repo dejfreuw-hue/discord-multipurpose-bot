@@ -12,7 +12,15 @@
     "disabled": "Disabled",
     "unavailable": "Unavailable",
     "on": "On",
-    "off": "Off"
+    "off": "Off",
+    "presets": {
+      "midnight": "Midnight",
+      "sunset": "Sunset",
+      "ocean": "Ocean",
+      "forest": "Forest",
+      "grape": "Grape",
+      "mono": "Mono"
+    }
   },
   "errors": {
     "generic": "Something went wrong on our side. If it keeps happening, give the server owner this reference: `{ref}`",
@@ -25,7 +33,11 @@
     "botPermissions": "I'm missing these permissions here: **{permissions}**. Ask an admin to grant them.",
     "discordPermissions": "Discord didn't let me do that. Check that my role has the right permissions and sits high enough in the role list.",
     "moduleDisabled": "The **{module}** module is turned off in this server.",
-    "cooldown": "Slow down a little. You can use this again {time}."
+    "cooldown": "Slow down a little. You can use this again {time}.",
+    "everyoneRole": "You can't use @everyone here.",
+    "managedRole": "{role} is managed by an integration and can't be assigned by hand.",
+    "botRoleHierarchy": "{role} is equal to or higher than my highest role. Move my role above it in Server Settings -> Roles.",
+    "userRoleHierarchy": "{role} is equal to or higher than your highest role."
   },
   "modules": {
     "core": {
@@ -63,6 +75,46 @@
     "voice": {
       "name": "Join to Create",
       "description": "Members get their own voice channel by joining a hub, with controls to manage it"
+    },
+    "welcome": {
+      "name": "Welcome",
+      "description": "Welcome and goodbye messages with image cards"
+    },
+    "roles": {
+      "name": "Roles",
+      "description": "Auto-roles for new members and self-assign role menus"
+    },
+    "verification": {
+      "name": "Verification",
+      "description": "Button or captcha verification for new members"
+    },
+    "giveaways": {
+      "name": "Giveaways",
+      "description": "Giveaways with entry requirements and bonus entries"
+    },
+    "suggestions": {
+      "name": "Suggestions",
+      "description": "Member suggestions with voting, discussion threads and staff responses"
+    },
+    "counting": {
+      "name": "Counting",
+      "description": "A channel where members count up together, with a server record"
+    },
+    "starboard": {
+      "name": "Starboard",
+      "description": "Reposts messages that collect enough star reactions into a highlights channel"
+    },
+    "sticky": {
+      "name": "Sticky Messages",
+      "description": "Messages that stay at the bottom of a channel"
+    },
+    "birthdays": {
+      "name": "Birthdays",
+      "description": "Birthday announcements and a birthday role, in each member's own timezone"
+    },
+    "serverstats": {
+      "name": "Server Stats",
+      "description": "Voice channels whose names show live server counts"
     }
   },
   "core": {
@@ -882,14 +934,6 @@
       "level": "LEVEL",
       "xp": "XP"
     },
-    "presets": {
-      "midnight": "Midnight",
-      "sunset": "Sunset",
-      "ocean": "Ocean",
-      "forest": "Forest",
-      "grape": "Grape",
-      "mono": "Mono"
-    },
     "errors": {
       "bot": "Bots don't earn XP.",
       "minMax": "The minimum XP can't be higher than the maximum.",
@@ -1520,6 +1564,508 @@
       },
       "body": "Members who join a hub channel get their own voice channel, with buttons to lock, hide, limit, rename, kick and hand it over. Empty channels are deleted. Create a hub with the button below, or turn an existing channel into one with {command}.",
       "create": "Create a hub"
+    }
+  },
+  "welcome": {
+    "defaults": {
+      "join": "Welcome to **{server}**, {user}! You're member #{count}.",
+      "leave": "**{username}** left the server. We're now {count} members."
+    },
+    "card": {
+      "join": "WELCOME",
+      "leave": "GOODBYE",
+      "member": "Member #{count}"
+    },
+    "errors": {
+      "needChannel": "Pick a channel first."
+    },
+    "command": {
+      "description": "Set up welcome and goodbye messages",
+      "join": "Message when someone joins",
+      "leave": "Message when someone leaves",
+      "dm": "Also DM new members the welcome message",
+      "card": "Style of the image card",
+      "test": "Preview the message with you as the member",
+      "options": {
+        "enabled": "Turn it on or off",
+        "channel": "Where to post it",
+        "message": "Text with {user}, {username}, {server} and {count}. \"default\" restores the built-in one",
+        "card": "Include the image card",
+        "preset": "Built-in background",
+        "image": "Your own background image (about 1024x450)",
+        "color": "Accent colour, like #F1C40F",
+        "removeImage": "Remove the uploaded background",
+        "kind": "Which message to preview"
+      },
+      "title": "Welcome messages",
+      "joinTitle": "Join",
+      "leaveTitle": "Leave",
+      "noChannel": "no channel",
+      "withCard": "with card",
+      "textOnly": "text only"
+    },
+    "setup": {
+      "messages": {
+        "title": "Welcome messages"
+      },
+      "body": "Pick where welcome and goodbye messages go. Change the text and card style with /welcome, and preview them with {command}.",
+      "joinPlaceholder": "Channel for welcome messages",
+      "leavePlaceholder": "Channel for goodbye messages"
+    }
+  },
+  "roles": {
+    "options": {
+      "role": "The role",
+      "menu": "The role menu",
+      "title": "Menu title",
+      "style": "Buttons, a dropdown, or emoji reactions",
+      "description": "Text shown above the roles",
+      "exclusive": "Members can hold only one role from this menu",
+      "label": "Button or option text (defaults to the role name)",
+      "emoji": "Emoji, like a unicode emoji or <:name:id>. Required for reaction menus",
+      "optionDescription": "Short description (dropdown menus only)",
+      "channel": "Where to post the menu"
+    },
+    "styles": {
+      "buttons": "Buttons",
+      "select": "Dropdown",
+      "reactions": "Reactions"
+    },
+    "errors": {
+      "noMenu": "There's no role menu #{id}.",
+      "empty": "Add some roles to the menu first.",
+      "invalid": "Discord rejected the menu. Usually that's an emoji I can't use; I can only use emojis from servers I'm in.",
+      "needEmoji": "Reaction menus need an emoji for every role.",
+      "emojiTaken": "Another role in this menu already uses that emoji."
+    },
+    "menu": {
+      "placeholder": "Pick your roles",
+      "footer": {
+        "buttons": "Click a button to get or remove a role.",
+        "select": "Pick roles from the menu. Unpicking removes them.",
+        "reactions": "React to get a role, remove your reaction to lose it."
+      },
+      "footerExclusive": "You can have one role from this menu. Picking another swaps it.",
+      "added": "Added {roles}.",
+      "removed": "Removed {roles}.",
+      "unchanged": "Nothing changed. I may not be allowed to manage that role anymore."
+    },
+    "autorole": {
+      "description": "Roles given to new members automatically",
+      "add": "Give a role to everyone who joins",
+      "remove": "Stop giving a role",
+      "list": "Show the auto-roles",
+      "options": {
+        "for": "New humans or new bots (default humans)"
+      },
+      "humans": "Humans",
+      "bots": "Bots",
+      "title": "Auto-roles",
+      "footer": "If the server uses membership screening, roles are given once the member accepts the rules."
+    },
+    "menuCommand": {
+      "description": "Self-assign role menus",
+      "create": "Create a role menu",
+      "add": "Add a role to a menu",
+      "remove": "Remove a role from a menu",
+      "send": "Post a menu in a channel",
+      "delete": "Delete a menu",
+      "list": "Show all menus",
+      "created": "Created role menu #{id}. Add roles with {command}, then post it with /rolemenu send.",
+      "added": "Added {role} to menu #{id}. If the menu is posted, it's been updated.",
+      "removed": "Removed {role} from the menu.",
+      "deleted": "Deleted menu #{id}.",
+      "listTitle": "Role menus",
+      "none": "No role menus yet."
+    },
+    "setup": {
+      "auto": {
+        "title": "Auto-roles"
+      },
+      "body": "Roles every new member gets automatically. For roles members pick themselves, build a role menu with {command}.",
+      "humanRoles": "Roles for new members",
+      "botRoles": "Roles for new bots"
+    }
+  },
+  "verification": {
+    "modes": {
+      "button": "Button",
+      "captcha": "Captcha"
+    },
+    "panel": {
+      "title": "Verify to get access",
+      "body": "Click the button below to verify and unlock the rest of the server.",
+      "button": "Verify"
+    },
+    "captcha": {
+      "prompt": "Type the characters from the image. It expires {time}.",
+      "enter": "Enter code",
+      "title": "Verification",
+      "label": "Characters in the image"
+    },
+    "done": "You're verified. Welcome!",
+    "errors": {
+      "notSetUp": "Verification isn't set up yet. An admin needs to pick a verified or unverified role with /verification settings.",
+      "already": "You're already verified.",
+      "tooNew": "Your account is too new to verify here. Try again {time}.",
+      "expired": "That captcha expired. Click Verify again for a new one.",
+      "wrong_one": "That's not it. Here's a new image; {left} try left.",
+      "wrong_other": "That's not it. Here's a new image; {left} tries left.",
+      "tooManyAttempts": "Too many wrong answers. Click Verify to start over.",
+      "roles": "I couldn't update your roles. Ask an admin to move my role above the verification roles."
+    },
+    "command": {
+      "description": "Set up member verification",
+      "settings": "Choose the mode, roles and minimum account age",
+      "panel": "Post the verify button in a channel",
+      "options": {
+        "mode": "Plain button or captcha",
+        "verifiedRole": "Role given after verifying",
+        "unverifiedRole": "Role given on join and removed after verifying",
+        "minAccountDays": "Accounts younger than this many days can't verify (0 = off)",
+        "clearRoles": "Remove both role settings",
+        "channel": "Where to post the verify button"
+      },
+      "title": "Verification",
+      "mode": "Mode",
+      "verifiedRole": "Verified role",
+      "unverifiedRole": "Unverified role",
+      "minAge": "Minimum account age",
+      "days_one": "{count} day",
+      "days_other": "{count} days",
+      "footer": "Hide your channels from @everyone or the unverified role, and show them to the verified role."
+    }
+  },
+  "giveaways": {
+    "entered": "You're in! Good luck. Click the button again to leave.",
+    "left": "You left the giveaway.",
+    "req": {
+      "role": "Have {role}",
+      "account_one": "Account at least {count} day old",
+      "account_other": "Account at least {count} days old",
+      "server_one": "In the server for {count} day",
+      "server_other": "In the server for {count} days",
+      "level": "Level {level} or higher"
+    },
+    "bonus": {
+      "booster_one": "Server boosters get {count} extra entry",
+      "booster_other": "Server boosters get {count} extra entries",
+      "role_one": "{role} gets {count} extra entry",
+      "role_other": "{role} gets {count} extra entries"
+    },
+    "panel": {
+      "ends": "Ends",
+      "ended": "Ended",
+      "host": "Hosted by",
+      "entries": "Entries",
+      "requirements": "Requirements",
+      "bonus": "Bonus entries",
+      "winners": "Winners",
+      "noWinners": "Nobody qualified.",
+      "winnerCount": "Winners",
+      "enter": "Enter ({count})",
+      "footer": "Giveaway #{id}",
+      "cancelled": "Giveaway #{id} was cancelled."
+    },
+    "announce": {
+      "won": "Congratulations {winners}! You won **{prize}**.",
+      "reroll": "New winner: {winners} wins **{prize}**!",
+      "none": "The giveaway for **{prize}** ended without anyone who qualified."
+    },
+    "errors": {
+      "notFound": "There's no giveaway #{id}.",
+      "notRunning": "That giveaway isn't running.",
+      "notEnded": "That giveaway hasn't ended yet.",
+      "duration": "`{value}` doesn't work. Use a duration from 1 minute to 60 days, like `2d`.",
+      "role": "You need {role} to enter.",
+      "account_one": "Your account must be at least {count} day old to enter.",
+      "account_other": "Your account must be at least {count} days old to enter.",
+      "server_one": "You must be in the server for at least {count} day to enter.",
+      "server_other": "You must be in the server for at least {count} days to enter.",
+      "level": "You need level {level} to enter. You're level {current}."
+    },
+    "command": {
+      "description": "Run giveaways",
+      "start": "Start a giveaway",
+      "end": "End a giveaway now and draw winners",
+      "reroll": "Draw new winners for an ended giveaway",
+      "cancel": "Cancel a giveaway without drawing",
+      "list": "Show running giveaways",
+      "options": {
+        "id": "The giveaway",
+        "prize": "What can be won",
+        "duration": "How long it runs, like 1h, 2d or 1w",
+        "winners": "Number of winners (default 1)",
+        "rerollWinners": "How many new winners to draw (default 1)",
+        "description": "Extra details",
+        "channel": "Where to post it (default here)",
+        "requiredRole": "Only members with this role can enter",
+        "minAccountDays": "Minimum account age in days",
+        "minServerDays": "Minimum days in the server",
+        "minLevel": "Minimum level (from the Leveling module)",
+        "boosterEntries": "Extra entries for server boosters",
+        "bonusRole": "A role that gets extra entries",
+        "bonusEntries": "Extra entries for the bonus role (default 1)"
+      },
+      "started": "Giveaway #{id} started: {url}. It ends {time}.",
+      "ended_one": "Ended. Drew {count} winner.",
+      "ended_other": "Ended. Drew {count} winners.",
+      "rerolled_one": "Drew {count} new winner.",
+      "rerolled_other": "Drew {count} new winners.",
+      "cancelled": "Cancelled giveaway #{id}.",
+      "listTitle": "Running giveaways",
+      "none": "No giveaways are running."
+    }
+  },
+  "suggestions": {
+    "suggest": {
+      "description": "Suggest something for this server",
+      "options": {
+        "idea": "What you would like to see"
+      },
+      "done": "Your suggestion is up: {url}"
+    },
+    "manage": {
+      "description": "Respond to suggestions and configure them",
+      "respond": "Approve, deny, consider or mark a suggestion as implemented",
+      "settings": "Set the suggestion channel and options",
+      "options": {
+        "number": "Suggestion number",
+        "status": "New status",
+        "reason": "Response shown on the suggestion",
+        "channel": "Channel where suggestions are posted",
+        "threads": "Open a discussion thread on each suggestion",
+        "dmAuthor": "DM the author when staff respond"
+      },
+      "saved": "Suggestions go to {channel}. Threads: {threads}. DM on response: {dm}.",
+      "done": "Suggestion #{number} is now **{status}**."
+    },
+    "panel": {
+      "title": "Suggestion #{number}",
+      "by": "Suggested by {user}",
+      "status": "Status",
+      "votes": "Votes",
+      "voteLine": "{up} up, {down} down ({percent})",
+      "response": "Response from {user}",
+      "up_one": "{count} Upvote",
+      "up_other": "{count} Upvotes",
+      "down_one": "{count} Downvote",
+      "down_other": "{count} Downvotes"
+    },
+    "status": {
+      "open": "Open",
+      "considered": "Under consideration",
+      "approved": "Approved",
+      "implemented": "Implemented",
+      "denied": "Denied"
+    },
+    "voted": {
+      "up": "You upvoted this suggestion.",
+      "down": "You downvoted this suggestion.",
+      "none": "Your vote was removed."
+    },
+    "thread": "Suggestion #{number}",
+    "dm": "Your suggestion #{number} in **{server}** was marked as **{status}**.",
+    "setup": {
+      "channel": {
+        "title": "Suggestions"
+      },
+      "placeholder": "Channel for suggestions",
+      "threads": "Discussion threads",
+      "dmAuthor": "DM on response",
+      "body": "Members post ideas with {command} and vote on them with buttons. Staff respond with `/suggestion respond`."
+    },
+    "errors": {
+      "noChannel": "Suggestions are not set up yet. An admin can pick a channel with `/suggestion settings` or `/setup`.",
+      "notFound": "There is no suggestion #{number}.",
+      "closed": "Voting on this suggestion has closed."
+    }
+  },
+  "counting": {
+    "command": {
+      "description": "Configure the counting channel",
+      "settings": "Set the counting channel and rules",
+      "set": "Set the current number, for example after a mistake",
+      "stats": "Show the current number and the record",
+      "options": {
+        "channel": "Channel used for counting",
+        "resetOnFail": "Start over from 1 after a mistake",
+        "allowTwice": "Let the same member count twice in a row",
+        "allowChat": "Keep messages that aren't numbers",
+        "number": "The number to continue from"
+      },
+      "saved": "Counting happens in {channel}. Reset on mistakes: {reset}. Same member twice: {twice}. Chat allowed: {chat}.",
+      "setDone": "Done. The next number is **{next}**."
+    },
+    "stats": {
+      "title": "Counting",
+      "current": "Current number",
+      "record": "Server record",
+      "last": "Counted last"
+    },
+    "fail": {
+      "wrongNumber": "That's not the next number. It was **{next}**.",
+      "twice": "You can't count twice in a row.",
+      "reset": "{user} ruined it at **{count}**. {reason} Back to **1**. Record: **{record}**."
+    },
+    "deleted": "{user} deleted their number **{count}**. The next number is **{next}**.",
+    "setup": {
+      "channel": {
+        "title": "Counting"
+      },
+      "placeholder": "Counting channel",
+      "resetOnFail": "Reset on mistakes",
+      "allowTwice": "Same member twice",
+      "body": "Members count up one number at a time in this channel. More options with {command}."
+    }
+  },
+  "starboard": {
+    "command": {
+      "description": "Configure the starboard",
+      "settings": "Set the starboard channel, emoji and threshold",
+      "ignore": "Stop or resume picking up messages from a channel",
+      "options": {
+        "channel": "Channel where starred messages are posted",
+        "emoji": "Reaction that counts as a star",
+        "threshold": "Stars needed to reach the board",
+        "selfStar": "Count the author's own star",
+        "ignored": "Channel to ignore or stop ignoring"
+      },
+      "saved": "Starred messages go to {channel} after {threshold} {emoji}. Self-stars count: {self}.",
+      "ignored": "Messages in {channel} won't reach the starboard anymore.",
+      "unignored": "Messages in {channel} can reach the starboard again."
+    },
+    "post": {
+      "in": "in {channel}",
+      "jump": "Jump to message"
+    },
+    "setup": {
+      "channel": {
+        "title": "Starboard"
+      },
+      "placeholder": "Starboard channel",
+      "selfStar": "Self-stars",
+      "body": "Messages with **{threshold}** {emoji} reactions are reposted in the starboard channel. Change the emoji with {command}."
+    },
+    "errors": {
+      "emoji": "That doesn't look like a single emoji. Use a normal emoji or a custom one from this server."
+    }
+  },
+  "sticky": {
+    "command": {
+      "description": "Keep a message at the bottom of this channel",
+      "set": "Set or edit the sticky message in this channel",
+      "remove": "Remove the sticky message from this channel",
+      "list": "List the sticky messages in this server"
+    },
+    "modal": {
+      "title": "Sticky message",
+      "label": "Message"
+    },
+    "label": "Sticky message",
+    "saved": "Sticky message saved. It moves back to the bottom whenever someone posts here.",
+    "removed": "Sticky message removed.",
+    "listTitle": "Sticky messages",
+    "empty": "No sticky messages yet. Use `/sticky set` in a channel to add one.",
+    "errors": {
+      "channel": "I can't post in this channel.",
+      "none": "This channel has no sticky message.",
+      "empty": "The message can't be empty.",
+      "limit_one": "This server already has the maximum of {count} sticky message.",
+      "limit_other": "This server already has the maximum of {count} sticky messages."
+    }
+  },
+  "birthdays": {
+    "command": {
+      "description": "Your birthday in this server",
+      "set": "Save your birthday",
+      "remove": "Forget your birthday",
+      "view": "See someone's birthday",
+      "upcoming": "The next birthdays in this server",
+      "options": {
+        "month": "Month (1-12)",
+        "day": "Day of the month",
+        "year": "Year, if you want your age in the announcement (only you can see it)",
+        "timezone": "Your timezone, so the celebration starts at your midnight",
+        "user": "Whose birthday to show"
+      }
+    },
+    "admin": {
+      "description": "Configure birthday announcements",
+      "settings": "Set the announcement channel, birthday role, timezone and message",
+      "remove": "Remove a member's birthday",
+      "options": {
+        "channel": "Where birthdays are announced",
+        "role": "Role members get for their birthday",
+        "timezone": "Timezone for members who didn't pick one",
+        "message": "Custom announcement. Placeholders: {user}, {username}, {server}, {age}",
+        "reset": "Clear all birthday settings",
+        "user": "Member whose birthday to remove"
+      },
+      "saved": "Birthdays are announced in {channel} with the role {role}. Default timezone: {timeZone}.",
+      "reset": "Birthday settings cleared.",
+      "removed": "Removed the birthday of {user}."
+    },
+    "announce": {
+      "plain": "Happy birthday, {user}! Everyone in **{server}** wishes you a great day.",
+      "age": "Happy birthday, {user}! You're turning **{age}** today. Everyone in **{server}** wishes you a great day."
+    },
+    "saved": "Got it. Your birthday is saved as **{date}**.",
+    "removed": "Your birthday was removed.",
+    "view": "{user}'s birthday is **{date}**.",
+    "today": "That's today!",
+    "inDays_one": "That's tomorrow.",
+    "inDays_other": "That's in {count} days.",
+    "upcomingTitle": "Upcoming birthdays",
+    "none": "Nobody has saved a birthday yet. Use `/birthday set` to add yours.",
+    "setup": {
+      "channel": {
+        "title": "Birthdays"
+      },
+      "channelPlaceholder": "Announcement channel",
+      "rolePlaceholder": "Birthday role (optional)",
+      "body": "Members save their birthday with {command}. The default timezone is **{timeZone}**; change it and the message with {admin}."
+    },
+    "errors": {
+      "date": "That date doesn't exist. Check the month, day and year.",
+      "timeZone": "I don't know that timezone. Pick one from the list, like `Europe/Berlin`.",
+      "notSet": "You haven't saved a birthday here.",
+      "unknown": "{user} hasn't saved a birthday here."
+    }
+  },
+  "serverstats": {
+    "command": {
+      "description": "Channels that show server counts in their name",
+      "add": "Create a counter channel",
+      "remove": "Delete a counter channel",
+      "options": {
+        "counter": "What to count",
+        "name": "Channel name; {count} is replaced with the number",
+        "category": "Category to put the channel in",
+        "channel": "Counter channel to delete"
+      }
+    },
+    "kinds": {
+      "members": "All members",
+      "humans": "Members without bots",
+      "bots": "Bots",
+      "boosts": "Server boosts",
+      "channels": "Channels",
+      "roles": "Roles"
+    },
+    "templates": {
+      "members": "Members: {count}",
+      "humans": "Humans: {count}",
+      "bots": "Bots: {count}",
+      "boosts": "Boosts: {count}",
+      "channels": "Channels: {count}",
+      "roles": "Roles: {count}"
+    },
+    "added": "Created {channel}. It updates every few minutes; Discord limits how often channels can be renamed.",
+    "removed": "Counter channel deleted.",
+    "errors": {
+      "notCounter": "That channel isn't a counter.",
+      "limit": "A server can have up to 10 counters. Remove one first."
     }
   }
 }

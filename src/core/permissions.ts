@@ -1,4 +1,5 @@
-import { PermissionFlagsBits, PermissionsBitField, type GuildMember, type PermissionResolvable } from 'discord.js';
+import { PermissionFlagsBits, PermissionsBitField, type GuildMember, type PermissionResolvable, type Role } from 'discord.js';
+import { UserError } from './errors.js';
 
 export interface PermissionRequirements {
   /** Discord permissions the user needs in the channel. */
@@ -42,4 +43,20 @@ export function outranks(actor: GuildMember, target: GuildMember): boolean {
   if (target.id === target.guild.ownerId) return false;
   if (actor.id === actor.guild.ownerId) return true;
   return actor.roles.highest.comparePositionTo(target.roles.highest) > 0;
+}
+
+/**
+ * Refuses roles the bot can't hand out, or that `actor` couldn't hand out themselves (null when
+ * the bot acts on its own). The second check stops someone with Manage Roles from using the bot
+ * to give out roles above their own.
+ */
+export async function assertAssignableRole(role: Role, actor: GuildMember | null): Promise<void> {
+  const me = role.guild.members.me ?? (await role.guild.members.fetchMe());
+  const vars = { role: role.toString() };
+  if (role.id === role.guild.id) throw new UserError('errors.everyoneRole');
+  if (role.managed) throw new UserError('errors.managedRole', vars);
+  if (me.roles.highest.comparePositionTo(role) <= 0) throw new UserError('errors.botRoleHierarchy', vars);
+  if (actor && actor.id !== role.guild.ownerId && actor.roles.highest.comparePositionTo(role) <= 0) {
+    throw new UserError('errors.userRoleHierarchy', vars);
+  }
 }

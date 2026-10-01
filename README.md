@@ -21,11 +21,11 @@ Windows, Linux and macOS all work. Nothing needs compiling.
 
    | Intent | Needed by |
    | --- | --- |
-   | Server Members | Welcome messages, auto-roles and verification (Community module) |
-   | Message Content | AutoMod, AI, Tickets (transcripts and modmail) |
+   | Server Members | Welcome, Auto-roles and role menus, Verification, Server Stats |
+   | Message Content | AutoMod, AI, Tickets (transcripts and modmail), Counting, Starboard |
    | Presence | Not needed |
 
-   General and Moderation need none of them. AutoMod, AI and Tickets need Message Content. The bot only requests intents for modules that are enabled, so you can leave the rest off.
+   General, Moderation, Leveling, Economy, Music, Join to Create, Giveaways, Suggestions, Sticky Messages and Birthdays need none of them. The bot only requests intents for modules that are enabled, so you can leave the rest off.
 4. Under **Installation**, tick both **Guild Install** and **User Install**. User install lets people use `/botinfo` (and later `/userinfo` and `/rank`) anywhere.
 5. Invite the bot: under **OAuth2 -> URL Generator**, tick the `bot` and `applications.commands` scopes, pick the permissions you want to grant (or Administrator for a quick test) and open the generated link. Once the bot runs, `/botinfo` has an **Invite** button with exactly the permissions it needs.
 
@@ -276,6 +276,32 @@ Lock and hide also work on servers where a role (like "Verified") is what grants
 
 The bot needs Manage Channels, Move Members and Manage Roles (for channel permissions) in the hub's category.
 
+### Community
+
+Every part below is its own module, so each can be turned off separately in `config.yml` or per server in `/setup`. Most of them have a page in `/setup` for the basics.
+
+**Welcome and leave messages.** `/welcome join` and `/welcome leave` set the channel, the text and whether an image card is attached. Messages can use `{user}`, `{username}`, `{server}` and `{count}` (member count). `/welcome card` picks a colour preset or your own background image (resized and cropped to fit), `/welcome dm` also sends the join message by DM, and `/welcome test` previews the join or leave message with your own account.
+
+**Auto-roles.** `/autorole add` gives roles to everyone who joins, with separate lists for humans and bots. On servers with membership screening, roles wait until the member accepts the rules.
+
+**Role menus.** `/rolemenu create` makes a menu with buttons, a dropdown or reactions; `/rolemenu add` adds a role with a label, emoji and description, and `/rolemenu send` posts it. Exclusive menus let members hold only one role from the menu at a time, which suits colour or region roles. Editing a menu updates the posted message.
+
+**Verification.** `/verification settings` picks the mode (a button, or an image captcha with three tries) and the roles: a verified role that's given, and optionally an unverified role given on join and taken away on success, for servers that lock channels behind it. It can also refuse accounts younger than a number of days. `/verification panel` posts the panel members click.
+
+**Giveaways.** `/giveaway start` takes a prize, a duration and the number of winners, plus optional requirements (a role, account age, time in the server, a minimum level from the Leveling module) and bonus entries for server boosters or a role. Members enter with a button and are told right away if they don't qualify. Winners are drawn when it ends, even if the bot was offline at that moment. `/giveaway end`, `reroll`, `cancel` and `list` manage running ones.
+
+**Suggestions.** Members post ideas with `/suggest`. Each gets a number, up and down vote buttons with a live count, and optionally a discussion thread. Staff answer with `/suggestion respond` (approved, denied, under consideration, implemented) and a reason; the suggestion is updated, voting closes when it's decided, and the author gets a DM if that's on.
+
+**Counting.** Members count up one number at a time in the counting channel. The same person can't count twice in a row (unless allowed), a wrong number resets the count to 1 (or is just deleted, if you turn reset off), and the bot keeps a server record. If someone deletes their number, the bot says what comes next. `/counting set` continues from a given number. Needs the Message Content intent.
+
+**Starboard.** Messages that get enough star reactions are reposted in the starboard channel with a link back, and the count stays live. Set the channel, emoji (any emoji, including your server's own), threshold and whether authors can star themselves with `/starboard settings`, and leave channels out with `/starboard ignore`. NSFW messages only go to an NSFW starboard. Needs the Message Content intent.
+
+**Sticky messages.** `/sticky set` in a channel opens a form for a message that stays at the bottom: whenever someone posts, the bot removes the old copy and posts it again, at most once every few seconds so busy channels aren't flooded.
+
+**Birthdays.** Members save theirs with `/birthday set`, with an optional year (for their age in the announcement; only they can see it) and their own timezone. At midnight in that timezone the bot announces it and gives the birthday role, then takes the role back when their day ends. February 29 birthdays are celebrated on February 28 in other years. `/birthday upcoming` shows what's next; `/birthdays settings` sets the channel, role, default timezone and a custom message (`{user}`, `{username}`, `{server}`, `{age}`).
+
+**Server stats.** `/serverstats add` creates a voice channel nobody can join whose name shows a count: members, members without bots, bots, boosts, channels or roles. Use `{count}` in the name to place the number. Discord allows only two renames per channel every ten minutes, so counts update every few minutes rather than instantly. Deleting the channel removes the counter.
+
 Durations accept `30s`, `10m`, `2h`, `1d`, `1w` and combinations like `1d 12h`. A plain number means minutes.
 
 `npm run commands:deploy` re-registers commands by hand. `npm run commands:clear` removes them all (useful after switching between `devGuildId` and global).
@@ -301,6 +327,7 @@ src/
   modules/
     index.ts            list of modules, in load order
     core/               General module (help, ping, botinfo, setup)
+    community/          one folder per Community module (welcome, roles, giveaways, ...)
   scripts/commands.ts   manual command registration
 locales/                translations
 tests/                  unit tests (npm test)
@@ -369,6 +396,18 @@ YouTube changes often, and the YouTube plugin needs updates to keep up. Update t
 
 **Temporary bans don't expire**
 The bot must be running and still have Ban Members. Expiries are checked every `expiryCheckSeconds`, so they can be up to that late.
+
+**Welcome messages, auto-roles or verification do nothing when someone joins**
+Turn on the Server Members intent under Developer Portal -> Bot and restart the bot. For roles, the bot's own role must be above the roles it gives.
+
+**The counting channel or starboard ignores messages**
+Both need the Message Content intent. The starboard also needs a channel set with `/starboard settings`, and it never copies messages from NSFW channels into a channel that isn't NSFW.
+
+**Server stats counters don't change**
+Discord lets a channel be renamed only twice per ten minutes, so changes show up after a few minutes. The bot needs Manage Channels on the counter channels.
+
+**Birthdays are announced at the wrong time**
+Announcements follow the member's own timezone, or the server's default from `/birthdays settings` (UTC unless changed). Members can fix theirs by running `/birthday set` again with their timezone.
 
 **"Something went wrong" with a reference code**
 Search the log for the code. The full error is right there.

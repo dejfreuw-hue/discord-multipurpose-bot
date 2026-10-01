@@ -2,7 +2,7 @@ import { AttachmentBuilder, type Guild, type User } from 'discord.js';
 import type { Bot } from '../../core/bot.js';
 import { renderRankCard } from './card.js';
 import { progressFor } from './curve.js';
-import { fetchImage } from './images.js';
+import { fetchImage } from '../../core/images.js';
 import { BackgroundModel, ProfileModel, type ProfileDoc } from './models.js';
 import { levelingSettings } from './settings.js';
 import { curveOf, rankOf } from './xp.js';
