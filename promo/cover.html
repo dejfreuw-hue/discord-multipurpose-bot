@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cover</title>
+<script>
+  // Every name and number on this image. Edit here; colours live in theme.css.
+  window.PROMO = {
+    botName: 'Reuw',
+    author: 'ReuwTheDev',
+    price: '$19.99',
+    modules: '25',
+    commands: '76',
+    tests: '305',
+    node: '20+',
+    // Mock data
+    songPosition: '1:47',
+    songLength: '3:52',
+    volume: '72%',
+    queueCount: '6 songs in queue',
+    scanScore: '94%',
+  };
+</script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="discord.css">
+<style>
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+  }
+  .stage {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background:
+      radial-gradient(1100px 700px at 78% 46%, rgba(61, 224, 255, 0.10), transparent 60%),
+      radial-gradient(700px 500px at 8% 105%, var(--accent-2-soft), transparent 70%),
+      var(--bg);
+  }
+  .grid-bg {
+    mask-image: radial-gradient(ellipse 60% 75% at 72% 45%, #000 20%, transparent 80%);
+  }
+
+  .copy {
+    position: absolute;
+    left: 132px;
+    top: 128px;
+    width: 760px;
+    z-index: 2;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .brand .logo {
+    width: 56px;
+    height: 56px;
+  }
+  .brand .logo svg {
+    width: 40px;
+  }
+  .brand .eyebrow {
+    font-size: 14px;
+  }
+  h1 {
+    margin-top: 54px;
+    font-size: 228px;
+    color: var(--ink);
+  }
+  h1 .dot {
+    color: var(--accent);
+  }
+  .tagline {
+    margin-top: 34px;
+    max-width: 640px;
+    font-size: 30px;
+    line-height: 1.3;
+    font-weight: 450;
+    color: var(--ink-soft);
+    letter-spacing: -0.01em;
+  }
+  .tagline b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .chips {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 700px;
+  }
+  .chips .pill {
+    height: 34px;
+    font-size: 15px;
+  }
+  .footer-row {
+    position: absolute;
+    left: 132px;
+    bottom: 104px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    z-index: 2;
+  }
+  .facts {
+    display: flex;
+    gap: 34px;
+  }
+  .fact .n {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 90%;
+    font-size: 38px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .fact .l {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .vrule {
+    width: 1px;
+    height: 54px;
+    background: var(--line-strong);
+  }
+
+  /* Discord scene on the right. */
+  .scene {
+    position: absolute;
+    left: 1000px;
+    top: 128px;
+    width: 800px;
+    height: 880px;
+    z-index: 1;
+  }
+  .scene .glow {
+    width: 520px;
+    height: 420px;
+    left: 160px;
+    top: 210px;
+    background: var(--accent-glow);
+    opacity: 0.55;
+  }
+  .rank {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 560px;
+    border-radius: 16px;
+    box-shadow: 0 30px 70px -28px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+  .rank-label {
+    position: absolute;
+    right: 4px;
+    top: -34px;
+  }
+  .win-front {
+    position: absolute;
+    left: 0;
+    top: 206px;
+    width: 580px;
+  }
+  .alert {
+    position: absolute;
+    right: 0;
+    top: 520px;
+    width: 330px;
+    padding: 16px 18px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    align-items: center;
+    z-index: 3;
+  }
+  .alert .badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 197, 107, 0.12);
+    border: 1px solid rgba(255, 197, 107, 0.3);
+  }
+  .alert .badge svg {
+    width: 22px;
+  }
+  .alert .t {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .alert .s {
+    margin-top: 2px;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  .alert .s b {
+    color: var(--warn);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="stage grain">
+  <div class="grid-bg"></div>
+
+  <section class="copy">
+    <div class="brand">
+      <span class="logo" data-logo></span>
+      <span class="eyebrow">Discord bot <b>by</b> <span data-var="author"></span></span>
+    </div>
+    <h1 class="display"><span data-var="botName"></span><span class="dot">.</span></h1>
+    <p class="tagline">One bot for the whole server. <b><span data-var="modules"></span> modules</b>, one config file, readable TypeScript.</p>
+    <div class="chips">
+      <span class="pill"><i></i>Moderation</span>
+      <span class="pill">AutoMod</span>
+      <span class="pill">AI chat + scam scanner</span>
+      <span class="pill">Tickets &amp; modmail</span>
+      <span class="pill">Leveling</span>
+      <span class="pill">Economy</span>
+      <span class="pill">Music</span>
+      <span class="pill">Join to Create</span>
+      <span class="pill">Giveaways</span>
+      <span class="pill">Backups</span>
+    </div>
+  </section>
+
+  <div class="footer-row">
+    <span class="price-button">Get the source <span class="amount" data-var="price"></span></span>
+    <div class="vrule"></div>
+    <div class="facts">
+      <div class="fact"><div class="n" data-var="commands"></div><div class="l">Slash commands</div></div>
+      <div class="fact"><div class="n" data-var="tests"></div><div class="l">Tests</div></div>
+      <div class="fact"><div class="n">Node <span data-var="node"></span></div><div class="l">Win / Linux / macOS</div></div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="glow"></div>
+
+    <img class="rank" src="assets/rank-card.png" alt="">
+    <div class="eyebrow rank-label">Rank card <b>/</b> rendered by the bot</div>
+
+    <div class="dc dc-window win-front">
+      <div class="dc-topbar"><span class="hash">#</span>music</div>
+      <div class="dc-body">
+        <div class="dc-msg has-reply">
+          <div class="dc-reply"><span class="dc-avatar" data-avatar="ottilie"></span><span class="who">Ottilie</span> used <span class="cmd">/play</span></div>
+          <span class="dc-avatar" data-bot-avatar></span>
+          <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Today at 9:16 PM</span></div>
+          <div class="dc-container" style="--bar: #3de0ff">
+            <div class="dc-section">
+              <div>
+                <div class="dc-h2">Now playing</div>
+                <div class="dc-text"><span class="dc-link">Paper Lanterns</span><br>The Velvet Coast</div>
+              </div>
+              <div class="dc-thumb" data-cover="paper-lanterns"></div>
+            </div>
+            <div><span class="dc-progress"><span data-var="songPosition"></span> ━━━━━━●───────── <span data-var="songLength"></span></span></div>
+            <div class="dc-text">
+              <div class="dc-field"><b>Requested by</b><br><span class="dc-mention">@Ottilie</span></div>
+              <div class="dc-field"><b>Volume</b><br><span data-var="volume"></span></div>
+              <div class="dc-field"><b>Loop</b><br>Off</div>
+              <div class="dc-field"><b>Up next</b><br><span class="dc-link">Low Tide Radio</span></div>
+            </div>
+            <div class="dc-sub" data-var="queueCount"></div>
+            <div class="dc-row">
+              <span class="dc-btn">Previous</span>
+              <span class="dc-btn primary">Pause</span>
+              <span class="dc-btn primary">Skip</span>
+              <span class="dc-btn danger">Stop</span>
+            </div>
+            <div class="dc-row">
+              <span class="dc-btn">Loop</span>
+              <span class="dc-btn">Shuffle</span>
+              <span class="dc-btn">Vol -</span>
+              <span class="dc-btn">Vol +</span>
+              <span class="dc-btn">Queue</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card ticks alert">
+      <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="#ffc56b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4"/><circle cx="12" cy="17" r="0.6" fill="#ffc56b"/></svg></span>
+      <div>
+        <div class="t">Scam image removed</div>
+        <div class="s">#general · fake giveaway, <b><span data-var="scanScore"></span></b> sure. Poster timed out.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="art.js"></script>
+<script>Promo.render(window.PROMO);</script>
+</body>
+</html>

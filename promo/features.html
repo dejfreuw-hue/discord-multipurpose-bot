@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Features</title>
+<script>
+  // Every name and number on this image. Edit here; colours live in theme.css.
+  window.PROMO = {
+    botName: 'Reuw',
+    author: 'ReuwTheDev',
+    price: '$19.99',
+    commands: '76',
+    modules: '25',
+    tests: '305',
+    featureAreas: '9',
+    aiProviders: '4',
+    communityModules: '10',
+    node: '20+',
+    // Mock data shown in the cards
+    caseNumber: 'Case #142',
+    timeoutLength: '2 hours',
+    scanScore: '94%',
+    timeoutMinutes: '60',
+    ticketNumber: '#0187',
+    wallet: '2,418 coins',
+    bank: '13,050 coins',
+    netWorth: '15,468 coins',
+    balanceRank: '#4 in this server',
+    songPosition: '0:58',
+    songLength: '4:11',
+    voiceLimit: '5',
+    level: '23',
+    reminderTime: 'in 2 hours',
+  };
+</script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="discord.css">
+<style>
+  body {
+    width: 1200px;
+  }
+  .page {
+    position: relative;
+    overflow: hidden;
+    padding: 0 64px 72px;
+    background:
+      radial-gradient(900px 620px at 76% 0%, rgba(61, 224, 255, 0.11), transparent 62%),
+      radial-gradient(700px 600px at 0% 46%, var(--accent-2-soft), transparent 70%),
+      radial-gradient(800px 600px at 100% 88%, rgba(61, 224, 255, 0.06), transparent 70%),
+      var(--bg);
+  }
+  .grid-bg {
+    mask-image: radial-gradient(ellipse 80% 22% at 60% 6%, #000 20%, transparent 85%);
+  }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    padding-top: 84px;
+    z-index: 1;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .brand .logo {
+    width: 48px;
+    height: 48px;
+  }
+  .brand .logo svg {
+    width: 34px;
+  }
+  .hero h1 {
+    margin-top: 44px;
+    font-size: 168px;
+  }
+  .hero h1 .dot {
+    color: var(--accent);
+  }
+  .hero .tagline {
+    margin-top: 30px;
+    max-width: 640px;
+    font-size: 27px;
+    line-height: 1.32;
+    color: var(--ink-soft);
+    letter-spacing: -0.01em;
+  }
+  .hero .tagline b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .cta {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+  .cta .note {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .config {
+    position: absolute;
+    right: 0;
+    top: 150px;
+    width: 380px;
+    padding: 0 0 18px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.75;
+  }
+  .config .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 12.5px;
+  }
+  .config .bar i {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 8px var(--ok);
+    margin-right: 8px;
+  }
+  .config pre {
+    padding: 14px 18px 0;
+    color: var(--ink-soft);
+    font: inherit;
+  }
+  .config .k { color: var(--accent); }
+  .config .c { color: var(--dim); }
+  .config .v { color: var(--warn); }
+  .config .off { color: #ff8f8f; }
+  .stats {
+    margin-top: 56px;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1fr;
+    gap: 16px;
+  }
+  .stat {
+    padding: 24px 26px 22px;
+  }
+  .stat .n {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 85%;
+    font-size: 76px;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+  .stat .n small {
+    font-size: 0.42em;
+    color: var(--accent);
+    letter-spacing: 0;
+    margin-left: 4px;
+  }
+  .stat .l {
+    margin-top: 14px;
+    font-size: 15.5px;
+    color: var(--ink-soft);
+  }
+  .stat .l .mono {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .section-head {
+    margin-top: 96px;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  .section-head h2 {
+    font-size: 64px;
+  }
+  .section-head p {
+    max-width: 380px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* Feature cards: a 12-column bento grid with uneven spans. */
+  .bento {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 20px;
+  }
+  .feature {
+    padding: 28px 28px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    overflow: hidden;
+  }
+  .feature .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .feature .idx {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+  .feature .count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .feature h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 90%;
+    font-size: 38px;
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+  .feature .lede {
+    margin-top: -6px;
+    color: var(--ink-soft);
+    font-size: 16.5px;
+    line-height: 1.45;
+  }
+  .feature .lede b {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1.08fr;
+    gap: 26px;
+    align-items: start;
+  }
+  .mock {
+    margin-top: auto;
+  }
+  .mock .dc {
+    background: transparent;
+  }
+  /* Mockups are shown a little smaller than life, laid out properly rather than scaled as a bitmap. */
+  .mini {
+    zoom: 0.84;
+  }
+  .mini .dc-container {
+    max-width: none;
+  }
+  .mini .dc-msg {
+    margin-top: 0;
+    padding-right: 0;
+  }
+  .surface {
+    padding: 14px 14px 16px 0;
+    border-radius: 12px;
+    background: var(--dc-chat);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .shot {
+    width: 100%;
+    border-radius: 12px;
+    display: block;
+    box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.8);
+  }
+
+  .span-7 { grid-column: span 7; }
+  .span-5 { grid-column: span 5; }
+  .span-4 { grid-column: span 4; }
+  .span-8 { grid-column: span 8; }
+  .span-12 { grid-column: span 12; }
+
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag-cloud .pill {
+    height: 30px;
+    font-size: 13.5px;
+  }
+  .filters {
+    margin-top: 26px;
+  }
+  .filters .mono {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .filters .pill {
+    height: 26px;
+    padding: 0 10px;
+    font-size: 12.5px;
+  }
+  .tag-cloud .pill b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .voice-panel {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .voice-panel .dc-btn {
+    width: 100%;
+  }
+
+  .util-list {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px 16px;
+    align-items: baseline;
+  }
+  .util-list .mono {
+    color: var(--accent);
+    font-size: 13.5px;
+  }
+  .util-list span:not(.mono) {
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  /* Closing strip */
+  .stack {
+    margin-top: 72px;
+    padding: 34px 36px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 30px;
+    align-items: center;
+  }
+  .stack h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 90%;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+  }
+  .stack p {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 15.5px;
+    line-height: 1.5;
+    max-width: 560px;
+  }
+  .stack .tag-cloud {
+    margin-top: 20px;
+  }
+  .sign {
+    margin-top: 42px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
+</head>
+<body>
+<div class="page grain">
+  <div class="grid-bg"></div>
+
+  <section class="hero" data-section>
+    <div class="brand">
+      <span class="logo" data-logo></span>
+      <span class="eyebrow">Discord bot <b>by</b> <span data-var="author"></span></span>
+    </div>
+    <div class="card ticks config">
+      <div class="bar"><span><i></i>config.yml</span><span>validated on start</span></div>
+<pre><span class="k">modules</span>:
+  <span class="k">moderation</span>:
+    <span class="k">enabled</span>: <span class="v">true</span>
+  <span class="k">music</span>:
+    <span class="c"># leave after 3 idle minutes</span>
+    <span class="k">idleSeconds</span>: <span class="v">180</span>
+  <span class="k">economy</span>:
+    <span class="k">enabled</span>: <span class="off">false</span>
+  <span class="k">translate</span>:
+    <span class="k">service</span>: <span class="v">auto</span></pre>
+    </div>
+    <h1 class="display"><span data-var="botName"></span><span class="dot">.</span></h1>
+    <p class="tagline">Moderation, tickets, music, AI and economy in <b>one bot you host yourself</b>. Clean TypeScript source with one commented config file.</p>
+    <div class="cta">
+      <span class="price-button">Get the source <span class="amount" data-var="price"></span></span>
+      <span class="note">Setup guide, Docker files<br>and troubleshooting included</span>
+    </div>
+    <div class="stats">
+      <div class="card ticks stat">
+        <div class="n" data-var="commands"></div>
+        <div class="l"><span class="mono">Slash commands</span>plus two right-click apps</div>
+      </div>
+      <div class="card stat">
+        <div class="n" data-var="modules"></div>
+        <div class="l"><span class="mono">Modules</span>switch any of them off per server</div>
+      </div>
+      <div class="card stat">
+        <div class="n" data-var="tests"></div>
+        <div class="l"><span class="mono">Automated tests</span>economy maths, XP, AutoMod</div>
+      </div>
+    </div>
+  </section>
+
+  <section data-section>
+    <div class="section-head">
+      <h2 class="display"><span data-var="featureAreas"></span> areas,<br>one codebase.</h2>
+      <p>Every module ships with its own setup page in <span class="mono" style="color: var(--ink)">/setup</span>, its own settings and its own toggle.</p>
+    </div>
+
+    <div class="bento">
+      <!-- Moderation -->
+      <article class="card ticks feature span-7" data-section>
+        <div class="top"><span class="idx">01</span><span class="count">Moderation + AutoMod</span></div>
+        <div class="split">
+          <div>
+            <h3>Every action gets a case.</h3>
+            <ul class="check-list" style="margin-top: 18px">
+              <li>Ban, kick, timeout and warn, with <b>role hierarchy checks</b> first</li>
+              <li>Temp bans and temp roles that expire on their own</li>
+              <li>Editable case history and a mod log</li>
+              <li>AutoMod with <b>strikes that escalate</b> to timeouts and bans</li>
+            </ul>
+            <div class="filters">
+              <span class="mono">AutoMod filters</span>
+              <div class="tag-cloud">
+                <span class="pill">Invites</span><span class="pill">Links</span><span class="pill">Bad words</span><span class="pill">Spam</span><span class="pill">Mass mentions</span><span class="pill">Caps</span><span class="pill">Ghost pings</span>
+              </div>
+            </div>
+          </div>
+          <div class="mock">
+            <div class="dc surface mini">
+              <div class="dc-msg">
+                <span class="dc-avatar" data-bot-avatar></span>
+                <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Today at 4:52 PM</span></div>
+                <div class="dc-container" style="--bar: #da373c">
+                  <div class="dc-h3"><span data-var="caseNumber"></span> · Timeout</div>
+                  <div class="dc-text">
+                    <div class="dc-field"><b>Member</b><br><span class="dc-mention">@quillon_</span></div>
+                    <div class="dc-field"><b>Moderator</b><br><span class="dc-mention">@Brannoch</span></div>
+                    <div class="dc-field"><b>Reason</b><br>Posting invite links in #art</div>
+                    <div class="dc-field"><b>Duration</b><br><span data-var="timeoutLength"></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- AI -->
+      <article class="card feature span-5">
+        <div class="top"><span class="idx">02</span><span class="count"><span data-var="aiProviders"></span> providers</span></div>
+        <h3>AI on your own key.</h3>
+        <p class="lede">OpenAI, Anthropic, Gemini or any OpenAI-compatible server.</p>
+        <ul class="check-list">
+          <li>Chat channels, mention replies and <b>/ask</b></li>
+          <li>Five personalities or your own prompt</li>
+          <li>Per-user rate limits and a daily token budget</li>
+          <li><b>Scam image scanner</b> with alert, delete and timeout thresholds</li>
+        </ul>
+        <div class="mock">
+          <div class="dc surface mini">
+            <div class="dc-msg">
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span></div>
+              <div class="dc-container" style="--bar: #f0b232">
+                <div class="dc-h3">Possible scam image (<span data-var="scanScore"></span>)</div>
+                <div class="dc-text">
+                  Fake crypto giveaway asking members to send a deposit first.
+                  <div class="dc-field" style="margin-top: 8px"><b>Action taken</b><br>message deleted, timed out for <span data-var="timeoutMinutes"></span> minutes</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Tickets -->
+      <article class="card feature span-5" data-section>
+        <div class="top"><span class="idx">03</span><span class="count">Tickets + modmail</span></div>
+        <h3>Tickets with HTML transcripts.</h3>
+        <ul class="check-list">
+          <li>Button or dropdown panels with several ticket types</li>
+          <li>Forms that ask questions before a ticket opens</li>
+          <li>Claim, lock, add people, auto-close when idle</li>
+          <li>Modmail: members DM the bot, staff answer in a channel</li>
+        </ul>
+        <div class="mock">
+          <div class="dc surface mini">
+            <div class="dc-msg">
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span></div>
+              <div class="dc-container" style="--bar: #3de0ff">
+                <div class="dc-h3">Ticket <span data-var="ticketNumber"></span>: Billing</div>
+                <div class="dc-text">Thanks for reaching out. Describe what you need and a staff member will be with you shortly.</div>
+                <div class="dc-sub">Claimed by <span class="dc-mention">@Wrenfield</span></div>
+                <div class="dc-row"><span class="dc-btn">Unclaim</span><span class="dc-btn">Lock</span><span class="dc-btn danger">Close</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Leveling -->
+      <article class="card ticks feature span-7">
+        <div class="top"><span class="idx">04</span><span class="count">Leveling</span></div>
+        <h3>XP for talking and for voice.</h3>
+        <div class="split" style="grid-template-columns: 1fr 1fr">
+          <ul class="check-list">
+            <li>Text and voice XP on a tunable curve</li>
+            <li>Role rewards and XP multipliers</li>
+            <li>Leaderboards by XP, voice time or messages</li>
+          </ul>
+          <ul class="check-list">
+            <li>Rank cards with presets, your own image or colour</li>
+            <li>Level-up messages wherever you want them</li>
+          </ul>
+        </div>
+        <div class="mock">
+          <div class="dc surface mini" style="margin-bottom: 14px">
+            <div class="dc-msg">
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Today at 11:03 PM</span></div>
+              <div class="dc-content"><span class="dc-mention">@Marlowe</span> reached level <span class="dc-strong" data-var="level"></span>!</div>
+            </div>
+          </div>
+          <img class="shot" src="assets/rank-card.png" alt="">
+        </div>
+      </article>
+
+      <!-- Economy -->
+      <article class="card feature span-4" data-section>
+        <div class="top"><span class="idx">05</span><span class="count">Economy</span></div>
+        <h3>Wallet, bank, casino.</h3>
+        <ul class="check-list">
+          <li>Daily streaks, weekly, work and rob</li>
+          <li>Coinflip, slots and blackjack</li>
+          <li>A shop that sells items and roles</li>
+        </ul>
+        <div class="mock">
+          <div class="dc surface mini">
+            <div class="dc-msg">
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span></div>
+              <div class="dc-container" style="--bar: #5ee3a1">
+                <div class="dc-h3">kestrel_vane's balance</div>
+                <div class="dc-text">
+                  <div class="dc-field"><b>Wallet</b><br><b data-var="wallet"></b></div>
+                  <div class="dc-field"><b>Bank</b><br><b data-var="bank"></b></div>
+                </div>
+                <div class="dc-sub" data-var="balanceRank"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Music -->
+      <article class="card feature span-4">
+        <div class="top"><span class="idx">06</span><span class="count">Music · Lavalink v4</span></div>
+        <h3>Music that survives restarts.</h3>
+        <ul class="check-list">
+          <li>YouTube, SoundCloud and Spotify links</li>
+          <li>Filters, lyrics, seek and 24/7 mode</li>
+          <li>Queue and position restored after a reboot</li>
+        </ul>
+        <div class="mock">
+          <div class="dc surface mini">
+            <div class="dc-msg">
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span></div>
+              <div class="dc-container" style="--bar: #3de0ff">
+                <div class="dc-section">
+                  <div>
+                    <div class="dc-h3">Now playing</div>
+                    <div class="dc-text"><span class="dc-link">Low Tide Radio</span><br>Marlow &amp; Finch</div>
+                  </div>
+                  <div class="dc-thumb" style="width: 64px; height: 64px" data-cover="low-tide-radio"></div>
+                </div>
+                <div><span class="dc-progress"><span data-var="songPosition"></span> ━━━●──────── <span data-var="songLength"></span></span></div>
+                <div class="dc-row"><span class="dc-btn primary">Pause</span><span class="dc-btn primary">Skip</span><span class="dc-btn danger">Stop</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Voice -->
+      <article class="card feature span-4">
+        <div class="top"><span class="idx">07</span><span class="count">Join to Create</span></div>
+        <h3>Everyone gets a room.</h3>
+        <ul class="check-list">
+          <li>Join a hub, get your own voice channel</li>
+          <li>Owner controls from a panel in its chat</li>
+          <li>Deleted the moment it's empty</li>
+        </ul>
+        <div class="mock">
+          <div class="dc surface mini" style="padding-left: 14px">
+            <div class="dc-container" style="--bar: #a597ff">
+              <div class="dc-h3">Channel controls</div>
+              <div class="dc-sub">Owner: <span class="dc-mention">@sable.k</span> · Locked · Limit: <span data-var="voiceLimit"></span></div>
+              <div class="voice-panel">
+                <span class="dc-btn">Unlock</span><span class="dc-btn">Hide</span>
+                <span class="dc-btn">Set limit</span><span class="dc-btn">Rename</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Community -->
+      <article class="card ticks feature span-8" data-section>
+        <div class="top"><span class="idx">08</span><span class="count"><span data-var="communityModules"></span> modules</span></div>
+        <h3>The community extras, done properly.</h3>
+        <div class="tag-cloud">
+          <span class="pill"><span><b>Welcome cards</b> with your own background</span></span>
+          <span class="pill"><span><b>Role menus</b>: buttons, dropdown or reactions</span></span>
+          <span class="pill"><span><b>Verification</b>: button or image captcha</span></span>
+          <span class="pill"><span><b>Giveaways</b> with requirements and booster bonus</span></span>
+          <span class="pill"><span><b>Suggestions</b> with voting</span></span>
+          <span class="pill"><span><b>Birthdays</b> in each member's timezone</span></span>
+          <span class="pill">Counting</span>
+          <span class="pill">Starboard</span>
+          <span class="pill">Sticky messages</span>
+          <span class="pill">Server stats channels</span>
+        </div>
+        <div class="mock">
+          <img class="shot" src="assets/welcome-card.png" alt="">
+        </div>
+      </article>
+
+      <!-- Utilities -->
+      <article class="card feature span-4">
+        <div class="top"><span class="idx">09</span><span class="count">Utilities</span></div>
+        <h3>The small stuff.</h3>
+        <div class="util-list">
+          <span class="mono">/remind</span><span>One-off or repeating, with snooze</span>
+          <span class="mono">/feed</span><span>YouTube uploads and Twitch go-live alerts</span>
+          <span class="mono">/backup</span><span>Roles, channels and permissions, restorable</span>
+          <span class="mono">/translate</span><span>DeepL, LibreTranslate or AI, also on right-click</span>
+          <span class="mono">/weather</span><span>Three-day forecast, no API key</span>
+          <span class="mono">/userinfo</span><span>Works anywhere as a user app</span>
+        </div>
+        <div class="mock">
+          <div class="dc surface mini">
+            <div class="dc-msg">
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span></div>
+              <div class="dc-container" style="--bar: #3de0ff">
+                <div class="dc-text"><span class="dc-mention">@juniper</span> <b>Reminder</b><br>Swap the server banner for the summer event</div>
+                <div class="dc-row"><span class="dc-btn">Snooze 10 minutes</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section data-section>
+    <div class="card stack">
+      <div>
+        <h4>Built to be read and changed.</h4>
+        <p>Each module is one folder: commands, events, settings and translations side by side. Strict TypeScript, a central error handler, and every string in a locale file you can translate.</p>
+        <div class="tag-cloud">
+          <span class="pill">discord.js v14</span>
+          <span class="pill">TypeScript strict</span>
+          <span class="pill">MongoDB / Atlas</span>
+          <span class="pill">Lavalink v4</span>
+          <span class="pill">Docker Compose</span>
+          <span class="pill"><span>Node <span data-var="node"></span></span></span>
+          <span class="pill">Components V2</span>
+        </div>
+      </div>
+      <span class="price-button">Get the source <span class="amount" data-var="price"></span></span>
+    </div>
+    <div class="sign">
+      <span class="eyebrow"><span data-var="botName"></span> <b>/</b> by <span data-var="author"></span></span>
+      <span class="logo" data-logo style="width: 40px; height: 40px"></span>
+    </div>
+  </section>
+</div>
+<script src="art.js"></script>
+<script>Promo.render(window.PROMO);</script>
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>In action</title>
+<script>
+  // Every name and number on this image. Edit here; colours live in theme.css.
+  window.PROMO = {
+    botName: 'Reuw',
+    author: 'ReuwTheDev',
+    price: '$19.99',
+    previewCount: '10',
+    // Music
+    songPosition: '2:09',
+    songLength: '3:52',
+    volume: '64%',
+    queueLine: '11 songs in queue · Filters: Bass boost',
+    // Scam alert
+    scanScore: '94',
+    timeoutMinutes: '60',
+    // Giveaway
+    giveawayEntries: '213',
+    giveawayWinners: '2',
+    giveawayId: '18',
+    giveawayLevel: '10',
+    giveawayAccountDays: '30',
+    boosterEntries: '2',
+    // Ticket
+    ticketNumber: '0187',
+    // AI
+    aiUsed: '41,862',
+    aiCap: '200,000',
+    aiRequests: '137',
+    aiPerMinute: '5',
+    aiHistory: '12',
+    // Economy
+    wallet: '2,418 coins',
+    bank: '13,050 coins',
+    netWorth: '15,468 coins',
+    balanceRank: '4',
+    slotsBet: '500 coins',
+    slotsBack: '375 coins',
+    blackjackBet: '250 coins',
+  };
+</script>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="discord.css">
+<style>
+  body {
+    width: 1200px;
+  }
+  .page {
+    position: relative;
+    overflow: hidden;
+    padding: 80px 56px 64px;
+    background:
+      radial-gradient(800px 500px at 15% 0%, rgba(61, 224, 255, 0.10), transparent 65%),
+      radial-gradient(700px 700px at 100% 55%, var(--accent-2-soft), transparent 70%),
+      radial-gradient(700px 500px at 0% 100%, rgba(61, 224, 255, 0.07), transparent 70%),
+      var(--bg);
+  }
+  .grid-bg {
+    mask-image: radial-gradient(ellipse 70% 14% at 30% 3%, #000 20%, transparent 85%);
+  }
+  header {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 40px;
+  }
+  header h1 {
+    margin-top: 22px;
+    font-size: 108px;
+  }
+  header h1 .dot {
+    color: var(--accent);
+  }
+  header p {
+    max-width: 390px;
+    margin-bottom: 8px;
+    color: var(--muted);
+    font-size: 16.5px;
+    line-height: 1.5;
+  }
+  header p b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* Each band is a two-column masonry; bands are where the export may cut a tall image. */
+  .band {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .band:first-of-type {
+    margin-top: 56px;
+  }
+  .col {
+    display: grid;
+    gap: 24px;
+  }
+  .shot-item {
+    display: grid;
+    gap: 12px;
+  }
+  .caption {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 0 4px;
+  }
+  .caption .n {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--accent);
+  }
+  .caption .t {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .caption .d {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .dc-window .dc-msg {
+    padding-right: 18px;
+  }
+  .dc-window .dc-container {
+    max-width: none;
+  }
+  .attachment {
+    margin-top: 6px;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 8px;
+    display: block;
+  }
+  .jump {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 6px;
+    border-radius: 4px;
+    background: rgba(78, 80, 88, 0.45);
+    color: var(--dc-text);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .jump .muted {
+    color: var(--dc-muted);
+  }
+  .suspect {
+    background: #3a2d22;
+  }
+  .card-face {
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 15px;
+  }
+  .slots-line {
+    font-size: 30px;
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+    color: var(--dc-header);
+  }
+  .slots-line .bar {
+    color: var(--dc-muted);
+    margin: 0 10px;
+    font-weight: 400;
+  }
+  .user-msg .dc-content {
+    margin-top: 1px;
+  }
+
+  footer {
+    margin-top: 56px;
+    padding: 26px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  footer .left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  footer .left .logo {
+    width: 44px;
+    height: 44px;
+  }
+  footer .left div {
+    font-size: 15.5px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  footer .left b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="page grain">
+  <div class="grid-bg"></div>
+
+  <header data-section>
+    <div>
+      <span class="eyebrow"><b>/</b> <span data-var="previewCount"></span> screens from a test server</span>
+      <h1 class="display">In action<span class="dot">.</span></h1>
+    </div>
+    <p>Every panel below is the bot's real layout and wording, rebuilt in HTML with made-up members. <b>Components V2</b> by default, classic embeds with one setting.</p>
+  </header>
+
+  <!-- Band 1: help menu + slots | rank card + scam alert -->
+  <section class="band" data-section>
+    <div class="col">
+      <div class="shot-item">
+        <div class="caption"><span class="n">01</span><span class="t">Help menu</span><span class="d">/help</span></div>
+        <div class="dc dc-window">
+          <div class="dc-topbar"><span class="hash">#</span>bot-commands</div>
+          <div class="dc-body">
+            <div class="dc-msg has-reply">
+              <div class="dc-reply"><span class="dc-avatar" data-avatar="kestrel"></span><span class="who">kestrel_vane</span> used <span class="cmd">/help</span></div>
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Today at 9:14 PM</span></div>
+              <div class="dc-container" style="--bar: #3de0ff">
+                <div class="dc-h2"><span data-var="botName"></span> help</div>
+                <div class="dc-text">Pick a category below to see its commands. Use <span class="dc-mention">/help</span> with a command name for details. Admins can configure the bot with <span class="dc-mention">/setup</span>.</div>
+                <div class="dc-gap"></div>
+                <div class="dc-select open">Choose a category<span class="chev"></span></div>
+                <div class="dc-options">
+                  <div class="dc-option"><span class="label">General</span><span class="desc">Help, bot info and server setup</span></div>
+                  <div class="dc-option"><span class="label">Moderation</span><span class="desc">Bans, kicks, timeouts, warnings, cases and the mod log</span></div>
+                  <div class="dc-option active"><span class="label">Tickets</span><span class="desc">Ticket panels with forms, transcripts and modmail through DMs</span></div>
+                  <div class="dc-option"><span class="label">Music</span><span class="desc">Play music from YouTube, SoundCloud, Spotify and more in voice channels</span></div>
+                  <div class="dc-option"><span class="label">Join to Create</span><span class="desc">Members get their own voice channel by joining a hub, with controls to manage it</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="shot-item">
+        <div class="caption"><span class="n">04</span><span class="t">Slots</span><span class="d">/slots</span></div>
+        <div class="dc dc-window">
+          <div class="dc-topbar"><span class="hash">#</span>casino</div>
+          <div class="dc-body">
+            <div class="dc-msg has-reply">
+              <div class="dc-reply"><span class="dc-avatar" data-avatar="sable"></span><span class="who">sable.k</span> used <span class="cmd">/slots</span></div>
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Today at 7:31 PM</span></div>
+              <div class="dc-container" style="--bar: #3de0ff">
+                <div class="slots-line"><span class="dc-emoji">&#x1F352;</span><span class="bar">|</span><span class="dc-emoji">&#x1F352;</span><span class="bar">|</span><span class="dc-emoji">&#x1F514;</span></div>
+                <div class="dc-text">A pair. You got <b data-var="slotsBack"></b> back.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="shot-item">
+        <div class="caption"><span class="n">02</span><span class="t">Rank card</span><span class="d">/rank</span></div>
+        <div class="dc dc-window">
+          <div class="dc-topbar"><span class="hash">#</span>general</div>
+          <div class="dc-body">
+            <div class="dc-msg user-msg">
+              <span class="dc-avatar" data-avatar="marlowe-user"></span>
+              <div class="dc-head"><span class="dc-name">Marlowe</span><span class="dc-time">Today at 11:02 PM</span></div>
+              <div class="dc-content">ok who's ahead of me now</div>
+            </div>
+            <div class="dc-msg has-reply">
+              <div class="dc-reply"><span class="dc-avatar" data-avatar="marlowe-user"></span><span class="who">Marlowe</span> used <span class="cmd">/rank</span></div>
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Today at 11:02 PM</span></div>
+              <img class="attachment" src="assets/rank-card.png" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="shot-item">
+        <div class="caption"><span class="n">03</span><span class="t">Scam image alert</span><span class="d">mod log</span></div>
+        <div class="dc dc-window">
+          <div class="dc-topbar"><span class="hash">#</span>mod-log</div>
+          <div class="dc-body">
+            <div class="dc-msg">
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Today at 3:41 AM</span></div>
+              <div class="dc-container" style="--bar: #ed4245">
+                <div class="dc-section">
+                  <div class="dc-h2">Possible scam image (<span data-var="scanScore"></span>%)</div>
+                  <div class="dc-thumb suspect">
+                    <svg viewBox="0 0 85 85" xmlns="http://www.w3.org/2000/svg">
+                      <rect width="85" height="85" fill="#2a2320"/>
+                      <rect x="10" y="10" width="65" height="12" rx="3" fill="#e9b949"/>
+                      <rect x="10" y="28" width="44" height="5" rx="2.5" fill="#8f8577"/>
+                      <rect x="10" y="37" width="52" height="5" rx="2.5" fill="#8f8577"/>
+                      <g fill="#f4efe6"><rect x="24" y="49" width="7" height="7"/><rect x="33" y="49" width="7" height="7"/><rect x="51" y="49" width="7" height="7"/><rect x="24" y="58" width="7" height="7"/><rect x="42" y="58" width="7" height="7"/><rect x="33" y="67" width="7" height="7"/><rect x="51" y="67" width="7" height="7"/><rect x="42" y="49" width="7" height="7" opacity=".4"/></g>
+                    </svg>
+                  </div>
+                </div>
+                <div class="dc-text">
+                  <div class="dc-field"><b>User</b><br><span class="dc-mention">@quillon_</span> quillon_</div>
+                  <div class="dc-field"><b>Message</b><br><span class="jump"><span class="muted">#</span> general <span class="muted">›</span> Message</span></div>
+                  <div class="dc-field"><b>Reason</b><br>Screenshot of a "double your coins" giveaway with a QR code and a wallet address to send a deposit to.</div>
+                  <div class="dc-field"><b>Action taken</b><br>message deleted, timed out for <span data-var="timeoutMinutes"></span> minutes</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Band 2: music | giveaway -->
+  <section class="band" data-section>
+    <div class="col">
+      <div class="shot-item">
+        <div class="caption"><span class="n">05</span><span class="t">Music player</span><span class="d">/nowplaying</span></div>
+        <div class="dc dc-window">
+          <div class="dc-topbar"><span class="hash">#</span>music</div>
+          <div class="dc-body">
+            <div class="dc-msg has-reply">
+              <div class="dc-reply"><span class="dc-avatar" data-avatar="ottilie"></span><span class="who">Ottilie</span> used <span class="cmd">/nowplaying</span></div>
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Today at 9:16 PM</span></div>
+              <div class="dc-container" style="--bar: #3de0ff">
+                <div class="dc-section">
+                  <div>
+                    <div class="dc-h2">Now playing</div>
+                    <div class="dc-text"><span class="dc-link">Paper Lanterns</span><br>The Velvet Coast</div>
+                  </div>
+                  <div class="dc-thumb" data-cover="paper-lanterns"></div>
+                </div>
+                <div><span class="dc-progress"><span data-var="songPosition"></span> ━━━━━━━●──────── <span data-var="songLength"></span></span></div>
+                <div class="dc-text">
+                  <div class="dc-field"><b>Requested by</b><br><span class="dc-mention">@Ottilie</span></div>
+                  <div class="dc-field"><b>Volume</b><br><span data-var="volume"></span></div>
+                  <div class="dc-field"><b>Loop</b><br>Whole queue</div>
+                  <div class="dc-field"><b>Up next</b><br><span class="dc-link">Low Tide Radio</span></div>
+                </div>
+                <div class="dc-sub" data-var="queueLine"></div>
+                <div class="dc-row">
+                  <span class="dc-btn">Previous</span>
+                  <span class="dc-btn primary">Pause</span>
+                  <span class="dc-btn primary">Skip</span>
+                  <span class="dc-btn danger">Stop</span>
+                </div>
+                <div class="dc-row">
+                  <span class="dc-btn">Loop</span>
+                  <span class="dc-btn">Shuffle</span>
+                  <span class="dc-btn">Vol -</span>
+                  <span class="dc-btn">Vol +</span>
+                  <span class="dc-btn">Queue</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="shot-item">
+        <div class="caption"><span class="n">06</span><span class="t">Giveaway</span><span class="d">/giveaway start</span></div>
+        <div class="dc dc-window">
+          <div class="dc-topbar"><span class="hash">#</span>giveaways</div>
+          <div class="dc-body">
+            <div class="dc-msg">
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Yesterday at 6:30 PM</span></div>
+              <div class="dc-container" style="--bar: #3de0ff">
+                <div class="dc-h2">Hot-swap keyboard, 75% layout</div>
+                <div class="dc-text">Two winners, shipped anywhere. Thanks for 2,000 members!</div>
+                <div class="dc-text">
+                  <div class="dc-field"><b>Ends</b><br>in 2 days (Friday, 6:30 PM)</div>
+                  <div class="dc-field"><b>Hosted by</b><br><span class="dc-mention">@Brannoch</span></div>
+                  <div class="dc-field"><b>Entries</b><br><span data-var="giveawayEntries"></span></div>
+                  <div class="dc-field"><b>Requirements</b><br>Account at least <span data-var="giveawayAccountDays"></span> days old<br>Level <span data-var="giveawayLevel"></span> or higher</div>
+                  <div class="dc-field"><b>Bonus entries</b><br>Server boosters get <span data-var="boosterEntries"></span> extra entries</div>
+                  <div class="dc-field"><b>Winners</b><br><span data-var="giveawayWinners"></span></div>
+                </div>
+                <div class="dc-sub">Giveaway #<span data-var="giveawayId"></span></div>
+                <div class="dc-row"><span class="dc-btn success">Enter (<span data-var="giveawayEntries"></span>)</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Band 3: ticket panel + balance | AI status + blackjack -->
+  <section class="band" data-section>
+    <div class="col">
+      <div class="shot-item">
+        <div class="caption"><span class="n">07</span><span class="t">Ticket panel</span><span class="d">/tickets panel</span></div>
+        <div class="dc dc-window">
+          <div class="dc-topbar"><span class="hash">#</span>support</div>
+          <div class="dc-body">
+            <div class="dc-msg">
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">3/14/26, 2:07 PM</span></div>
+              <div class="dc-container" style="--bar: #3de0ff">
+                <div class="dc-h2">Need a hand?</div>
+                <div class="dc-text">Pick what it's about. A private channel opens for you and the team, usually answered within a few hours.</div>
+                <div class="dc-row">
+                  <span class="dc-btn primary">Billing</span>
+                  <span class="dc-btn">Bug report</span>
+                  <span class="dc-btn">Appeal a ban</span>
+                  <span class="dc-btn success">Partnership</span>
+                </div>
+              </div>
+            </div>
+            <div class="dc-msg">
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Today at 10:48 AM</span></div>
+              <div class="dc-container" style="--bar: #57f287">
+                <div class="dc-text">Your ticket is open: <span class="dc-channel">#ticket-<span data-var="ticketNumber"></span></span></div>
+              </div>
+              <div class="dc-ephemeral"><span class="eye"></span>Only you can see this · <a>Dismiss message</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="shot-item">
+        <div class="caption"><span class="n">09</span><span class="t">Economy balance</span><span class="d">/balance</span></div>
+        <div class="dc dc-window">
+          <div class="dc-topbar"><span class="hash">#</span>casino</div>
+          <div class="dc-body">
+            <div class="dc-msg has-reply">
+              <div class="dc-reply"><span class="dc-avatar" data-avatar="kestrel"></span><span class="who">kestrel_vane</span> used <span class="cmd">/balance</span></div>
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Today at 7:22 PM</span></div>
+              <div class="dc-container" style="--bar: #3de0ff">
+                <div class="dc-section">
+                  <div class="dc-h2">kestrel_vane's balance</div>
+                  <div class="dc-thumb" data-avatar="kestrel"></div>
+                </div>
+                <div class="dc-text">
+                  <div class="dc-field"><b>Wallet</b><br><b data-var="wallet"></b></div>
+                  <div class="dc-field"><b>Bank</b><br><b data-var="bank"></b></div>
+                  <div class="dc-field"><b>Net worth</b><br><b data-var="netWorth"></b><div class="dc-sub">#<span data-var="balanceRank"></span> in this server</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="shot-item">
+        <div class="caption"><span class="n">08</span><span class="t">AI settings</span><span class="d">/ai status</span></div>
+        <div class="dc dc-window">
+          <div class="dc-topbar"><span class="hash">#</span>staff-bots</div>
+          <div class="dc-body">
+            <div class="dc-msg has-reply">
+              <div class="dc-reply"><span class="dc-avatar" data-avatar="brannoch"></span><span class="who">Brannoch</span> used <span class="cmd">/ai status</span></div>
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Today at 1:15 PM</span></div>
+              <div class="dc-container" style="--bar: #3de0ff">
+                <div class="dc-h2">AI</div>
+                <div class="dc-text">
+                  <div class="dc-field"><b>Provider</b><br>Anthropic</div>
+                  <div class="dc-field"><b>Available</b><br>Anthropic, OpenAI-compatible</div>
+                  <div class="dc-field"><b>Personality</b><br>Concise</div>
+                  <div class="dc-field"><b>Chat channels</b><br><span class="dc-channel">#ask-the-bot</span>, <span class="dc-channel">#homework-help</span></div>
+                  <div class="dc-field"><b>Replies to mentions</b><br>On</div>
+                  <div class="dc-field"><b>Limits</b><br><span data-var="aiPerMinute"></span> per user per minute, <span data-var="aiHistory"></span> messages of context</div>
+                  <div class="dc-field"><b>Used today</b><br><span data-var="aiUsed"></span> of <span data-var="aiCap"></span> tokens in <span data-var="aiRequests"></span> requests</div>
+                  <div class="dc-field"><b>Blocked</b><br><span class="dc-mention">@Muted</span></div>
+                  <div class="dc-field"><b>Image scanner</b><br>On<br>Alert 60%, delete 85%, timeout 92%<br>All channels</div>
+                </div>
+              </div>
+              <div class="dc-ephemeral"><span class="eye"></span>Only you can see this · <a>Dismiss message</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="shot-item">
+        <div class="caption"><span class="n">10</span><span class="t">Blackjack</span><span class="d">/blackjack</span></div>
+        <div class="dc dc-window">
+          <div class="dc-topbar"><span class="hash">#</span>casino</div>
+          <div class="dc-body">
+            <div class="dc-msg has-reply">
+              <div class="dc-reply"><span class="dc-avatar" data-avatar="juniper"></span><span class="who">juniper</span> used <span class="cmd">/blackjack</span></div>
+              <span class="dc-avatar" data-bot-avatar></span>
+              <div class="dc-head"><span class="dc-name" data-var="botName"></span><span class="dc-app">APP</span><span class="dc-time">Today at 7:34 PM</span></div>
+              <div class="dc-container" style="--bar: #3de0ff">
+                <div class="dc-h2">Blackjack</div>
+                <div class="dc-text">
+                  <div class="dc-field"><b>Your hand</b><br><span class="card-face">9♠  2♥  K♦  (21)</span></div>
+                  <div class="dc-field"><b>Dealer</b><br><span class="card-face">7♣  ??</span></div>
+                  <div class="dc-field"><b>Bet</b><br><b data-var="blackjackBet"></b></div>
+                </div>
+                <div class="dc-row">
+                  <span class="dc-btn primary">Hit</span>
+                  <span class="dc-btn">Stand</span>
+                  <span class="dc-btn success disabled">Double down</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="card ticks" data-section>
+    <div class="left">
+      <span class="logo" data-logo></span>
+      <div><b><span data-var="botName"></span></b> by <span data-var="author"></span><br>Self-hosted source code, Node.js and MongoDB</div>
+    </div>
+    <span class="price-button">Get the source <span class="amount" data-var="price"></span></span>
+  </footer>
+</div>
+<script src="art.js"></script>
+<script>Promo.render(window.PROMO);</script>
+</body>
+</html>

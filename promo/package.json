@@ -1,0 +1,17 @@
+{
+  "name": "reuw-promo",
+  "private": true,
+  "description": "Listing graphics for the bot, rendered from HTML with Playwright",
+  "type": "module",
+  "scripts": {
+    "export": "node export.js",
+    "cards": "cd .. && npx tsx promo/make-cards.ts"
+  },
+  "devDependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource-variable/noto-sans": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "playwright": "1.56.1"
+  }
+}

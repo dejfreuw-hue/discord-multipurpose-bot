@@ -1,0 +1,454 @@
+/*
+  Discord dark theme, rebuilt in plain HTML/CSS for the message mockups. Colours follow
+  Discord's dark theme; Noto Sans stands in for Discord's own UI font, which isn't licensed for this.
+*/
+:root {
+  --dc-chat: #313338;
+  --dc-secondary: #2b2d31;
+  --dc-tertiary: #1e1f22;
+  --dc-container: #2b2d31;
+  --dc-container-border: rgba(255, 255, 255, 0.045);
+  --dc-header: #f2f3f5;
+  --dc-text: #dbdee1;
+  --dc-muted: #949ba4;
+  --dc-interactive: #b5bac1;
+  --dc-link: #00a8fc;
+  --dc-blurple: #5865f2;
+  --dc-blurple-hover: #4752c4;
+  --dc-green: #248046;
+  --dc-red: #da373c;
+  --dc-grey-button: #4e5058;
+  --dc-mention-bg: rgba(88, 101, 242, 0.3);
+  --dc-mention-text: #c9cdfb;
+  --dc-code-bg: #1e1f22;
+  --dc-divider: #3f4147;
+  --dc-highlight-bg: rgba(250, 168, 26, 0.08);
+  --dc-highlight-bar: #f0b232;
+  --dc-online: #23a55a;
+  --dc-font: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.dc {
+  font-family: var(--dc-font);
+  background: var(--dc-chat);
+  color: var(--dc-text);
+  font-size: 16px;
+  line-height: 1.375;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* A framed channel view: channel header on top, messages below. */
+.dc-window {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.7);
+}
+.dc-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--dc-tertiary);
+  box-shadow: 0 1px 0 rgba(4, 4, 5, 0.2);
+  color: var(--dc-header);
+  font-weight: 600;
+  font-size: 16px;
+}
+.dc-topbar .hash {
+  color: var(--dc-muted);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+}
+.dc-topbar .topic {
+  margin-left: 6px;
+  padding-left: 12px;
+  border-left: 1px solid var(--dc-divider);
+  color: var(--dc-muted);
+  font-weight: 500;
+  font-size: 14px;
+}
+.dc-body {
+  padding: 8px 0 18px;
+}
+
+.dc-msg {
+  position: relative;
+  padding: 2px 48px 2px 72px;
+  margin-top: 17px;
+  min-height: 44px;
+}
+.dc-msg.compact {
+  margin-top: 0;
+  min-height: 0;
+}
+.dc-msg > .dc-avatar {
+  position: absolute;
+  left: 16px;
+  top: 2px;
+}
+.dc-msg.has-reply > .dc-avatar {
+  top: 24px;
+}
+.dc-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex: none;
+}
+.dc-avatar svg,
+.dc-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The "used /command" line above a slash command response, with its curved spine. */
+.dc-reply {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  margin-bottom: 2px;
+  color: var(--dc-muted);
+  font-size: 14px;
+  white-space: nowrap;
+}
+.dc-reply::before {
+  content: '';
+  position: absolute;
+  left: -36px;
+  top: 10px;
+  width: 31px;
+  height: 12px;
+  border-left: 2px solid #4e5058;
+  border-top: 2px solid #4e5058;
+  border-top-left-radius: 6px;
+}
+.dc-reply .dc-avatar {
+  width: 16px;
+  height: 16px;
+  margin-right: 2px;
+}
+.dc-reply .who {
+  color: var(--dc-interactive);
+  font-weight: 500;
+}
+.dc-reply .cmd {
+  color: var(--dc-link);
+}
+
+.dc-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  line-height: 22px;
+}
+.dc-name {
+  color: var(--dc-header);
+  font-weight: 500;
+  font-size: 16px;
+}
+.dc-app {
+  display: inline-flex;
+  align-items: center;
+  height: 15px;
+  margin-left: 4px;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: var(--dc-blurple);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 15px;
+  position: relative;
+  top: -2px;
+}
+.dc-time {
+  margin-left: 8px;
+  color: var(--dc-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.dc-content {
+  color: var(--dc-text);
+  white-space: normal;
+}
+.dc-content p + p {
+  margin-top: 2px;
+}
+.dc-mention {
+  padding: 0 2px;
+  border-radius: 3px;
+  background: var(--dc-mention-bg);
+  color: var(--dc-mention-text);
+  font-weight: 500;
+}
+.dc-channel {
+  padding: 0 2px;
+  border-radius: 3px;
+  background: var(--dc-mention-bg);
+  color: var(--dc-mention-text);
+  font-weight: 500;
+}
+.dc-code {
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+  background: var(--dc-code-bg);
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.85em;
+}
+.dc-link {
+  color: var(--dc-link);
+}
+.dc-strong {
+  font-weight: 700;
+  color: var(--dc-text);
+}
+
+/* Components V2 container. The accent bar is drawn like an embed's side bar. */
+.dc-container {
+  position: relative;
+  max-width: 520px;
+  margin-top: 4px;
+  padding: 16px 16px 16px 20px;
+  border-radius: 8px;
+  background: var(--dc-container);
+  border: 1px solid var(--dc-container-border);
+  display: grid;
+  gap: 8px;
+}
+.dc-container::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: -1px;
+  bottom: -1px;
+  width: 4px;
+  border-radius: 8px 0 0 8px;
+  background: var(--bar, var(--dc-blurple));
+}
+.dc-section {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: start;
+}
+.dc-thumb {
+  width: 85px;
+  height: 85px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.dc-thumb svg,
+.dc-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dc-h2 {
+  color: var(--dc-header);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.375;
+}
+.dc-h3 {
+  color: var(--dc-header);
+  font-size: 16px;
+  font-weight: 700;
+}
+.dc-sub {
+  color: var(--dc-muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+.dc-text {
+  font-size: 15.5px;
+  line-height: 1.375;
+}
+.dc-text b,
+.dc-field b {
+  color: var(--dc-header);
+  font-weight: 700;
+}
+.dc-field + .dc-field {
+  margin-top: 8px;
+}
+.dc-quote {
+  padding-left: 12px;
+  border-left: 4px solid #4e5058;
+  border-radius: 4px 0 0 4px;
+}
+.dc-sep {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--dc-divider);
+}
+.dc-gap {
+  height: 4px;
+}
+.dc-media {
+  border-radius: 8px;
+  overflow: hidden;
+}
+.dc-media img {
+  display: block;
+  width: 100%;
+}
+
+.dc-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.dc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  min-width: 60px;
+  padding: 2px 16px;
+  border-radius: 8px;
+  background: var(--dc-grey-button);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.dc-btn.primary {
+  background: var(--dc-blurple);
+}
+.dc-btn.success {
+  background: var(--dc-green);
+}
+.dc-btn.danger {
+  background: var(--dc-red);
+}
+.dc-btn.disabled {
+  opacity: 0.5;
+}
+.dc-btn .e {
+  margin-right: 6px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.dc-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: var(--dc-tertiary);
+  border: 1px solid var(--dc-tertiary);
+  color: var(--dc-muted);
+  font-size: 15px;
+}
+.dc-select.open {
+  border-color: #6d6f78;
+  border-radius: 8px 8px 0 0;
+}
+.dc-select .chev {
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--dc-interactive);
+  border-bottom: 2px solid var(--dc-interactive);
+  transform: rotate(45deg) translate(-2px, -2px);
+}
+.dc-select.open .chev {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+.dc-options {
+  max-width: 400px;
+  margin-top: -8px;
+  border: 1px solid var(--dc-tertiary);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  background: var(--dc-secondary);
+  overflow: hidden;
+}
+.dc-option {
+  padding: 8px 12px;
+  display: grid;
+  gap: 0;
+}
+.dc-option + .dc-option {
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+.dc-option .label {
+  color: var(--dc-text);
+  font-size: 15px;
+  font-weight: 500;
+}
+.dc-option .desc {
+  color: var(--dc-muted);
+  font-size: 13.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dc-option.active {
+  background: rgba(78, 80, 88, 0.45);
+}
+
+/* The note under ephemeral replies. */
+.dc-ephemeral {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  color: var(--dc-muted);
+  font-size: 12px;
+}
+.dc-ephemeral .eye {
+  width: 14px;
+  height: 9px;
+  border: 1.5px solid var(--dc-muted);
+  border-radius: 70% 0;
+  transform: rotate(45deg);
+  margin-right: 2px;
+}
+.dc-ephemeral a {
+  color: var(--dc-link);
+}
+
+/* A plain user message being highlighted because it mentions you. */
+.dc-msg.mentioned {
+  background: var(--dc-highlight-bg);
+}
+.dc-msg.mentioned::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--dc-highlight-bar);
+}
+
+.dc-progress {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 13.5px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--dc-code-bg);
+  color: var(--dc-text);
+  display: inline-block;
+}
+
+.dc-emoji {
+  font-family: 'Noto Color Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+  font-size: 1.2em;
+  line-height: 1;
+  vertical-align: -0.15em;
+}
