@@ -1,0 +1,120 @@
+{
+  "_meta": {
+    "name": "English",
+    "discord": ["en-US", "en-GB"]
+  },
+  "common": {
+    "none": "None",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "unavailable": "Unavailable"
+  },
+  "errors": {
+    "generic": "Something went wrong on our side. If it keeps happening, give the server owner this reference: `{ref}`",
+    "unknownCommand": "That command no longer exists. Discord may take a minute to update the command list.",
+    "expired": "This menu has expired. Run the command again.",
+    "guildOnly": "This only works in a server I'm in.",
+    "ownerOnly": "Only the bot owner can use this.",
+    "staffOnly": "Only staff can use this. Admins can set staff roles with /setup.",
+    "userPermissions": "You need these permissions: **{permissions}**",
+    "botPermissions": "I'm missing these permissions here: **{permissions}**. Ask an admin to grant them.",
+    "discordPermissions": "Discord didn't let me do that. Check that my role has the right permissions and sits high enough in the role list.",
+    "moduleDisabled": "The **{module}** module is turned off in this server.",
+    "cooldown": "Slow down a little. You can use this again {time}."
+  },
+  "modules": {
+    "core": {
+      "name": "General",
+      "description": "Help, bot info and server setup"
+    }
+  },
+  "core": {
+    "help": {
+      "description": "Browse commands by category",
+      "options": {
+        "command": "Show details for one command"
+      },
+      "title": "{name} help",
+      "intro": "Pick a category below to see its commands. Use {help} with a command name for details. Admins can configure the bot with {setup}.",
+      "pick": "Choose a category",
+      "back": "Overview",
+      "commandCount_one": "{count} command",
+      "commandCount_other": "{count} commands",
+      "disabledHere": "-# This module is turned off in this server.",
+      "notYours": "This menu belongs to someone else. Run /help to get your own.",
+      "notFound": "There's no command called `/{name}`.",
+      "category": "Category",
+      "cooldown": "Cooldown",
+      "requires": "Requires",
+      "staffRole": "Staff role",
+      "ownerOnly": "Bot owner",
+      "seconds_one": "{count} second",
+      "seconds_other": "{count} seconds",
+      "legend": "<required>  [optional]"
+    },
+    "ping": {
+      "description": "Check the bot's latency",
+      "measuring": "Measuring...",
+      "title": "Pong",
+      "gateway": "Gateway",
+      "roundTrip": "Round trip",
+      "database": "Database"
+    },
+    "botinfo": {
+      "description": "Information and stats about the bot",
+      "intro": "{name} is an all-in-one bot for moderation, tickets, music, leveling and more.",
+      "servers": "Servers",
+      "users": "Users",
+      "commands": "Commands",
+      "uptime": "Online since",
+      "memory": "Memory",
+      "latency": "Latency",
+      "versions": "Versions",
+      "modules": "Modules",
+      "invite": "Invite",
+      "support": "Support server",
+      "website": "Website",
+      "footer": "Made by ReuwTheDev"
+    },
+    "setup": {
+      "description": "Configure the bot for this server",
+      "title": "Server setup",
+      "progress": "Step {current} of {total}. Changes save as soon as you make them.",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "language": {
+        "title": "Language",
+        "body": "The language I use for messages in this server.\nCurrent: **{current}**",
+        "unknown": "That language isn't installed."
+      },
+      "staff": {
+        "title": "Staff roles",
+        "body": "Members with these roles can use staff commands, on top of anyone with Administrator.\nCurrent: {current}",
+        "placeholder": "Pick up to 10 roles",
+        "none": "none yet, only Administrators count as staff"
+      },
+      "appearance": {
+        "title": "Accent colour",
+        "body": "The colour used on my messages in this server.\nCurrent: **{current}** ({source})",
+        "custom": "custom",
+        "default": "bot default",
+        "change": "Change colour",
+        "reset": "Use default",
+        "modalTitle": "Accent colour",
+        "modalLabel": "Hex colour, e.g. #5865F2",
+        "invalid": "`{value}` isn't a hex colour. Use six characters like `#5865F2`."
+      },
+      "modules": {
+        "title": "Modules",
+        "body": "Choose which features are active in this server. Modules you turn off stop responding to commands and events in this server.",
+        "placeholder": "Select the modules to keep on",
+        "empty": "No optional modules are installed."
+      },
+      "done": {
+        "title": "Setup complete",
+        "body": "You're all set. Run {setup} any time to change these settings."
+      }
+    }
+  }
+}

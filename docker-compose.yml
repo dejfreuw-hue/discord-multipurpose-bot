@@ -1,0 +1,52 @@
+# Starts the bot, MongoDB and Lavalink together:  docker compose up -d --build
+# Fill in .env first. MONGODB_URI and LAVALINK_HOST from .env are overridden below so the
+# containers find each other.
+
+services:
+  bot:
+    build: .
+    restart: unless-stopped
+    init: true
+    env_file: .env
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/reuwbot
+      LAVALINK_HOST: lavalink
+      LAVALINK_PORT: "2333"
+      LAVALINK_SECURE: "false"
+    volumes:
+      - ./config.yml:/app/config.yml:ro
+      - ./locales:/app/locales:ro
+      - bot-data:/app/data
+      - bot-logs:/app/logs
+    depends_on:
+      mongo:
+        condition: service_healthy
+      lavalink:
+        condition: service_started
+
+  mongo:
+    image: mongo:8
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  lavalink:
+    image: ghcr.io/lavalink-devs/lavalink:4-alpine
+    restart: unless-stopped
+    environment:
+      _JAVA_OPTIONS: -Xmx1G
+      LAVALINK_SERVER_PASSWORD: ${LAVALINK_PASSWORD}
+    volumes:
+      - ./lavalink/application.yml:/opt/Lavalink/application.yml:ro
+      - lavalink-plugins:/opt/Lavalink/plugins
+
+volumes:
+  bot-data:
+  bot-logs:
+  mongo-data:
+  lavalink-plugins:

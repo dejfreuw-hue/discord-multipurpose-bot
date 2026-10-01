@@ -1,0 +1,71 @@
+# Main configuration. Secrets (bot token, database URI, license key, API keys) go in .env, not here.
+# Restart the bot after editing. If something is wrong, the bot prints exactly which line to fix.
+#
+# Wrap text in quotes when it contains a colon or starts with a special character like # or @.
+# Discord IDs must always be in quotes: "123456789012345678"
+
+bot:
+  # Shown in /help, /botinfo and panels.
+  name: "Reuw"
+
+  # User IDs that bypass cooldowns and permission checks. Leave empty to use the
+  # owner of the application in the Discord Developer Portal.
+  owners: []
+
+  # Default language for servers that haven't picked one in /setup. Must match a file in /locales.
+  locale: en
+
+  # Accent colour for panels. Servers can override it in /setup.
+  color: "#5865F2"
+
+  presence:
+    # online, idle, dnd or invisible
+    status: online
+    # playing, listening, watching, competing, custom or none
+    activity: watching
+    text: "/help"
+
+  # Optional links shown as buttons in /botinfo. Leave empty to hide them.
+  supportServer: ""
+  website: ""
+
+commands:
+  # Register slash commands on startup whenever they change. Turn off if you prefer
+  # running "npm run commands:deploy" yourself.
+  autoRegister: true
+
+  # Register commands to one server only. Updates there are instant, which is handy while
+  # testing. Leave empty to register globally (can take up to an hour to show everywhere).
+  devGuildId: ""
+
+  # Seconds a user has to wait between uses of the same command.
+  defaultCooldown: 3
+
+  # Per-command cooldowns in seconds, overriding the default. Example:
+  #   cooldowns:
+  #     ping: 10
+  #     botinfo: 30
+  cooldowns: {}
+
+ui:
+  # Use Discord's newer message layout (Components V2). Set to false for classic embeds,
+  # for example if some of your users are on very old Discord clients.
+  componentsV2: true
+
+logging:
+  # trace, debug, info, warn or error. Use debug when asking for support.
+  level: info
+  # Coloured, readable console output. Turn off when a log collector reads stdout as JSON.
+  pretty: true
+  # Folder for log files, relative to the bot folder. Files rotate daily and at maxSize.
+  dir: logs
+  retainFiles: 14
+  maxSize: 10m
+
+# Settings per module. Optional modules have "enabled: true/false" to turn them off for
+# every server. Servers can also turn modules off for themselves in /setup.
+modules:
+  core:
+    help:
+      # List modules in /help even when a server has turned them off.
+      showDisabled: false
